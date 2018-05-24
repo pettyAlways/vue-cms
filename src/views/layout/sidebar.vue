@@ -5,7 +5,8 @@
            @open="handleOpen"
            @close="handleClose"
            background-color=""
-           :collapse="isCollapse">
+           :collapse="isCollapse"
+           :default-active="$route.path">
     <template v-for="router of routers" v-if="!router.hidden">
 
       <router-link v-if="hasOneShowingChildren(router.children) && !router.children[0].children && !router.alwaysShow" :to="router.path + '/' + router.children[0].path">
