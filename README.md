@@ -1,6 +1,6 @@
 # vue-cms
 
-> 用vue做的一个后台管理系统
+<p align="center">基于 Vue 和 ElementUI 构建的企业级后台管理项目</p>
 
 <p align="center">
   <a href="https://github.com/vuejs/vue">
@@ -68,4 +68,6 @@ npm run build --report
 ```
 
 ## 截图
+![](./resource/screenhot3.png)
 ![](./resource/screenhot1.png)
+![](./resource/screenhot2.png)
