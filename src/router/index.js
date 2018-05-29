@@ -7,6 +7,7 @@ import HomePage from '@/views/homepage/homepage'
 import Introduction from '@/views/introduction/index'
 import ExportExcel from '@/views/excel/export-excel'
 import UploadExcel from '@/views/excel/upload-excel'
+import ClipBoard from '@/views/clipboard'
 
 Vue.use(Router)
 
@@ -14,6 +15,8 @@ Vue.use(Router)
  * alwaysShow: true           if set true, will always show the root menu, whatever its child routes length
  *                            if not set alwaysShow, only more than ont route under the children
  *                            it will becomes nested mode, otherwise not show the root menu
+ * alwaysShow: true           如果设置为true,它将总是现在在根目录。如果不设置的话，当它只有1个子路由的时候，会把
+ *                            它的唯一子路由放到跟目录上来，而不显示它自己本身。
  */
 
 export const constantRouterMap = [
@@ -61,13 +64,17 @@ export const asyncRouterMap = [
     alwaysShow: true,
     children: [
       { path: 'export-excel', component: ExportExcel, name: '导出表格', meta: { title: 'exportExcel' } },
-      // { path: 'export-selected-excel', component: _import('excel/selectExcel'), name: 'selectExcel', meta: { title: 'selectExcel' }},
       { path: 'upload-excel', component: UploadExcel, name: '上传表格', meta: { title: 'uploadExcel' } }
     ]
+  },
+  {
+    path: '/clipboard',
+    name: 'ClipBoard',
+    component: Layout,
+    redirect: 'index',
+    icon: 'document',
+    children: [
+      { path: 'index', component: ClipBoard, name: '粘贴板', icon: 'document', meta: { title: 'Clipboard demo' } }
+    ]
   }
-  // {
-  //   path: '/upload',
-  //   name: '上传',
-  //   component: Upload
-  // }
 ]

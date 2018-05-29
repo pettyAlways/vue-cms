@@ -1,9 +1,12 @@
 <template>
   <div class="introduction">
-    {{$t('author.name')}}：
-    <ul>
-      <li>{{$t('introduction.item1')}}</li>
-    </ul>
+    
+    <wired-card>
+      {{$t('author.name')}}：
+      <ul>
+        <li>{{$t('introduction.item1')}}</li>
+      </ul>
+    </wired-card>
 
     <div class="mid-center">
       <div class="stack-wrapper">
@@ -19,6 +22,8 @@
 <script>
   import { getImage } from '@/api/introduction'
   import Stack from '@/components/tantan/stack'
+  /* eslint-disable no-unused-vars */
+  import { WiredCard, WiredTooltip } from 'wired-elements'
   export default {
     components: {
       Stack
