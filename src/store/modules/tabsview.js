@@ -25,7 +25,7 @@ const tabsview = {
     addVisitedTabsView({ commit }, view) {
       commit(SET_TABSVIEW, view)
     },
-    // 关闭一个tabsView
+    // 关闭一个tabsViewx
     delVisitedTabsView({ commit, state }, view) {
       return new Promise((resolve, reject) => {
         commit(DEL_TABSVIEW, view)

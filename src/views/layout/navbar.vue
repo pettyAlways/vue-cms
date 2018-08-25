@@ -1,17 +1,22 @@
 <template>
   <el-menu
     class="navbar"
-    mode="horizontal" 
+    mode="horizontal"
+    @select="switchMenu"
     text-color="#fff"
-    active-text-color="#fff">
+    default-active="SysConfigure"
+    active-text-color="#00b4aa">
     <router-link to="/home">
-      <el-menu-item index="1">{{$t('navbar.title')}}</el-menu-item>
+      <div class="site-title" index="1">{{$t('navbar.title')}}</div>
     </router-link>
-
+    <div style="margin-left: 300px">
+      <el-menu-item index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
+      <el-menu-item index="SysService" disabled><i class="el-icon-service"></i>服务配置</el-menu-item>
+      <el-menu-item index="SysProfile" disabled><i class="el-icon-message"></i>工具集成</el-menu-item>
+    </div>
     <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
       <screenfull class="screenfull right-menu-item"></screenfull>
     </el-tooltip>
-
     <lang-select class="right-menu-item"></lang-select>
 
     <el-dropdown class="avatar-container" trigger="click">
@@ -63,11 +68,17 @@
     },
     methods: {
       ...mapActions({
-        userLogout: 'logout'
+        userLogout: 'logout',
+        switchConfigureMenu: 'switchConfigureMenu'
       }),
+      switchMenu(key) {
+        // 通过vuex管理导航栏功能切换
+        this.switchConfigureMenu(key)
+      },
       logout() {
         this.userLogout().then(() => {
-          location.reload()// 为了重新实例化vue-router对象 避免bug
+          // 为了重新实例化vue-router对象 避免bug
+          location.reload()
         }).catch(err => {
           console.log(err)
         })
@@ -75,6 +86,7 @@
     }
   }
 </script>
+
 <style scoped lang="scss">
   .navbar {
     position: fixed;
@@ -86,13 +98,29 @@
       image: -moz-linear-gradient(45deg, #1278f6, #00b4aa 50%, #1278f6);
       image: linear-gradient(45deg,#1278f6,#00b4aa 50%, #1278f6);
     }
+    .site-title {
+      float: left;
+      height: 60px;
+      line-height: 60px;
+      margin: 0;
+      margin-left: 15px;
+      cursor: pointer;
+      position: relative;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      color: #fff;
+    }
   }
   .navbar /deep/ .el-menu-item {
+    &.is-active {
+      background: cornsilk;
+    }
+    border-bottom: none;
     &:hover {
       background-color: transparent;
     }
     &:focus {
-      background-color: transparent;
+      background-color: cornsilk;
     }
   }
   .navbar /deep/ .screenfull {

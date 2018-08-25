@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
     <navbar></navbar>
-    <sidebar></sidebar>
+    <div class="sys-sidebar" :is="curConfigure"></div>
     <div class="main-container">
       <tabs-view></tabs-view>
       <app-main></app-main>
@@ -10,15 +10,21 @@
 </template>
 <script>
   import Navbar from './navbar'
-  import Sidebar from './sidebar'
   import TabsView from './tabs-view'
   import AppMain from './app-main'
+  import { mapGetters } from 'vuex'
+  import loadComponents from '../../utils/loadComponents'
   export default {
+    computed: {
+      ...mapGetters([
+        'curConfigure'
+      ])
+    },
     components: {
       Navbar,
-      Sidebar,
       TabsView,
-      AppMain
+      AppMain,
+      ...loadComponents
     }
   }
 </script>
