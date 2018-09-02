@@ -9,11 +9,9 @@
     <router-link to="/home">
       <div class="site-title" index="1">{{$t('navbar.title')}}</div>
     </router-link>
-    <div style="margin-left: 300px">
-      <el-menu-item index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
-      <el-menu-item index="SysService" disabled><i class="el-icon-service"></i>服务配置</el-menu-item>
-      <el-menu-item index="SysProfile" disabled><i class="el-icon-message"></i>工具集成</el-menu-item>
-    </div>
+    <el-menu-item style="margin-left: 88px" index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
+    <el-menu-item index="SysService"><i class="el-icon-service"></i>服务配置</el-menu-item>
+    <el-menu-item index="SysProfile"><i class="el-icon-message"></i>工具集成</el-menu-item>
     <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
       <screenfull class="screenfull right-menu-item"></screenfull>
     </el-tooltip>

@@ -56,7 +56,7 @@ export default new Router({
 export const asyncRouterMap = [
   {
     path: '/excel',
-    name: '表格',
+    name: '表格溜溜',
     component: Layout,
     redirect: '/excel/export-excel',
     title: 'excel',
