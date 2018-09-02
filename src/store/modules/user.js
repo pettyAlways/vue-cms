@@ -1,5 +1,6 @@
 import { login, userInfo, logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/common/auth'
+import store from '../index'
 
 const SET_TOKEN = 'SET_TOKEN'
 const SET_NAME = 'SET_NAME'
@@ -58,8 +59,12 @@ const user = {
           commit(SET_NAME, data.name)
           commit(SET_AGE, data.age)
           commit(SET_AVATAR, data.avatar)
-          commit(SET_PERMISSIONS, data.permissions)
-          return resolve(data)
+          let partition = {}
+          data.permissions.forEach(item => {
+            partition[item.alias] = item.menus
+          })
+          commit(SET_PERMISSIONS, partition)
+          return resolve(partition[store.getters.curConfigure])
         }).catch(err => {
           return reject(err)
         })

@@ -9,7 +9,65 @@ const userMap = {
     token: 'admin',
     name: 'Admin',
     age: 10,
-    permissions: '/excel,/clipboard',
+    permissions: [{name: '系统配置',
+      type: 'root',
+      alias: 'SysConfigure',
+      menus: [{
+        name: '表格管理',
+        type: 'menu',
+        icon: 'goods',
+        children: [{
+          name: '导出表格',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/export-excel'
+        },
+        {
+          name: '表格功能',
+          type: 'menu',
+          icon: 'news',
+          children: [{
+            name: '导出表格',
+            type: 'leaf',
+            icon: 'message',
+            path: '/sys-config/export-excel'
+          },
+          {
+            name: '上传表格',
+            type: 'leaf',
+            icon: 'date',
+            path: '/sys-config/upload-excel'
+          }]
+        }]
+      }]
+    },
+    {root: '系统配置',
+      type: 'root',
+      alias: 'SysService',
+      menus: [{
+        name: '表格管理',
+        type: 'menu',
+        children: [{
+          name: '导出表格',
+          type: 'leaf',
+          path: '/sys-config/export-excel'
+        },
+        {
+          name: '表格功能',
+          type: 'menu',
+          children: [{
+            name: '导出表格',
+            type: 'leaf',
+            path: '/sys-config/export-excel'
+          },
+          {
+            name: '上传表格',
+            type: 'leaf',
+            path: '/sys-config/upload-excel'
+          }]
+        }]
+      }]
+    }],
     avatar: '/static/avatar/0.jpg'
   },
   lucy: {

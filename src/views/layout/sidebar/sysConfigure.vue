@@ -8,45 +8,25 @@
              background-color=""
              :collapse="isCollapse"
              :default-active="$route.path">
-      <template v-for="router of routers" v-if="!router.hidden">
-
-        <router-link v-if="hasOneShowingChildren(router.children) && !router.children[0].children && !router.alwaysShow" :to="router.path + '/' + router.children[0].path">
-          <el-menu-item :index="router.path + '/' + router.children[0].path">
-            <i :class="'el-icon-' + router.icon"></i>
-            <span>{{router.children[0].name}}</span>
-          </el-menu-item>
-        </router-link>
-
-        <el-submenu v-else :index="router.path || router.name" :key="router.path">
-          <template slot="title">
-            <i :class="'el-icon-' + router.icon"></i>
-            <span>{{router.name}}</span>
-          </template>
-
-          <template v-for="child of router.children">
-            <router-link :to="router.path + '/' + child.path">
-              <el-menu-item :index="router.path + '/' + child.path">
-                <span>{{child.name}}</span>
-              </el-menu-item>
-            </router-link>
-          </template>
-        </el-submenu>
-
-      </template>
+        <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
     </el-menu>
   </div>
 </template>
 <script>
   import { mapGetters } from 'vuex'
+  import menuSidebar from '@/components/menu-sidebar'
   export default {
     data() {
       return {
         isCollapse: false
       }
     },
+    components: {
+      menuSidebar
+    },
     computed: {
       ...mapGetters([
-        'routers',
+        'permissions',
         'curConfigure'
       ])
     },

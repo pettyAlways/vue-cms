@@ -16,6 +16,9 @@ import './mock'
 // 全局日志
 import log from './utils/logger'
 
+var _ = require('lodash')
+Vue.prototype._ = _
+
 // 项目上线后不再提示警告
 Vue.config.productionTip = false
 
