@@ -1,9 +1,10 @@
 const SET_TABSVIEW = 'SET_TABSVIEW'
 const DEL_TABSVIEW = 'DEL_TABSVIEW'
-
+const ACTIVE_TAG = 'ACTIVE_TAG'
 const tabsview = {
   state: {
-    tabViews: {}
+    tabViews: {},
+    curActive: {}
   },
   mutations: {
     [SET_TABSVIEW](state, payLoad) {
@@ -15,6 +16,12 @@ const tabsview = {
       // 新增对象属性时需要按照一定规则才能响应
       state.tabViews = Object.assign({}, state.tabViews, {
         [payLoad.menuSwitch]: visitedTabsView
+      })
+    },
+    [ACTIVE_TAG](state, payLoad) {
+      // 保留各个单独标签面板的选中状态
+      state.curActive = Object.assign({}, state.curActive, {
+        [payLoad.menuSwitch]: payLoad.path
       })
     },
     [DEL_TABSVIEW](state, payLoad) {
@@ -40,7 +47,8 @@ const tabsview = {
     }
   },
   getters: {
-    tabViews: state => state.tabViews
+    tabViews: state => state.tabViews,
+    curActive: state => state.curActive
   }
 }
 

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
     data() {
       return {}
@@ -23,6 +23,7 @@
     computed: {
       ...mapGetters([
         'tabViews',
+        'curActive',
         'curConfigure'
       ])
     },
@@ -31,6 +32,7 @@
         'addVisitedTabsView',
         'delVisitedTabsView'
       ]),
+      ...mapMutations(['ACTIVE_TAG']),
       addTabsView() {
         const route = this.generateRoute()
         if (!route) {
@@ -38,6 +40,7 @@
         }
         let payload = {menuSwitch: this.curConfigure, route: route}
         this.addVisitedTabsView(payload)
+        this.ACTIVE_TAG({menuSwitch: this.curConfigure, path: route.path})
       },
       generateRoute() {
         if (this.$route.name) {
@@ -46,20 +49,25 @@
         return false
       },
       isActive(route) {
-        return route.path === this.$route.path && route.name === this.$route.name
+        return route.path === this.curActive[this.curConfigure]
       },
       handleClose(tag) {
         this.delVisitedTabsView({menuSwitch: this.curConfigure, route: tag}).then((tags) => {
+          let routePath = {}
           if (this.isActive(tag)) {
             const lastTag = tags.slice(-1)[0]
             if (lastTag) {
               console.info(1)
+              routePath['path'] = lastTag.path
               this.$router.push(lastTag.path)
             } else {
               console.info(2)
-              this.$router.push('/')
+              routePath['path'] = '/'
+              this.$router.push('/home')
             }
           }
+          routePath['menuSwitch'] = this.curConfigure
+          this.ACTIVE_TAG(routePath)
         })
       }
     },
