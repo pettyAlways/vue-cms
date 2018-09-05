@@ -7,7 +7,7 @@
              @close="handleClose"
              background-color=""
              :collapse="isCollapse"
-             :default-active="$route.path">
+             :default-active="defaultActive">
         <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
     </el-menu>
   </div>
@@ -28,7 +28,10 @@
       ...mapGetters([
         'permissions',
         'curConfigure'
-      ])
+      ]),
+      defaultActive() {
+        return this.$route.path
+      }
     },
     methods: {
       handleOpen(key, keyPath) {
@@ -36,12 +39,10 @@
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath)
-      },
-      hasOneShowingChildren(children) {
-        if (children.length === 1) {
-          return true
-        }
-        return false
+      }
+    },
+    watch: {
+      '$route'() {
       }
     }
   }
@@ -53,11 +54,11 @@
     width: 200px;
     height: 100%;
     min-height: 500px;
-    // background: {
-    //   image: -webkit-gradient(linear, left top, right top, from(#1278f6), to(#00b4aa));
-    //   image: -webkit-linear-gradient(left, #1278f6, #00b4aa);
-    //   image: -moz-linear-gradient(left, #1278f6, #00b4aa);
-    //   image: linear-gradient(to bottom, #f2f2f2, #f5f5f5);
-    // }
+    /*background: {
+      image: -webkit-gradient(linear, left top, right top, from(#1278f6), to(#00b4aa));
+      image: -webkit-linear-gradient(left, #1278f6, #00b4aa);
+      image: -moz-linear-gradient(left, #1278f6, #00b4aa);
+      image: linear-gradient(to bottom, #f2f2f2, #f5f5f5);
+    }*/
   }
 </style>

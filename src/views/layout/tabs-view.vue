@@ -1,6 +1,6 @@
 <template>
   <div class="tabs-container">
-    <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' " v-for="(tag, index) in visitedTabsView" :to="tag.path" :key="index">
+    <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' " v-for="(tag, index) in tabViews[curConfigure]" :to="tag.path" :key="index">
       <el-tag
         closable
         :disable-transitions="false"
@@ -22,7 +22,8 @@
     },
     computed: {
       ...mapGetters([
-        'visitedTabsView'
+        'tabViews',
+        'curConfigure'
       ])
     },
     methods: {
@@ -35,7 +36,8 @@
         if (!route) {
           return false
         }
-        this.addVisitedTabsView(this.generateRoute())
+        let payload = {menuSwitch: this.curConfigure, route: route}
+        this.addVisitedTabsView(payload)
       },
       generateRoute() {
         if (this.$route.name) {
@@ -44,10 +46,10 @@
         return false
       },
       isActive(route) {
-        return route.path === this.$route.path || route.name === this.$route.name
+        return route.path === this.$route.path && route.name === this.$route.name
       },
       handleClose(tag) {
-        this.delVisitedTabsView(tag).then((tags) => {
+        this.delVisitedTabsView({menuSwitch: this.curConfigure, route: tag}).then((tags) => {
           if (this.isActive(tag)) {
             const lastTag = tags.slice(-1)[0]
             if (lastTag) {
@@ -63,7 +65,6 @@
     },
     watch: {
       $route() {
-        // console.log(this.$route)
         this.addTabsView()
       }
     }

@@ -27,10 +27,10 @@ const userMap = {
           type: 'menu',
           icon: 'news',
           children: [{
-            name: '导出表格',
+            name: '导出表格1',
             type: 'leaf',
             icon: 'message',
-            path: '/sys-config/export-excel'
+            path: '/sys-config/export-excel1'
           },
           {
             name: '上传表格',
@@ -56,7 +56,7 @@ const userMap = {
           name: '表格功能',
           type: 'menu',
           children: [{
-            name: '导出表格',
+            name: '导出表格1',
             type: 'leaf',
             path: '/sys-config/export-excel'
           },
