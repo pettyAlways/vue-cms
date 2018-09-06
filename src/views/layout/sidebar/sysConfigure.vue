@@ -7,7 +7,7 @@
              @close="handleClose"
              background-color=""
              :collapse="isCollapse"
-             :default-active="defaultActive">
+             :default-active="activeTagName">
         <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
     </el-menu>
   </div>
@@ -27,10 +27,20 @@
     computed: {
       ...mapGetters([
         'permissions',
-        'curConfigure'
+        'curConfigure',
+        'curActive',
+        'tabViews'
       ]),
-      defaultActive() {
-        return this.$route.path
+      activeTagName() {
+        let activeName
+        if (this.tabViews[this.curConfigure]) {
+          this.tabViews[this.curConfigure].forEach(item => {
+            if (item.path === this.curActive[this.curConfigure]) {
+              activeName = item.name
+            }
+          })
+        }
+        return activeName
       }
     },
     methods: {

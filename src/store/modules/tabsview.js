@@ -27,7 +27,7 @@ const tabsview = {
     [DEL_TABSVIEW](state, payLoad) {
       let route = payLoad.route
       for (let [i, v] of state.tabViews[payLoad.menuSwitch].entries()) {
-        if (v.path === route.path || v.name === route.name) {
+        if (v.path === route.path && v.name === route.name) {
           state.tabViews[payLoad.menuSwitch].splice(i, 1)
         }
       }
