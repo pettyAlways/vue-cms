@@ -42,7 +42,7 @@ const tabsview = {
     delVisitedTabsView({ commit, state }, payLoad) {
       return new Promise((resolve) => {
         commit(DEL_TABSVIEW, payLoad)
-        resolve([...state.tabViews])
+        resolve(state.tabViews)
       })
     }
   },

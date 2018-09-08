@@ -52,10 +52,11 @@
         return route.path === this.curActive[this.curConfigure]
       },
       handleClose(tag) {
-        this.delVisitedTabsView({menuSwitch: this.curConfigure, route: tag}).then((tags) => {
+        this.delVisitedTabsView({menuSwitch: this.curConfigure, route: tag}).then(tags => {
           let routePath = {}
+          routePath['path'] = this.curActive[this.curConfigure]
           if (this.isActive(tag)) {
-            const lastTag = tags.slice(-1)[0]
+            const lastTag = tags[this.curConfigure].slice(-1)[0]
             if (lastTag) {
               console.info(1)
               routePath['path'] = lastTag.path
