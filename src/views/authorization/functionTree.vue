@@ -1,5 +1,5 @@
 <template>
-  <div class="user-manage">
+  <div class="function-tree-manage">
     <div class="search-form">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
         <el-form-item label="审批人">
@@ -25,7 +25,7 @@
     </el-row>
     <div class="table-represent">
       <el-table
-        class="user-manage-table"
+        class="role-manage-table"
         :data="tableData"
         border
         stripe>
@@ -71,13 +71,12 @@
         </el-pagination>
       </el-row>
     </div>
-
   </div>
 </template>
 
 <script>
   export default {
-    name: '用户管理',
+    name: '角色管理',
     data() {
       return {
         currentPage4: 4,
@@ -116,9 +115,9 @@
 </script>
 
 <style scoped lang='scss'>
-  .user-manage {
+  .role-manage {
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-    .user-manage-table {
+    .role-manage-table {
       /deep/ .el-table__fixed-right {
         height: 100% !important;
       }
