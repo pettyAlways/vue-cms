@@ -61,7 +61,8 @@
     computed: {
       ...mapGetters([
         'name',
-        'avatar'
+        'avatar',
+        'curActive'
       ])
     },
     methods: {
@@ -72,6 +73,9 @@
       switchMenu(key) {
         // 通过vuex管理导航栏功能切换
         this.switchConfigureMenu(key)
+        // 切换导航配置功能菜单时重新刷新页面
+        let curActiveTab = this.curActive[key] || '/home'
+        this.$router.push(curActiveTab)
       },
       logout() {
         this.userLogout().then(() => {
