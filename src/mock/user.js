@@ -9,7 +9,8 @@ const userMap = {
     token: 'admin',
     name: 'Admin',
     age: 10,
-    permissions: [{name: '系统配置',
+    permissions: [{
+      name: '系统配置',
       type: 'root',
       alias: 'SysConfigure',
       menus: [{
@@ -38,6 +39,23 @@ const userMap = {
             icon: 'date',
             path: '/sys-config/upload-excel'
           }]
+        }]
+      },
+      {
+        name: '权限管理',
+        type: 'menu',
+        icon: 'goods',
+        children: [{
+          name: '用户管理',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/user-manage'
+        },
+        {
+          name: '角色管理',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/role-manage'
         }]
       }]
     },

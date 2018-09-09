@@ -1,8 +1,10 @@
 <template>
   <div class="main-app">
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <transition name="fade-transform" mode="out-in">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -19,6 +21,6 @@
 
 <style scoped lang="scss">
   .main-app {
-    padding: 5px;
+    padding: 15px;
   }
 </style>
