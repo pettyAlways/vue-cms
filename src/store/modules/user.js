@@ -64,7 +64,9 @@ const user = {
             partition[item.alias] = item.menus
           })
           commit(SET_PERMISSIONS, partition)
-          return resolve(partition[store.getters.curConfigure])
+          // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
+          let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
+          return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
         }).catch(err => {
           return reject(err)
         })

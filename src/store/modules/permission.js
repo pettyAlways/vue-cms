@@ -33,7 +33,6 @@ function resolveMenuTree(menuTree) {
   })
   return allLeaves
 }
-
 const SET_ROUTERS = 'SET_ROUTERS'
 
 const permission = {

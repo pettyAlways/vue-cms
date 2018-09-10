@@ -5,7 +5,7 @@
         closable
         :disable-transitions="false"
         @close.prevent.stop="handleClose(tag)">
-        {{tag.name}}
+        {{tag.tagName}}
       </el-tag>
     </router-link>
   </div>
@@ -16,9 +16,6 @@
   export default {
     data() {
       return {}
-    },
-    created() {
-      this.addTabsView()
     },
     computed: {
       ...mapGetters([
@@ -33,21 +30,6 @@
         'delVisitedTabsView'
       ]),
       ...mapMutations(['ACTIVE_TAG']),
-      addTabsView() {
-        const route = this.generateRoute()
-        if (!route) {
-          return false
-        }
-        let payload = {menuSwitch: this.curConfigure, route: route}
-        this.addVisitedTabsView(payload)
-        this.ACTIVE_TAG({menuSwitch: this.curConfigure, path: route.path})
-      },
-      generateRoute() {
-        if (this.$route.name) {
-          return this.$route
-        }
-        return false
-      },
       isActive(route) {
         return route.path === this.curActive[this.curConfigure]
       },
@@ -70,11 +52,6 @@
           routePath['menuSwitch'] = this.curConfigure
           this.ACTIVE_TAG(routePath)
         })
-      }
-    },
-    watch: {
-      $route() {
-        this.addTabsView()
       }
     }
   }

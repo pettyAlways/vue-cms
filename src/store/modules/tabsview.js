@@ -12,7 +12,7 @@ const tabsview = {
       if (visitedTabsView.find((n) => n.path === payLoad.route.path)) {
         return
       }
-      visitedTabsView.push({ name: payLoad.route.name, path: payLoad.route.path })
+      visitedTabsView.push({ name: payLoad.route.name, tagName: payLoad.route.meta.tagName, path: payLoad.route.path })
       // 新增对象属性时需要按照一定规则才能响应
       state.tabViews = Object.assign({}, state.tabViews, {
         [payLoad.menuSwitch]: visitedTabsView

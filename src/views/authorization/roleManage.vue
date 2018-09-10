@@ -77,7 +77,7 @@
 
 <script>
   export default {
-    name: '角色管理',
+    name: 'roleManage',
     data() {
       return {
         currentPage4: 4,

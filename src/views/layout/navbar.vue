@@ -4,12 +4,13 @@
     mode="horizontal"
     @select="switchMenu"
     text-color="#fff"
-    default-active="SysConfigure"
+    :default-active="curConfigure"
     active-text-color="#00b4aa">
     <router-link to="/home">
       <div class="site-title" index="1">{{$t('navbar.title')}}</div>
     </router-link>
-    <el-menu-item style="margin-left: 88px" index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
+    <el-menu-item style="margin-left: 88px" index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
+    <el-menu-item index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
     <el-menu-item index="SysService"><i class="el-icon-service"></i>服务配置</el-menu-item>
     <el-menu-item index="SysProfile"><i class="el-icon-message"></i>工具集成</el-menu-item>
     <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
@@ -36,11 +37,6 @@
             修改头像
           </el-dropdown-item>
         </router-link>
-        <!-- <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
-          <el-dropdown-item>
-            项目地址
-          </el-dropdown-item>
-        </a> -->
         <el-dropdown-item @click.native="logout">
           <span style="display:block;">退出登录</span>
         </el-dropdown-item>
@@ -53,7 +49,7 @@
   import LangSelect from '@/components/langselect'
   import Screenfull from '@/components/screenfull'
   export default {
-    name: '',
+    name: 'NavBar',
     components: {
       LangSelect,
       Screenfull
@@ -62,19 +58,29 @@
       ...mapGetters([
         'name',
         'avatar',
-        'curActive'
+        'curActive',
+        'curConfigure',
+        'defaultPage',
+        'permissions'
       ])
     },
     methods: {
       ...mapActions({
         userLogout: 'logout',
-        switchConfigureMenu: 'switchConfigureMenu'
+        switchConfigureMenu: 'switchConfigureMenu',
+        resolveDefaultPage: 'resolveDefaultPage'
       }),
       switchMenu(key) {
+        if (key === 'HomePage') {
+          this.$router.push('/home')
+          return
+        }
         // 通过vuex管理导航栏功能切换
         this.switchConfigureMenu(key)
         // 切换导航配置功能菜单时重新刷新页面
-        let curActiveTab = this.curActive[key] || '/home'
+        this.resolveDefaultPage({permissions: this.permissions[this.curConfigure], alias: this.curConfigure})
+        let curActiveTab = this.curActive[key] || (key === 'HomePage' ? '/home' : this.defaultPage[this.curConfigure])
+        curActiveTab = curActiveTab || '/home'
         this.$router.push(curActiveTab)
       },
       logout() {
@@ -114,12 +120,14 @@
     }
   }
   .navbar /deep/ .el-menu-item {
+    margin: 0px 1px;
     &.is-active {
       background: cornsilk;
     }
     border-bottom: none;
     &:hover {
-      background-color: transparent;
+      background-color: cornsilk;
+      color: #00b4aa !important;
     }
     &:focus {
       background-color: cornsilk;

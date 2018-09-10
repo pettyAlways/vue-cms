@@ -36,7 +36,7 @@
         if (this.tabViews[this.curConfigure]) {
           this.tabViews[this.curConfigure].forEach(item => {
             if (item.path === this.curActive[this.curConfigure]) {
-              activeName = item.name
+              activeName = item.tagName
             }
           })
         }

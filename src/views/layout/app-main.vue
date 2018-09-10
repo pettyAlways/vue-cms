@@ -23,9 +23,12 @@
         'curConfigure'
       ]),
       cacheViews() {
-        return this.tabViews[this.curConfigure].map(item => {
-          return item.name
-        })
+        if (this.tabViews[this.curConfigure]) {
+          return this.tabViews[this.curConfigure].map(item => {
+            return item.name
+          })
+        }
+        return []
       }
     }
   }

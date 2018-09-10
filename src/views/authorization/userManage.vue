@@ -77,7 +77,7 @@
 
 <script>
   export default {
-    name: '用户管理',
+    name: 'userManage',
     data() {
       return {
         currentPage4: 4,

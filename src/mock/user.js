@@ -12,6 +12,7 @@ const userMap = {
     permissions: [{
       name: '系统配置',
       type: 'root',
+      icon: 'el-icon-setting',
       alias: 'SysConfigure',
       menus: [{
         name: '表格管理',
@@ -49,6 +50,7 @@ const userMap = {
           name: '用户管理',
           type: 'leaf',
           icon: 'sold-out',
+          defaultPage: true,
           path: '/sys-config/user-manage'
         },
         {
@@ -59,14 +61,17 @@ const userMap = {
         }]
       }]
     },
-    {root: '系统配置',
+    {
+      name: '服务配置',
       type: 'root',
+      icon: 'el-icon-service',
       alias: 'SysService',
       menus: [{
         name: '表格管理',
         type: 'menu',
         children: [{
           name: '导出表格',
+          defaultPage: true,
           type: 'leaf',
           path: '/sys-config/export-excel'
         },

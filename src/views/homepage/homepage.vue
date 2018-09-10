@@ -188,7 +188,9 @@
     methods: {
       initCountUp() {
         this.$nextTick(() => {
-          let countupLength = this.$refs.countup.length
+          if (this.$refs.countup) {
+            var countupLength = this.$refs.countup.length
+          }
           let i = 0
           for (i; i < countupLength; i++) {
             this.numAnim = new CountUp(this.$refs.countup[i], 0, this.$refs.countup[i].innerText, 2, 1.5)
