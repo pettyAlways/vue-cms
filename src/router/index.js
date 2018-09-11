@@ -61,7 +61,9 @@ export const asyncRouterMap = [
       { name: '导出表格', path: 'export-excel', component: ExportExcel, meta: { tagName: '导出表格' } },
       { name: '上传表格', path: 'upload-excel', component: UploadExcel, meta: { tagName: '上传表格' } },
       { name: 'userManage', path: 'user-manage', component: () => import('../views/authorization/userManage.vue'), meta: {tagName: '用户管理'} },
-      { name: 'roleManage', path: 'role-manage', component: () => import('../views/authorization/roleManage.vue'), meta: {tagName: '角色管理'} }
+      { name: 'roleManage', path: 'role-manage', component: () => import('../views/authorization/roleManage.vue'), meta: {tagName: '角色管理'} },
+      { name: 'resourceManage', path: 'resource-manage', component: () => import('../views/authorization/resourceManage.vue'), meta: {tagName: '资源管理'} },
+      { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} }
     ]
   },
   {

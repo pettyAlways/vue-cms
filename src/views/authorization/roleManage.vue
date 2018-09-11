@@ -123,18 +123,5 @@
         height: 100% !important;
       }
     }
-    .search-form {
-      /deep/ .el-form-item {
-        margin-bottom: 0px !important;
-      }
-    }
-    .operate-btn-group {
-      margin: 10px 0px;
-    }
-    .table-represent {
-      .table-pagination {
-        margin: 10px 0;
-      }
-    }
   }
 </style>

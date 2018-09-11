@@ -1,11 +1,13 @@
 <template>
   <div class="app-wrapper">
     <navbar></navbar>
-    <div class="sys-sidebar" :is="curConfigure" v-if="curConfigure !== 'HomePage'"></div>
-    <div class="main-container" v-if="curConfigure !== 'HomePage'">
-      <tabs-view></tabs-view>
-      <app-main></app-main>
-    </div>
+    <template v-if="curConfigure !== 'HomePage'">
+      <div class="sys-sidebar" :is="curConfigure"></div>
+      <div class="main-container">
+        <tabs-view></tabs-view>
+        <app-main></app-main>
+      </div>
+    </template>
     <div class="home-container" v-else>
       <router-view></router-view>
     </div>

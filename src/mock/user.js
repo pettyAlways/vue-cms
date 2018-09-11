@@ -58,6 +58,18 @@ const userMap = {
           type: 'leaf',
           icon: 'sold-out',
           path: '/sys-config/role-manage'
+        },
+        {
+          name: '资源管理',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/resource-manage'
+        },
+        {
+          name: '授权管理',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/resource-manage'
         }]
       }]
     },

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="menu-sidebar">
       <div v-for="item in menus" :key="item.name">
         <router-link v-if="item.type === 'leaf'" :to="item.path">
           <el-menu-item :index="item.name">
@@ -27,6 +27,9 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang='scss'>
+  .menu-sidebar {
+    color: gold;
+    font-size: 11px !important;
+  }
 </style>

@@ -1,5 +1,8 @@
 @import './transition.scss';
 
+* {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -31,4 +34,19 @@ a:hover {
 }
 P {
   margin: 0;
+}
+
+/* 搜索域+表格*/
+.search-form {
+  /deep/ .el-form-item {
+    margin-bottom: 0px !important;
+  }
+}
+.operate-btn-group {
+  margin: 10px 0px;
+}
+.table-represent {
+  .table-pagination {
+    margin: 10px 0;
+  }
 }
