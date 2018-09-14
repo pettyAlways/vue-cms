@@ -54,6 +54,12 @@ const userMap = {
           path: '/sys-config/user-manage'
         },
         {
+          name: '组织管理',
+          type: 'leaf',
+          icon: 'sold-out',
+          path: '/sys-config/organization-manage'
+        },
+        {
           name: '角色管理',
           type: 'leaf',
           icon: 'sold-out',
