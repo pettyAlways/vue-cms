@@ -5,3 +5,10 @@ export function loadOrgTree() {
     method: 'get'
   })
 }
+export function list(data) {
+  return remote({
+    url: '/organization/list.do',
+    method: 'get',
+    params: data
+  })
+}

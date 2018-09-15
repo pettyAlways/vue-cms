@@ -44,7 +44,7 @@
         <div class="table-represent">
           <el-table
             class="role-manage-table"
-            :data="tableData"
+            :data="orgList"
             border
             stripe>
             <el-table-column
@@ -52,18 +52,18 @@
               width="55">
             </el-table-column>
             <el-table-column
-              prop="date"
-              label="日期"
+              prop="id"
+              label="编号"
               width="180">
             </el-table-column>
             <el-table-column
-              prop="name"
-              label="用户名"
+              prop="orgName"
+              label="部门名称"
               width="180">
             </el-table-column>
             <el-table-column
-              prop="address"
-              label="密码">
+              prop="parentName"
+              label="上级部门">
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import {loadOrgTree} from '../../api/organization'
+  import { loadOrgTree, list } from '../../api/organization'
   export default {
     name: 'organizationManage',
     data() {
@@ -104,25 +104,10 @@
           user: '',
           region: ''
         },
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        orgList: [],
         filterText: '',
         orgTree: [],
+        curNode: '',
         defaultProps: {
           children: 'children',
           label: 'label'
@@ -142,7 +127,16 @@
       })
     },
     methods: {
-      nodeClick(item, node, self) {
+      nodeClick(item) {
+        this.curNode = item
+        list({ parentId: item.id }).then(res => {
+          if (res.data.flag) {
+            this.orgList = res.data.datas.childrenEntityList
+            this.orgList.map(org => {
+              org.parentName = res.data.datas.label
+            })
+          }
+        })
       },
       filterNode(value, data) {
         if (!value) return true
