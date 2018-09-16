@@ -12,3 +12,10 @@ export function list(data) {
     params: data
   })
 }
+export function save(data) {
+  return remote({
+    url: '/organization/save.do',
+    method: 'post',
+    data: data
+  })
+}

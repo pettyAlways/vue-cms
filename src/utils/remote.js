@@ -1,5 +1,5 @@
 import axios from 'axios/index'
-import { Message } from 'element-ui'
+import Vue from 'vue'
 function remote(params) {
   return axios(params)
 }
@@ -14,7 +14,10 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // 预留一些错误不提示，如code为2018
   if (!response.data.flag && response.data.code !== '2018') {
-    Message.error(response.message)
+    Vue.prototype.$message({
+      message: response.data.message,
+      type: 'error'
+    })
   }
   return response
 }, function (error) {
