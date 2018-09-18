@@ -23,8 +23,11 @@
     },
     name: 'common-dialog',
     computed: {
-      dialogVisible() {
-        return this.visible
+      dialogVisible: {
+        get() {
+          return this.visible
+        },
+        set() {}
       }
     },
     methods: {

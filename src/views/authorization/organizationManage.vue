@@ -72,7 +72,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-row type="flex" justify="center" class="table-pagination">
+          <el-row v-if="orgList.length !== 0" type="flex" justify="center" class="table-pagination">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -111,6 +111,7 @@
     name: 'organizationManage',
     data() {
       return {
+        loading: false,
         paging: {
           page: 1,
           total: 0,
@@ -158,9 +159,14 @@
       commonDialog: () => import('@/components/common-dialog')
     },
     mounted() {
-      this.loadTree()
+      this.loadPrepresentData()
     },
     methods: {
+      async loadPrepresentData() {
+        // await必须是Promise对象才有意义（等待resolve的返回）
+        let parentId = await this.loadTree()
+        this.loadChildren({ parentId: parentId, ...this.paging })
+      },
       // 树节点切换时一些公用数据重置
       switchNodeClear() {
         this.paging = {
@@ -173,17 +179,19 @@
         }
       },
       loadTree() {
-        loadOrgTree().then(res => {
-          if (res.data.flag) {
-            this.orgTree = [res.data.datas]
-            let params = { parentId: res.data.datas.id, page: 1, size: 10 }
-            this.loadChildren(params)
-          }
+        let _this = this
+        return new Promise(resolve => {
+          loadOrgTree().then(res => {
+            if (res.flag) {
+              this.orgTree = [res.datas]
+              this.curNode = _this.curNode || res.datas
+              resolve(this.curNode.id)
+            }
+          })
         })
       },
       initForm() {
         this.orgForm = {
-          parentName: '',
           orgName: '',
           expand: 'N'
         }
@@ -198,14 +206,14 @@
           if (valid) {
             this.orgForm.parentId = this.curNode.id
             save(this.orgForm).then(res => {
-              if (res.data.flag) {
-                this.visible = false
+              if (res.flag) {
                 this.$message({
                   message: '新增部门成功',
                   type: 'success'
                 })
-                this.loadChildren(this.orgForm.parentId)
+                this.loadChildren({ parentId: this.curNode.id, ...this.paging })
                 this.loadTree()
+                this.visible = false
                 this.initForm()
               }
             })
@@ -219,16 +227,19 @@
       },
       searchForm() {
         this.paging.page = 1
-        let params = { parentId: this.curNode.id, pageInfo: this.paging, searchForm: this.orgSearchForm }
+        let params = { parentId: this.curNode.id, ...this.paging, ...this.orgSearchForm }
         this.loadChildren(params)
       },
       loadChildren(params) {
+        this.$loadingHelper.startLoading('.resource-represent')
         list(params).then(res => {
-          if (res.data.flag) {
-            this.orgList = res.data.datas.childrenEntityList
-            this.paging = res.data.datas.pageInfo
+          this.$loadingHelper.stopLoading()
+          if (res.flag) {
+            this.loading = false
+            this.orgList = res.datas.childrenEntityList
+            this.paging.total = res.counts
             this.orgList.map(org => {
-              org.parentName = res.data.datas.label
+              org.parentName = res.datas.label
             })
           }
         })
@@ -237,7 +248,7 @@
       nodeClick(item) {
         this.switchNodeClear()
         this.curNode = item
-        let params = { parentId: this.curNode.id, pageInfo: this.paging }
+        let params = { parentId: this.curNode.id, ...this.paging }
         this.loadChildren(params)
       },
       filterNode(value, data) {

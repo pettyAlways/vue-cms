@@ -16,6 +16,8 @@ import './mock'
 // 全局日志
 import log from './utils/logger'
 
+import loading from './utils/loading'
+
 var _ = require('lodash')
 Vue.prototype._ = _
 
@@ -28,6 +30,8 @@ Vue.use(ElementUI, {
 })
 // 引入log工具
 Vue.prototype.$logHelper = log
+// 引入动画工具
+Vue.prototype.$loadingHelper = loading
 
 new Vue({
   router,

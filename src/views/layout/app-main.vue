@@ -36,6 +36,7 @@
 
 <style scoped lang="scss">
   .main-app {
+    height: calc(100% - 40px);
     padding: 15px;
   }
 </style>

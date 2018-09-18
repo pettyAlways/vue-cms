@@ -67,6 +67,7 @@
     width: 100%;
     height: 100%;
     .main-container {
+      height: 100%;
       padding-left: 201px;
       padding-top: 61px;
     }

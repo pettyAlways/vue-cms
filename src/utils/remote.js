@@ -19,7 +19,7 @@ axios.interceptors.response.use(function (response) {
       type: 'error'
     })
   }
-  return response
+  return response.data
 }, function (error) {
   return Promise.reject(error)
 })
