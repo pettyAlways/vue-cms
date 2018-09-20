@@ -6,7 +6,7 @@
       :width="width"
       @close="closeDialog">
       <slot></slot>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer" v-if="hasButton">
         <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="confirm">确 定</el-button>
       </span>
@@ -19,7 +19,8 @@
     props: {
       visible: Boolean,
       width: 300,
-      title: String
+      title: String,
+      hasButton: true
     },
     name: 'common-dialog',
     computed: {

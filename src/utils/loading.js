@@ -14,5 +14,6 @@ export default {
   stopLoading() {
     Vue.nextTick(() => {
       this.loadingInstance.close()
-    })  }
+    })
+  }
 }
