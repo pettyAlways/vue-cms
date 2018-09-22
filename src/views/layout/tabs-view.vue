@@ -1,5 +1,8 @@
 <template>
   <div class="tabs-container">
+    <div style="display: inline-block; vertical-align: middle;">
+      <icon-svg :iconClass="switchIcon" @click.native="switchSidebar"></icon-svg>
+    </div>
     <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' " v-for="(tag, index) in tabViews[curConfigure]" :to="tag.path" :key="index">
       <el-tag
         closable
@@ -13,21 +16,27 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
+  import iconSvg from '@/components/icon-svg'
   export default {
-    data() {
-      return {}
-    },
     computed: {
       ...mapGetters([
         'tabViews',
         'curActive',
-        'curConfigure'
-      ])
+        'curConfigure',
+        'isCollapse'
+      ]),
+      switchIcon() {
+        return this.isCollapse ? 'switch-right' : 'switch-left'
+      }
+    },
+    components: {
+      iconSvg
     },
     methods: {
       ...mapActions([
         'addVisitedTabsView',
-        'delVisitedTabsView'
+        'delVisitedTabsView',
+        'collapseMenu'
       ]),
       ...mapMutations(['ACTIVE_TAG']),
       isActive(route) {
@@ -52,6 +61,9 @@
           routePath['menuSwitch'] = this.curConfigure
           this.ACTIVE_TAG(routePath)
         })
+      },
+      switchSidebar() {
+        this.collapseMenu(!this.isCollapse)
       }
     }
   }

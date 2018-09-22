@@ -290,7 +290,7 @@
                   message: `${this.dialogType === 'save' ? '新增' : '修改'}部门成功`,
                   type: 'success'
                 })
-                this.loadChildren({ parentId: this.curNode.id, ...this.paging })
+                this.loadChildren({ parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size } })
                 this.loadTree()
                 this.visible = false
                 this.initForm()
@@ -300,8 +300,7 @@
         })
       },
       searchForm() {
-        this.paging.page = 1
-        let params = { parentId: this.curNode.id, ...this.paging, ...this.orgSearchForm }
+        let params = { parentId: this.curNode.id, ...{ page: 1, size: this.paging.size }, ...this.orgSearchForm }
         this.loadChildren(params)
       },
       loadChildren(params) {
@@ -330,13 +329,15 @@
         return data.label.indexOf(value) !== -1
       },
       handleSizeChange(val) {
-        this.paging = { page: 1, size: val }
-        let params = { parentId: this.curNode.id, ...this.paging, ...this.orgSearchForm }
+        debugger
+        this.paging.size = val
+        let params = { parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }, ...this.orgSearchForm }
         this.loadChildren(params)
       },
       handleCurrentChange(val) {
+        debugger
         this.paging.page = val
-        let params = { parentId: this.curNode.id, ...this.paging, ...this.orgSearchForm }
+        let params = { parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }, ...this.orgSearchForm }
         this.loadChildren(params)
       }
     }

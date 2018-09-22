@@ -1,18 +1,20 @@
 <template>
     <div class="menu-sidebar">
-      <div v-for="item in menus" :key="item.name">
+      <div v-for="item in menus" :key="item.name" class="menu-sidebar-items">
         <router-link v-if="item.type === 'leaf'" :to="item.path">
           <el-menu-item :index="item.name">
-            <i :class="'el-icon-' + item.icon"></i>
+            <icon-svg :iconClass="item.icon"></icon-svg>
             <span>{{item.name}}</span>
           </el-menu-item>
         </router-link>
         <el-submenu v-else :index="item.name" :key="item.name">
           <template slot="title">
-            <i :class="'el-icon-' + item.icon"></i>
-            <span>{{item.name}}</span>
+            <div class="sidebar-menus-bar">
+              <icon-svg :iconClass="item.icon" class="collapse_icon"></icon-svg>
+              <span class="collapse_menu_title">{{item.name}}</span>
+            </div>
           </template>
-          <menuSidebar :menus="item.children"></menuSidebar>
+          <menuSidebar :menus="item.children" class="secondary_menu"></menuSidebar>
         </el-submenu>
       </div>
     </div>
@@ -22,6 +24,9 @@
   export default {
     props: {
       menus: Array
+    },
+    components: {
+      iconSvg: () => import('../icon-svg')
     },
     name: 'menuSidebar'
   }

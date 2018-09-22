@@ -3,6 +3,7 @@ let _ = require('lodash')
 const SET_CURCONFIGURE = 'SET_CURCONFIGURE'
 const SET_DEFAULTPAGE = 'SET_DEFAULTPAGE'
 const SET_CONFIGUREITEM = 'SET_CONFIGUREITEM'
+const SET_COLLAPSE = 'SET_COLLAPSE'
 
 let firstIn = true
 let firtLeafNode = ''
@@ -32,7 +33,8 @@ const menuswitch = {
   state: {
     curConfigure: 'HomePage',
     configureItem: [],
-    defaultPage: {}
+    defaultPage: {},
+    isCollapse: false
   },
   mutations: {
     [SET_CURCONFIGURE](state, curMenuName) {
@@ -45,6 +47,9 @@ const menuswitch = {
     },
     [SET_CONFIGUREITEM](state, configureItem) {
       state.configureItem = configureItem
+    },
+    [SET_COLLAPSE](state, isCollapse) {
+      state.isCollapse = isCollapse
     }
   },
   actions: {
@@ -56,11 +61,15 @@ const menuswitch = {
     resolveDefaultPage({ commit }, {permissions, alias}) {
       let sidebarPage = alias === 'HomePage' ? '/home' : (findDefaultPage(permissions) || firtLeafNode)
       commit(SET_DEFAULTPAGE, {configure: alias, sidebarPage: sidebarPage})
+    },
+    collapseMenu({ commit }, isCollapse) {
+      commit(SET_COLLAPSE, isCollapse)
     }
   },
   getters: {
     curConfigure: state => state.curConfigure,
-    defaultPage: state => state.defaultPage
+    defaultPage: state => state.defaultPage,
+    isCollapse: state => state.isCollapse
   }
 }
 

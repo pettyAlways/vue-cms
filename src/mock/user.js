@@ -17,17 +17,17 @@ const userMap = {
       menus: [{
         name: '表格管理',
         type: 'menu',
-        icon: 'goods',
+        icon: 'table-manage',
         children: [{
           name: '导出表格',
           type: 'leaf',
-          icon: 'sold-out',
+          icon: 'table-manage',
           path: '/sys-config/export-excel'
         },
         {
           name: '表格功能',
           type: 'menu',
-          icon: 'news',
+          icon: 'table-manage',
           children: [{
             name: '导出表格1',
             type: 'leaf',
@@ -45,7 +45,7 @@ const userMap = {
       {
         name: '权限管理',
         type: 'menu',
-        icon: 'goods',
+        icon: 'organization',
         children: [{
           name: '用户管理',
           type: 'leaf',

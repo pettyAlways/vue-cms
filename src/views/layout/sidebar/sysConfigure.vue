@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sys_configure_sidebar">
     <el-menu mode="vertical"
              class="el-menu-vertical"
              unique-opened
@@ -8,17 +8,16 @@
              background-color=""
              :collapse="isCollapse"
              :default-active="activeTagName">
-        <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
+      <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
     </el-menu>
   </div>
 </template>
 <script>
   import { mapGetters } from 'vuex'
-  import menuSidebar from '@/components/menu-sidebar'
+  import menuSidebar from '../../../components/menu-sidebar'
   export default {
     data() {
       return {
-        isCollapse: false
       }
     },
     components: {
@@ -28,6 +27,7 @@
       ...mapGetters([
         'permissions',
         'curConfigure',
+        'isCollapse',
         'curActive',
         'tabViews'
       ]),

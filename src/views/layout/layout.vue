@@ -2,8 +2,8 @@
   <div class="app-wrapper">
     <navbar></navbar>
     <template v-if="curConfigure !== 'HomePage'">
-      <div class="sys-sidebar" :is="curConfigure"></div>
-      <div class="main-container">
+      <div :class="[isCollapse ? 'hide-sidebar-container' : '', 'sys-sidebar']" :is="curConfigure"></div>
+      <div :class="[isCollapse ? 'hide-sidebar-main-container' : 'main-container']">
         <tabs-view></tabs-view>
         <app-main></app-main>
       </div>
@@ -24,7 +24,8 @@
       ...mapGetters([
         'curConfigure',
         'curActive',
-        'curConfigure'
+        'curConfigure',
+        'isCollapse'
       ])
     },
     components: {
@@ -71,8 +72,54 @@
       padding-left: 201px;
       padding-top: 61px;
     }
+    .hide-sidebar-main-container {
+      height: 100%;
+      padding-left: 64px;
+      padding-top: 61px;
+    }
     .home-container {
       padding-top: 70px;
     }
+    .sys-sidebar:not(.hide-sidebar-container) {
+      position: fixed;
+      top: 61px;
+      height: 100%;
+      width: 200px;
+      z-index: 2000
+    }
+    .sys-sidebar.hide-sidebar-container {
+      position: fixed;
+      top: 61px;
+      height: 100%;
+      z-index: 10000;
+      /deep/ .el-menu-vertical {
+        height: 100%
+      }
+      /deep/ .menu-sidebar:not(.secondary_menu) {
+        > .menu-sidebar-items > .el-submenu > .el-submenu__title {
+          padding: 0px !important;
+          margin-bottom: 15px;
+          height: 100%;
+          width: 100%;
+          line-height: 100%;
+          .sidebar-menus-bar {
+            text-align: center;
+            .collapse_menu_title {
+              display: block !important;
+              margin-top: 5px;
+            }
+            .collapse_icon {
+              width: 2em;
+              height: 2em;
+            }
+          }
+          .el-submenu__icon-arrow {
+            display: none !important;
+          }
+        }
+      }
+
+    }
+
   }
 </style>

@@ -23,9 +23,8 @@
 
 <style scoped lang="scss">
   .svg-icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
+    width: 1.25em;
+    height: 1.25em;
     fill: currentColor;
     overflow: hidden;
   }
