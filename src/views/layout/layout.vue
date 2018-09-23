@@ -68,11 +68,13 @@
     width: 100%;
     height: 100%;
     .main-container {
+      position: relative;
       height: 100%;
       padding-left: 201px;
       padding-top: 61px;
     }
     .hide-sidebar-main-container {
+      position: relative;
       height: 100%;
       padding-left: 64px;
       padding-top: 61px;

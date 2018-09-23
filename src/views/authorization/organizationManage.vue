@@ -304,18 +304,19 @@
         this.loadChildren(params)
       },
       loadChildren(params) {
-        this.$loadingHelper.startLoading('.resource-represent')
-        list(params).then(res => {
-          this.$loadingHelper.stopLoading()
-          if (res.flag) {
-            this.loading = false
-            this.orgList = res.datas.childrenEntityList
-            this.paging.total = res.counts
-            this.orgList.map(org => {
-              org.parentName = res.datas.label
-            })
-          }
-        })
+        if (this.$loadingHelper.startLoading('.resource-represent')) {
+          list(params).then(res => {
+            this.$loadingHelper.stopLoading()
+            if (res.flag) {
+              this.loading = false
+              this.orgList = res.datas.childrenEntityList
+              this.paging.total = res.counts
+              this.orgList.map(org => {
+                org.parentName = res.datas.label
+              })
+            }
+          })
+        }
       },
       // 树节点切换处理
       nodeClick(item) {

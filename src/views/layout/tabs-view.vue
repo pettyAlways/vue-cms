@@ -71,9 +71,13 @@
 
 <style scoped lang="scss">
   .tabs-container {
+    position: fixed;
     height: 40px;
+    width: 100%;
+    background: white;
     padding: 5px;
     border-bottom: 1px solid #dfdfdf;
+    z-index: 1999;
     .tags-view-item {
       .el-tag {
         margin: 0 3px;

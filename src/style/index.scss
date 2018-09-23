@@ -50,3 +50,7 @@ P {
     margin: 10px 0;
   }
 }
+/* 空表格消除横向滚动条*/
+.el-table__empty-block {
+  width: 100% !important;
+}
