@@ -261,8 +261,8 @@
         return new Promise(resolve => {
           loadOrgTree().then(res => {
             if (res.flag) {
-              this.orgTree = [res.datas]
-              this.curNode = _this.curNode || res.datas
+              this.orgTree = [res.data]
+              this.curNode = _this.curNode || res.data
               resolve(this.curNode.id)
             }
           })
@@ -309,10 +309,10 @@
             this.$loadingHelper.stopLoading()
             if (res.flag) {
               this.loading = false
-              this.orgList = res.datas.childrenEntityList
+              this.orgList = res.data.childrenEntityList
               this.paging.total = res.counts
               this.orgList.map(org => {
-                org.parentName = res.datas.label
+                org.parentName = res.data.label
               })
             }
           })
