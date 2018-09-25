@@ -1,7 +1,13 @@
 import axios from 'axios/index'
 import Vue from 'vue'
 function remote(params) {
-  return axios(params)
+  let instance = axios(params).catch(error => {
+    // 出异常则关闭遮罩层
+    Vue.prototype.$loadingHelper.stopLoading()
+    // 日志记录
+    Vue.prototype.$logHelper.error(error, 'dev')
+  })
+  return instance
 }
 
 // 参考：http://www.php.cn/js-tutorial-390447.html

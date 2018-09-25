@@ -19,9 +19,11 @@ export default {
     return true
   },
   stopLoading() {
-    Vue.nextTick(() => {
-      this.loadingInstance.close()
-      this.isLoading = false
-    })
+    if (this.isLoading) {
+      Vue.nextTick(() => {
+        this.loadingInstance.close()
+        this.isLoading = false
+      })
+    }
   }
 }

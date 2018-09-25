@@ -30,6 +30,7 @@ Vue.use(ElementUI, {
 })
 // 引入log工具
 Vue.prototype.$logHelper = log
+Vue.prototype.$logHelper.openLog = true
 // 引入动画工具
 Vue.prototype.$loadingHelper = loading
 

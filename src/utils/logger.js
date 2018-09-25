@@ -1,6 +1,6 @@
 export default {
   openLog: false,
-  filter: '',
+  filter: 'dev',
   info: function (msg, type) {
     if (this.openLog) {
       if (type && type.indexOf(this.filter) > -1) {
