@@ -14,11 +14,11 @@ export function subPower(params) {
     params
   })
 }
-export function deleteAll(data) {
+export function deleteAll(params) {
   return remote({
     url: '/permission/deletePower.do',
     method: 'delete',
-    data
+    params
   })
 }
 

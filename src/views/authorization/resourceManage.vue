@@ -11,7 +11,7 @@
         class="resource-tree"
         :data="resourceTree"
         :props="defaultProps"
-        node-key="powerCode"
+        node-key="id"
         highlight-current
         :default-expanded-keys="expandKey"
         :expand-on-click-node="false"
@@ -48,28 +48,29 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="powerName"
+            prop="resourceName"
             label="权限名称">
           </el-table-column>
           <el-table-column
-            prop="powerUrl"
+            prop="resourcePath"
             label="路径"
             width="300">
           </el-table-column>
           <el-table-column
-            prop="powerCode"
-            label="权限标志"
-            width="180">
+            prop="resourceIcon"
+            label="资源图标">
           </el-table-column>
           <el-table-column
-            prop="powerTypeName"
-            label="类型"
-            width="55">
+            prop="resourceTypeName"
+            label="类型">
           </el-table-column>
           <el-table-column
-            prop="powerIndex"
-            label="排序"
-            width="55">
+            prop="inUseName"
+            label="是否启用">
+          </el-table-column>
+          <el-table-column
+            prop="resourceSort"
+            label="排序">
           </el-table-column>
           <el-table-column
             fixed="right"
@@ -78,7 +79,7 @@
             <template slot-scope="scope">
               <a type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
               <a type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a type="text" size="small" @click="curDelete(scope.row.powerCode)" class="ml10 del">删除</a>
+              <a type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
             </template>
           </el-table-column>
         </el-table>
@@ -97,26 +98,33 @@
       </div>
       <common-dialog :title="dialogTitle[dialogType]" :visible="visible" @cancel="cancel" @confirm="confirm" :hasButton="!isView">
         <el-form :rules="rules" ref="resourceForm" :model="resourceForm" label-width="80px">
-          <el-form-item label="上级权限" prop="parentPowerName">
-            <el-input v-model="resourceForm.parentPowerName" disabled></el-input>
+          <el-form-item label="上级权限" prop="parentResourceName">
+            <el-input v-model="resourceForm.parentResourceName" disabled></el-input>
           </el-form-item>
-          <el-form-item label="权限名称" prop="powerName">
-            <el-input v-model="resourceForm.powerName" :disabled="isView"></el-input>
+          <el-form-item label="权限名称" prop="resourceName">
+            <el-input v-model="resourceForm.resourceName" :disabled="isView"></el-input>
           </el-form-item>
-          <el-form-item label="路径" prop="powerUrl">
-            <el-input v-model="resourceForm.powerUrl" :disabled="isView"></el-input>
+          <el-form-item label="资源图标" prop="resourceIcon">
+            <el-input v-model="resourceForm.resourceIcon" :disabled="isView" placeholder="确保唯一"></el-input>
           </el-form-item>
-          <el-form-item label="权限标志" prop="powerCode">
-            <el-input v-model="resourceForm.powerCode" :disabled="isView" placeholder="确保唯一"></el-input>
+          <el-form-item label="资源路径" prop="resourcePath">
+            <el-input v-model="resourceForm.resourcePath" :disabled="isView"></el-input>
           </el-form-item>
-          <el-form-item label="类型" prop="powerType">
-            <el-select v-model="resourceForm.powerType" :disabled="isView">
+          <el-form-item label="类型" prop="resourceType">
+            <el-select v-model="resourceForm.resourceType" :disabled="isView">
+              <el-option label="模块" value="0"></el-option>
               <el-option label="菜单" value="1"></el-option>
               <el-option label="按钮" value="2"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="排序" prop="powerIndex">
-            <el-input v-model="resourceForm.powerIndex" :disabled="isView"></el-input>
+          <el-form-item label="是否启用" prop="inUse">
+            <el-select v-model="resourceForm.inUse" :disabled="isView">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="排序" prop="resourceSort">
+            <el-input v-model="resourceForm.resourceSort" :disabled="isView"></el-input>
           </el-form-item>
         </el-form>
       </common-dialog>
@@ -143,15 +151,16 @@
         resourceList: [],
         filterText: '',
         resourceTree: [],
-        expandKey: ['contract'],
+        expandKey: [-1],
         curNode: '',
         resourceForm: {
-          parentPowerName: '',
-          powerName: '',
-          powerUrl: '',
-          powerCode: '',
-          powerType: '1',
-          powerIndex: ''
+          parentResourceName: '',
+          resourceName: '',
+          resourceIcon: '',
+          resourcePath: '',
+          resourceType: '1',
+          inUse: '',
+          resourceSort: ''
         },
         rules: {
           powerName: [
@@ -167,8 +176,8 @@
         visible: false,
         viewVisible: false,
         defaultProps: {
-          children: 'powerList',
-          label: 'powerName'
+          children: 'children',
+          label: 'name'
         }
       }
     },
@@ -192,34 +201,35 @@
       view(item) {
         this.dialogType = 'view'
         this.resourceForm = {
-          parentPowerName: this.curNode.powerName,
-          powerName: item.powerName,
-          powerUrl: item.powerUrl,
-          powerCode: item.powerCode,
-          powerType: item.powerType + '',
-          powerIndex: item.powerIndex
+          parentResourceName: this.curNode.name,
+          resourceName: item.resourceName,
+          resourceIcon: item.resourceIcon,
+          resourcePath: item.resourcePath,
+          resourceType: item.resourceType + '',
+          inUse: item.inUse + '',
+          resourceSort: item.resourceSort
         }
         this.visible = true
       },
       add() {
         this.dialogType = 'save'
-        this.resourceForm.parentPowerName = this.curNode.powerName
-        this.resourceForm.powerIndex = this.curNode.powerList.length + 1
+        this.resourceForm.parentResourceName = this.curNode.name
+        this.resourceForm.resourceSort = this.curNode.children.length + 1
         this.visible = true
       },
       edit(item) {
         this.visible = true
         this.dialogType = 'edit'
         this.resourceForm = {
-          parentPowerName: this.curNode.powerName,
-          powerName: item.powerName,
-          powerUrl: item.powerUrl,
-          powerCode: item.powerCode,
-          powerType: item.powerType + '',
-          powerIndex: item.powerIndex
+          parentResourceName: this.curNode.name,
+          resourceName: item.resourceName,
+          resourceIcon: item.resourceIcon,
+          resourcePath: item.resourcePath,
+          resourceType: item.resourceType,
+          inUse: item.inUse,
+          resourceSort: item.resourceSort
         }
-        // 独特的权限表设计所需要
-        this.resourceForm.oldPowerCode = item.powerCode
+        this.resourceForm.id = item.id
       },
       curDelete(id) {
         let _this = this
@@ -265,20 +275,19 @@
         })
       },
       selectDelIds(val) {
-        this.selectionIds = val.map(item => item.powerCode)
+        this.selectionIds = val.map(item => item.id)
       },
       async loadPrepresentData() {
         // await必须是Promise对象才有意义（等待resolve的返回）
-        let powerCode = await this.loadTree()
-        this.loadChildren({powerCode: powerCode, ...{ page: this.paging.page, size: this.paging.size }})
+        let curNodeId = await this.loadTree()
+        this.loadTableDatas({parentId: curNodeId, ...{ page: this.paging.page, size: this.paging.size }})
       },
       // 树节点切换时一些公用数据重置
       switchNodeClear() {
-        this.pageInfo = {
-          pageSize: 10,
-          pageNum: 1,
-          total: 1,
-          pages: 1
+        this.paging = {
+          page: 1,
+          total: 0,
+          size: 10
         }
         this.resourceSearchForm = {
           resourceName: ''
@@ -289,9 +298,9 @@
         return new Promise(resolve => {
           getMenu().then(res => {
             if (res.flag) {
-              this.resourceTree = res.data
-              this.curNode = _this.curNode || res.data[1]
-              resolve(this.curNode.powerCode)
+              this.resourceTree = [res.data]
+              this.curNode = _this.curNode || res.data
+              resolve(this.curNode.id)
             }
           })
         })
@@ -314,7 +323,7 @@
       confirm() {
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
-            this.resourceForm.parentPowerCode = this.curNode.powerCode
+            this.resourceForm.parentId = this.curNode.id
             let operMethod = this.dialogType === 'save' ? save : edit
             operMethod(this.resourceForm).then(res => {
               if (res.flag) {
@@ -322,7 +331,7 @@
                   message: `${this.dialogType === 'save' ? '新增' : '修改'}资源成功`,
                   type: 'success'
                 })
-                this.loadChildren({powerCode: this.curNode.powerCode, ...{ page: this.paging.page, size: this.paging.size }})
+                this.loadTableDatas({parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }})
                 this.visible = false
                 this.initForm()
               }
@@ -331,17 +340,18 @@
         })
       },
       searchForm() {
-        let params = { powerCode: this.curNode.powerCode, ...{ page: 1, size: this.paging.size }, ...this.resourceSearchForm }
-        this.loadChildren(params)
+        let params = { parentId: this.curNode.id, ...{ page: 1, size: this.paging.size }, ...this.resourceSearchForm }
+        this.loadTableDatas(params)
       },
-      loadChildren(params) {
+      loadTableDatas(params) {
         subPower(params).then(res => {
           if (res.flag) {
             this.loading = false
             this.resourceList = res.data
-            this.pageInfo = res.page
-            this.resourceList.map(org => {
-              org.powerTypeName = ['模块', '菜单', '按钮'][org.powerType]
+            this.paging.total = res.total
+            this.resourceList.forEach(resource => {
+              resource.resourceTypeName = ['模块', '菜单', '按钮'][resource.resourceType]
+              resource.inUseName = ['', '是', '否'][resource.inUse]
             })
           }
         })
@@ -350,20 +360,20 @@
       nodeClick(item) {
         this.switchNodeClear()
         this.curNode = item
-        let params = {powerCode: this.curNode.powerCode, ...{page: this.paging.page, size: this.paging.size}}
-        this.loadChildren(params)
+        let params = {parentId: this.curNode.id, ...{page: this.paging.page, size: this.paging.size}}
+        this.loadTableDatas(params)
       },
       filterNode(value, data) {
         if (!value) return true
-        return data.powerName.indexOf(value) !== -1
+        return data.name.indexOf(value) !== -1
       },
       handleSizeChange(val) {
-        let params = { powerCode: this.curNode.powerCode, ...{ page: this.paging.page, size: val }, ...this.resourceSearchForm }
-        this.loadChildren(params)
+        let params = { parentId: this.curNode.id, ...{ page: this.paging.page, size: val }, ...this.resourceSearchForm }
+        this.loadTableDatas(params)
       },
       handleCurrentChange(val) {
-        let params = { powerCode: this.curNode.powerCode, ...{ page: val, size: this.paging.size }, ...this.resourceSearchForm }
-        this.loadChildren(params)
+        let params = { parentId: this.curNode.id, ...{ page: val, size: this.paging.size }, ...this.resourceSearchForm }
+        this.loadTableDatas(params)
       }
     }
   }
