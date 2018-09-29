@@ -1,7 +1,7 @@
 <template>
     <div class="menu-sidebar">
       <div v-for="item in menus" :key="item.name" class="menu-sidebar-items">
-        <router-link v-if="item.type === 'leaf'" :to="item.path">
+        <router-link v-if="item.type == '2'" :to="item.path">
           <el-menu-item :index="item.name">
             <icon-svg :iconClass="item.icon"></icon-svg>
             <span>{{item.name}}</span>

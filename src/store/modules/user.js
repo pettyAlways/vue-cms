@@ -38,9 +38,8 @@ const user = {
     login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(resp => {
-          let data = resp.data
-          setToken(data.token)
-          commit(SET_TOKEN, data.token)
+          setToken(resp.token)
+          commit(SET_TOKEN, resp.token)
           // commit(SET_NAME, data.name)
           // commit(SET_AGE, data.age)
           // commit(SET_AVATAR, data.avatar)
@@ -60,8 +59,8 @@ const user = {
           commit(SET_AGE, data.age)
           commit(SET_AVATAR, data.avatar)
           let partition = {}
-          data.permissions.forEach(item => {
-            partition[item.alias] = item.menus
+          data.resourceTree.children.forEach(item => {
+            partition[item.alias] = item.children
           })
           commit(SET_PERMISSIONS, partition)
           // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
