@@ -22,7 +22,7 @@ export function deleteAll(params) {
   })
 }
 
-export function edit(data) {
+export function editResource(data) {
   return remote({
     url: '/permission/updatePower.do',
     method: 'put',
@@ -30,7 +30,7 @@ export function edit(data) {
   })
 }
 
-export function save(data) {
+export function saveResource(data) {
   return remote({
     url: '/permission/savePower.do',
     method: 'post',

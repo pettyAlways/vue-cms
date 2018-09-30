@@ -13,11 +13,11 @@ function findDefaultPage(menus) {
     return ''
   }
   for (let item of menus) {
-    if (firstIn && item.type === 'leaf') {
+    if (firstIn && item.type === 'page') {
       firtLeafNode = item.path
       firstIn = false
     }
-    if (item.type === 'leaf' && item.defaultPage) {
+    if (item.type === 'page' && item.defaultPage === 'Y') {
       return item.path
     }
     if (item.type === 'menu') {

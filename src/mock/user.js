@@ -14,7 +14,7 @@ const userMap = {
       type: 'root',
       icon: 'el-icon-setting',
       alias: 'SysConfigure',
-      menus: [{
+      children: [{
         name: '表格管理',
         type: 'menu',
         icon: 'table-manage',
@@ -84,7 +84,7 @@ const userMap = {
       type: 'root',
       icon: 'el-icon-service',
       alias: 'SysService',
-      menus: [{
+      children: [{
         name: '表格管理',
         type: 'menu',
         children: [{

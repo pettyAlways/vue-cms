@@ -45,21 +45,22 @@
       handleClose(tag) {
         this.delVisitedTabsView({menuSwitch: this.curConfigure, route: tag}).then(tags => {
           let routePath = {}
+          let distPath
           routePath['path'] = this.curActive[this.curConfigure]
           if (this.isActive(tag)) {
             const lastTag = tags[this.curConfigure].slice(-1)[0]
             if (lastTag) {
-              console.info(1)
               routePath['path'] = lastTag.path
+              distPath = lastTag.path
               this.$router.push(lastTag.path)
             } else {
-              console.info(2)
-              routePath['path'] = '/'
-              this.$router.push('/home')
+              routePath['path'] = ''
+              distPath = '/home'
             }
           }
           routePath['menuSwitch'] = this.curConfigure
           this.ACTIVE_TAG(routePath)
+          this.$router.push(distPath)
         })
       },
       switchSidebar() {

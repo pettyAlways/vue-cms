@@ -110,11 +110,18 @@
           <el-form-item label="资源路径" prop="resourcePath">
             <el-input v-model="resourceForm.resourcePath" :disabled="isView"></el-input>
           </el-form-item>
+          <el-form-item label="默认页面" prop="defaultPage">
+            <el-select v-model="resourceForm.defaultPage" :disabled="isView">
+              <el-option label="是" value="Y"></el-option>
+              <el-option label="否" value="N"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="类型" prop="resourceType">
             <el-select v-model="resourceForm.resourceType" :disabled="isView">
-              <el-option label="模块" value="0"></el-option>
-              <el-option label="菜单" value="1"></el-option>
-              <el-option label="按钮" value="2"></el-option>
+              <el-option label="模块" value="module"></el-option>
+              <el-option label="菜单" value="menu"></el-option>
+              <el-option label="页面" value="page"></el-option>
+              <el-option label="按钮" value="button"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否启用" prop="inUse">
@@ -133,7 +140,7 @@
 </template>
 
 <script>
-  import { getMenu, subPower, save, edit, deleteAll } from '../../api/permission'
+  import { getMenu, subPower, saveResource, editResource, deleteAll } from '../../api/permission'
   export default {
     name: 'permissionManagement',
     data() {
@@ -206,6 +213,7 @@
           resourceIcon: item.resourceIcon,
           resourcePath: item.resourcePath,
           resourceType: item.resourceType + '',
+          defaultPage: item.defaultPage,
           inUse: item.inUse + '',
           resourceSort: item.resourceSort
         }
@@ -226,6 +234,7 @@
           resourceIcon: item.resourceIcon,
           resourcePath: item.resourcePath,
           resourceType: item.resourceType,
+          defaultPage: item.defaultPage,
           inUse: item.inUse,
           resourceSort: item.resourceSort
         }
@@ -324,7 +333,7 @@
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
             this.resourceForm.parentId = this.curNode.id
-            let operMethod = this.dialogType === 'save' ? save : edit
+            let operMethod = this.dialogType === 'save' ? saveResource : editResource
             operMethod(this.resourceForm).then(res => {
               if (res.flag) {
                 this.$message({

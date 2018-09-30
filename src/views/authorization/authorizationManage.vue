@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import { getMenu, subPower, save, edit, deleteAll } from '../../api/permission'
+  import { getMenu, subPower, saveResource, editResource, deleteAll } from '../../api/permission'
   export default {
     name: 'permissionManagement',
     data() {
@@ -317,7 +317,7 @@
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
             this.resourceForm.parentPowerCode = this.curNode.powerCode
-            let operMethod = this.dialogType === 'save' ? save : edit
+            let operMethod = this.dialogType === 'save' ? saveResource : editResource
             operMethod(this.resourceForm).then(res => {
               if (res.flag) {
                 this.$message({

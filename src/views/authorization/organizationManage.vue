@@ -330,13 +330,11 @@
         return data.label.indexOf(value) !== -1
       },
       handleSizeChange(val) {
-        debugger
         this.paging.size = val
         let params = { parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }, ...this.orgSearchForm }
         this.loadChildren(params)
       },
       handleCurrentChange(val) {
-        debugger
         this.paging.page = val
         let params = { parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }, ...this.orgSearchForm }
         this.loadChildren(params)

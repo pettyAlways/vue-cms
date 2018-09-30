@@ -392,7 +392,6 @@
         this.loadUser(params)
       },
       handleCurrentChange(val) {
-        debugger
         this.paging.page = val
         let params = { userDepart: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }, ...this.orgSearchForm }
         this.loadUser(params)

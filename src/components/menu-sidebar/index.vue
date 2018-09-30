@@ -1,7 +1,7 @@
 <template>
     <div class="menu-sidebar">
       <div v-for="item in menus" :key="item.name" class="menu-sidebar-items">
-        <router-link v-if="item.type == '2'" :to="item.path">
+        <router-link v-if="item.type == 'page'" :to="item.path">
           <el-menu-item :index="item.name">
             <icon-svg :iconClass="item.icon"></icon-svg>
             <span>{{item.name}}</span>
@@ -14,7 +14,7 @@
               <span class="collapse_menu_title">{{item.name}}</span>
             </div>
           </template>
-          <menuSidebar :menus="item.children" class="secondary_menu"></menuSidebar>
+          <menuSidebar v-if="item.children.length" :menus="item.children" class="secondary_menu"></menuSidebar>
         </el-submenu>
       </div>
     </div>
