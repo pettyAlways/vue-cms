@@ -158,7 +158,7 @@
         resourceList: [],
         filterText: '',
         resourceTree: [],
-        expandKey: [-1],
+        expandKey: [],
         curNode: '',
         resourceForm: {
           parentResourceName: '',
@@ -309,6 +309,7 @@
             if (res.flag) {
               this.resourceTree = [res.data]
               this.curNode = _this.curNode || res.data
+              _this.expandKey.push(this.curNode.id)
               resolve(this.curNode.id)
             }
           })
@@ -340,7 +341,7 @@
                   message: `${this.dialogType === 'save' ? '新增' : '修改'}资源成功`,
                   type: 'success'
                 })
-                this.loadTableDatas({parentId: this.curNode.id, ...{ page: this.paging.page, size: this.paging.size }})
+                this.loadPrepresentData()
                 this.visible = false
                 this.initForm()
               }
@@ -359,7 +360,7 @@
             this.resourceList = res.data
             this.paging.total = res.total
             this.resourceList.forEach(resource => {
-              resource.resourceTypeName = ['模块', '菜单', '按钮'][resource.resourceType]
+              resource.resourceTypeName = {module: '模块', menu: '菜单', page: '页面', button: '按钮'}[resource.resourceType]
               resource.inUseName = ['', '是', '否'][resource.inUse]
             })
           }
