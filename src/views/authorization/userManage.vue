@@ -86,6 +86,7 @@
               <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
               <el-button type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
               <el-button type="text" size="small" @click="view(scope.row)">查看</el-button>
+              <el-button type="text" size="small" @click="auth(scope.row)">授权</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -134,6 +135,9 @@
           <el-input v-model="userForm.userMail" :disabled="isView"></el-input>
         </el-form-item>
       </el-form>
+    </common-dialog>
+    <common-dialog title="用户授权" :visible="authVisible" @cancel="cancel" @confirm="confirm">
+      <common-transfer></common-transfer>
     </common-dialog>
   </el-row>
 </template>
@@ -184,6 +188,7 @@
         dialogType: '',
         dialogTitle: { save: '新增用户', edit: '修改用户', view: '查看用户' },
         visible: false,
+        authVisible: false,
         viewVisible: false,
         defaultProps: {
           children: 'children',
@@ -202,12 +207,17 @@
       }
     },
     components: {
-      commonDialog: () => import('@/components/common-dialog')
+      commonDialog: () => import('@/components/common-dialog'),
+      commonTransfer: () => import('@/components/common-transfer')
     },
     mounted() {
       this.loadPrepresentData()
     },
     methods: {
+      auth() {
+        this.dialogType = 'auth'
+        this.authVisible = true
+      },
       view(item) {
         this.dialogType = 'view'
         this.userForm = {
