@@ -23,10 +23,18 @@ export function edit(data) {
   })
 }
 
+export function authUser(data) {
+  return remote({
+    url: '/user/edit.do',
+    method: 'put',
+    data: data
+  })
+}
+
 export function deleteAll(data) {
   return remote({
-    url: '/user/delete.do',
-    method: 'delete',
-    data: data
+    url: '/user/authUser.do',
+    method: 'post',
+    data
   })
 }

@@ -3,37 +3,53 @@
     <el-transfer
       filterable
       :filter-method="filterMethod"
-      filter-placeholder="请输入城市拼音"
-      :titles="['待选角色', '已选角色']"
-      v-model="value2"
-      :data="data2">
+      filter-placeholder="请输入角色名"
+      :titles="titles"
+      v-model="chooseRole"
+      :data="roleList">
     </el-transfer>
   </div>
 </template>
 
 <script>
+  import { listAll } from '../../api/role'
   export default {
     name: 'my-transfer',
+    props: {
+      titles: ['待选角色', '已选角色']
+    },
     data() {
-      const generateData2 = _ => {
-        const data = []
-        const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
-        const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu']
-        cities.forEach((city, index) => {
-          data.push({
-            label: city,
-            key: index,
-            pinyin: pinyin[index]
-          })
-        })
-        return data
-      }
       return {
-        data2: generateData2(),
-        value2: [],
-        filterMethod(query, item) {
-          return item.pinyin.indexOf(query) > -1
-        }
+        roleList: [],
+        chooseRole: []
+      }
+    },
+    computed() {
+      this.loadRoleList()
+    },
+    methods: {
+      // 提供清除选中内容接口
+      clearTransfer() {
+        this.chooseRole = []
+      },
+      // 提供获取选中内容接口
+      acquireChoooseRole() {
+        return this.chooseRole
+      },
+      filterMethod(query, item) {
+        return item.label.indexOf(query) > -1
+      },
+      loadRoleList() {
+        listAll().then(res => {
+          if (res.flag) {
+            this.roleList = res.data.map(item => {
+              return {
+                label: item.roleName,
+                key: item.id
+              }
+            })
+          }
+        })
       }
     }
   }

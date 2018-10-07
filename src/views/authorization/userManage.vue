@@ -136,14 +136,14 @@
         </el-form-item>
       </el-form>
     </common-dialog>
-    <common-dialog title="用户授权" :visible="authVisible" @cancel="cancel" @confirm="confirm">
-      <common-transfer></common-transfer>
+    <common-dialog title="用户授权" :visible="authVisible" @cancel="authCancel" @confirm="authConfirm">
+      <common-transfer ref="authTransfer" :titles="authorTitles"></common-transfer>
     </common-dialog>
   </el-row>
 </template>
 
 <script>
-  import { list, save, edit, deleteAll } from '../../api/user'
+  import { list, save, edit, deleteAll, authUser } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
   export default {
     name: 'organizationManage',
@@ -193,7 +193,9 @@
         defaultProps: {
           children: 'children',
           label: 'label'
-        }
+        },
+        authorTitles: ['待选角色', '已选角色'],
+        curAuthUser: ''
       }
     },
     watch: {
@@ -214,9 +216,35 @@
       this.loadPrepresentData()
     },
     methods: {
-      auth() {
+      // 用户授权
+      authUser(data) {
+        return new Promise(resolve => {
+          authUser(data).then(res => {
+            if (res.flag) {
+              this.$message({
+                type: 'success',
+                message: '授权成功'
+              })
+              resolve(res.flag)
+            }
+          })
+        })
+      },
+      authCancel() {
+        this.authVisible = false
+        // 通过ref引用对象调用第三方组件方法
+        this.$refs.authTransfer.clearTransfer()
+      },
+      authConfirm() {
+        let chooseRole = this.$refs.authTransfer.acquireChoooseRole()
+        // 等授权结果完成在关闭对话框
+        await this.authUser({ roles: chooseRole, id: this.curAuthUser })
+        this.authVisible = true
+      },
+      auth(item) {
         this.dialogType = 'auth'
         this.authVisible = true
+        this.curAuthUser = item.id
       },
       view(item) {
         this.dialogType = 'view'
