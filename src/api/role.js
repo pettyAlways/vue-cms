@@ -7,6 +7,15 @@ export function list(data) {
     params: data
   })
 }
+
+export function listAll(data) {
+  return remote({
+    url: '/role/listAll.do',
+    method: 'get',
+    params: data
+  })
+}
+
 export function save(data) {
   return remote({
     url: '/role/save.do',

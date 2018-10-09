@@ -16,7 +16,7 @@
   export default {
     name: 'my-transfer',
     props: {
-      titles: ['待选角色', '已选角色']
+      titles: Array
     },
     data() {
       return {
@@ -24,10 +24,13 @@
         chooseRole: []
       }
     },
-    computed() {
+    mounted() {
       this.loadRoleList()
     },
     methods: {
+      setChooseRole(roles) {
+        this.chooseRole = roles
+      },
       // 提供清除选中内容接口
       clearTransfer() {
         this.chooseRole = []
@@ -42,6 +45,7 @@
       loadRoleList() {
         listAll().then(res => {
           if (res.flag) {
+            res.data = res.data || []
             this.roleList = res.data.map(item => {
               return {
                 label: item.roleName,
@@ -67,6 +71,9 @@
       width: 100%;
       .el-transfer-panel {
         width: 100%;
+        .el-transfer-panel__empty {
+          text-align: center;
+        }
       }
     }
   }

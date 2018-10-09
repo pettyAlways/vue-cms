@@ -25,9 +25,17 @@ export function edit(data) {
 
 export function authUser(data) {
   return remote({
-    url: '/user/edit.do',
-    method: 'put',
+    url: '/user/authUser.do',
+    method: 'post',
     data: data
+  })
+}
+
+export function acquireRoles(params) {
+  return remote({
+    url: '/user/acquireRoles.do',
+    method: 'get',
+    params
   })
 }
 

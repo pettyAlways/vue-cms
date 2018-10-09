@@ -136,14 +136,14 @@
         </el-form-item>
       </el-form>
     </common-dialog>
-    <common-dialog title="用户授权" :visible="authVisible" @cancel="authCancel" @confirm="authConfirm">
+    <common-dialog title="用户授权" :visible="authVisible" @cancel="authCancel" @confirm="authConfirm" :hasButton="true">
       <common-transfer ref="authTransfer" :titles="authorTitles"></common-transfer>
     </common-dialog>
   </el-row>
 </template>
 
 <script>
-  import { list, save, edit, deleteAll, authUser } from '../../api/user'
+  import { list, save, edit, deleteAll, authUser, acquireRoles } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
   export default {
     name: 'organizationManage',
@@ -218,33 +218,39 @@
     methods: {
       // 用户授权
       authUser(data) {
-        return new Promise(resolve => {
-          authUser(data).then(res => {
-            if (res.flag) {
-              this.$message({
-                type: 'success',
-                message: '授权成功'
-              })
-              resolve(res.flag)
-            }
-          })
+        authUser(data).then(res => {
+          if (res.flag) {
+            this.$message({
+              type: 'success',
+              message: '授权成功'
+            })
+            this.authVisible = false
+          }
         })
       },
       authCancel() {
         this.authVisible = false
         // 通过ref引用对象调用第三方组件方法
+        console.log(this.$refs)
         this.$refs.authTransfer.clearTransfer()
       },
       authConfirm() {
         let chooseRole = this.$refs.authTransfer.acquireChoooseRole()
         // 等授权结果完成在关闭对话框
-        await this.authUser({ roles: chooseRole, id: this.curAuthUser })
-        this.authVisible = true
+        this.authUser({ roles: chooseRole, id: this.curAuthUser })
       },
       auth(item) {
-        this.dialogType = 'auth'
-        this.authVisible = true
-        this.curAuthUser = item.id
+        acquireRoles({ id: item.id }).then(res => {
+          if (res.flag) {
+            this.dialogType = 'auth'
+            this.authVisible = true
+            this.curAuthUser = item.id
+            // 打开对话框并渲染穿梭框需要一定的时间
+            this.$nextTick(function () {
+              this.$refs.authTransfer.setChooseRole(res.data)
+            })
+          }
+        })
       },
       view(item) {
         this.dialogType = 'view'

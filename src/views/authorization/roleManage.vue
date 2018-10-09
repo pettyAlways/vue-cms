@@ -28,7 +28,7 @@
             width="55">
           </el-table-column>
           <el-table-column type="index" label="编号" width="50" align="center">
-            <template scope="scope">
+            <template slot-scope="scope">
               <span>{{((paging.page-1) * paging.size + scope.$index+1)}}</span>
             </template>
           </el-table-column>
