@@ -53,6 +53,7 @@
               <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
               <el-button type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
               <el-button type="text" size="small" @click="view(scope.row)">查看</el-button>
+              <el-button type="text" size="small" @click="auth(scope.row)">配置</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -86,11 +87,15 @@
         </el-form-item>
       </el-form>
     </common-dialog>
+    <common-dialog title="分配资源" :visible="authVisible" @cancel="authCancel" @confirm="authConfirm" :hasButton="!isView">
+      <table-tree :datas="resourceTree"></table-tree>
+    </common-dialog>
   </el-row>
 </template>
 
 <script>
   import { list, save, edit, deleteAll } from '../../api/role'
+  import { getMenu } from '../../api/permission'
   export default {
     name: 'organizationManage',
     data() {
@@ -119,7 +124,9 @@
         },
         dialogType: '',
         dialogTitle: { save: '新增角色', edit: '修改角色', view: '查看角色' },
-        visible: false
+        visible: false,
+        authVisible: false,
+        resourceTree: []
       }
     },
     computed: {
@@ -128,12 +135,44 @@
       }
     },
     components: {
-      commonDialog: () => import('@/components/common-dialog')
+      commonDialog: () => import('@/components/common-dialog'),
+      tableTree: () => import('@/components/table-tree')
     },
     mounted() {
       this.loadPrepresentData()
     },
     methods: {
+      recursiveResource(resource) {
+        let result = []
+        if (resource) {
+          result = resource.map(item => {
+            if (item.type === 'page') {
+              item.buttonList = item.children || []
+              item.buttonList.map(btn => {
+                btn._parent = item
+              })
+              delete item.children
+            }
+            this.recursiveResource(item.children)
+            return item
+          })
+        }
+        return result
+      },
+      authConfirm() {
+
+      },
+      authCancel() {
+        this.authVisible = false
+      },
+      auth() {
+        getMenu().then(res => {
+          if (res.flag) {
+            this.resourceTree = this.recursiveResource([res.data])
+            this.authVisible = true
+          }
+        })
+      },
       view(item) {
         this.dialogType = 'view'
         this.roleForm = {

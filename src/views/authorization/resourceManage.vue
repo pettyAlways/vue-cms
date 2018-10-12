@@ -165,8 +165,9 @@
           resourceName: '',
           resourceIcon: '',
           resourcePath: '',
-          resourceType: '1',
-          inUse: '',
+          resourceType: 'menu',
+          defaultPage: 'N',
+          inUse: '1',
           resourceSort: ''
         },
         rules: {
@@ -303,13 +304,12 @@
         }
       },
       loadTree() {
-        let _this = this
         return new Promise(resolve => {
           getMenu().then(res => {
             if (res.flag) {
               this.resourceTree = [res.data]
-              this.curNode = _this.curNode || res.data
-              _this.expandKey.push(this.curNode.id)
+              this.curNode = this.curNode || res.data
+              this.expandKey.push(this.curNode.id)
               resolve(this.curNode.id)
             }
           })

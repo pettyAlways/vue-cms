@@ -9,6 +9,7 @@
       <el-tree
         class="filter-tree"
         :data="orgTree"
+        node-key="id"
         :props="defaultProps"
         highlight-current
         default-expand-all
@@ -35,10 +36,8 @@
         </el-form>
       </div>
       <el-row class="operate-btn-group" type="flex" justify="start">
-        <el-button-group>
-          <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-          <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
-        </el-button-group>
+        <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+        <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -346,12 +345,11 @@
         }
       },
       loadTree() {
-        let _this = this
         return new Promise(resolve => {
           loadOrgTree().then(res => {
             if (res.flag) {
               this.orgTree = [res.data]
-              this.curNode = _this.curNode || res.data
+              this.curNode = this.curNode || res.data
               resolve(this.curNode.id)
             }
           })
