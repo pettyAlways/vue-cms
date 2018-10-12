@@ -88,13 +88,13 @@
       </el-form>
     </common-dialog>
     <common-dialog title="分配资源" :visible="authVisible" @cancel="authCancel" @confirm="authConfirm" :hasButton="!isView">
-      <table-tree :datas="resourceTree"></table-tree>
+      <table-tree ref="tableTree" :datas="resourceTree"></table-tree>
     </common-dialog>
   </el-row>
 </template>
 
 <script>
-  import { list, save, edit, deleteAll } from '../../api/role'
+  import { list, save, edit, deleteAll, resourceAuth, acquireResource } from '../../api/role'
   import { getMenu } from '../../api/permission'
   export default {
     name: 'organizationManage',
@@ -126,7 +126,8 @@
         dialogTitle: { save: '新增角色', edit: '修改角色', view: '查看角色' },
         visible: false,
         authVisible: false,
-        resourceTree: []
+        resourceTree: [],
+        curRoleId: ''
       }
     },
     computed: {
@@ -142,34 +143,58 @@
       this.loadPrepresentData()
     },
     methods: {
-      recursiveResource(resource) {
+      recursiveResource(resource, chooseResource) {
         let result = []
         if (resource) {
           result = resource.map(item => {
+            if (chooseResource.indexOf(item.id) !== -1) {
+              item.isSelect = true
+            }
             if (item.type === 'page') {
               item.buttonList = item.children || []
-              item.buttonList.map(btn => {
+
+              item.buttonList.forEach(btn => {
+                if (chooseResource.indexOf(btn.id) !== -1) {
+                  btn.isSelect = true
+                }
                 btn._parent = item
               })
               delete item.children
             }
-            this.recursiveResource(item.children)
+            this.recursiveResource(item.children, chooseResource)
             return item
           })
         }
         return result
       },
       authConfirm() {
-
+        let resources = this.$refs.tableTree.acquireResource()
+        resourceAuth({ resources: resources, id: this.curRoleId }).then(res => {
+          if (res.flag) {
+            this.$message({
+              type: 'success',
+              message: '配置成功'
+            })
+            this.authVisible = false
+          }
+        })
       },
       authCancel() {
         this.authVisible = false
       },
-      auth() {
+      auth(item) {
+        this.curRoleId = item.id
         getMenu().then(res => {
           if (res.flag) {
-            this.resourceTree = this.recursiveResource([res.data])
-            this.authVisible = true
+            acquireResource({ id: item.id }).then(back => {
+              if (back.flag) {
+                if (back.data && back.data.length) {
+                  res.data.isSelect = true
+                }
+                this.resourceTree = this.recursiveResource([res.data], back.data)
+                this.authVisible = true
+              }
+            })
           }
         })
       },

@@ -39,3 +39,19 @@ export function deleteAll(params) {
     params
   })
 }
+
+export function resourceAuth(data) {
+  return remote({
+    url: '/role/resourceAuth.do',
+    method: 'post',
+    data
+  })
+}
+
+export function acquireResource(params) {
+  return remote({
+    url: '/role/acquireResource.do',
+    method: 'get',
+    params
+  })
+}

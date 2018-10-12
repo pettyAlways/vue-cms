@@ -52,6 +52,26 @@
       }
     },
     methods: {
+      acquireResource() {
+        return this.selectedResource(this.datas[0].children)
+      },
+      selectedResource(resources) {
+        let plain = []
+        // 空指针转换
+        resources = resources || []
+        // 递归将树结构数据转换成扁平类型数据
+        resources.forEach(item => {
+          if (item.isSelect) {
+            plain.push(item.id)
+            if (item.type === 'page') {
+              plain = [...plain, ...this.selectedResource(item.buttonList)]
+            } else {
+              plain = [...plain, ...this.selectedResource(item.children)]
+            }
+          }
+        })
+        return plain
+      },
       treeToArray(data, parent, level, expandedAll) {
         let tmp = []
         data.forEach(record => {
@@ -121,7 +141,6 @@
           this.ancestorHandle(checked, row._parent)
         }
         if (!checked && row._parent) {
-          debugger
           let ancestor = row.type === 'button' ? row._parent.buttonList : row._parent.children
           ancestor = ancestor || []
           let filter = ancestor.filter(item => {
