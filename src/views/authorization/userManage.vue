@@ -145,7 +145,7 @@
   import { list, save, edit, deleteAll, authUser, acquireRoles } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
   export default {
-    name: 'organizationManage',
+    name: 'userManage',
     data() {
       return {
         loading: false,

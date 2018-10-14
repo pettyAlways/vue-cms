@@ -142,7 +142,7 @@
 <script>
   import { getMenu, subPower, saveResource, editResource, deleteAll } from '../../api/permission'
   export default {
-    name: 'permissionManagement',
+    name: 'resourceManage',
     data() {
       return {
         loading: false,

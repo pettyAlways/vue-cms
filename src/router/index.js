@@ -34,33 +34,10 @@ export const constantRouterMap = [
     children: [
       { path: 'home', component: HomePage, name: '首页', meta: {tagName: '首页'} }
     ]
-  },
-  {
-    path: '/introduction',
-    name: '简述',
-    component: Layout,
-    redirect: '/introduction/index',
-    icon: 'question',
-    children: [
-      { path: 'index', component: Introduction, name: '简述' }
-    ]
-  },
-  {
-    path: '/sys-config',
-    component: Layout,
-    children: [
-      { name: 'userManage', path: 'user-manage', component: () => import('../views/authorization/userManage.vue'), meta: {tagName: '用户管理'} },
-      { name: 'roleManage', path: 'role-manage', component: () => import('../views/authorization/roleManage.vue'), meta: {tagName: '角色管理'} },
-      { name: 'resourceManage', path: 'resource-manage', component: () => import('../views/authorization/resourceManage.vue'), meta: {tagName: '资源管理'} },
-      { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
-      { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} }
-    ]
   }
 ]
 
 export default new Router({
-  // mode: 'history',  require service support
-  // scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
 
@@ -69,23 +46,11 @@ export const asyncRouterMap = [
     path: '/sys-config',
     component: Layout,
     children: [
-      { name: '导出表格', path: 'export-excel', component: ExportExcel, meta: { tagName: '导出表格' } },
-      { name: '上传表格', path: 'upload-excel', component: UploadExcel, meta: { tagName: '上传表格' } },
       { name: 'userManage', path: 'user-manage', component: () => import('../views/authorization/userManage.vue'), meta: {tagName: '用户管理'} },
       { name: 'roleManage', path: 'role-manage', component: () => import('../views/authorization/roleManage.vue'), meta: {tagName: '角色管理'} },
       { name: 'resourceManage', path: 'resource-manage', component: () => import('../views/authorization/resourceManage.vue'), meta: {tagName: '资源管理'} },
       { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
       { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} }
-    ]
-  },
-  {
-    path: '/clipboard',
-    name: 'ClipBoard',
-    component: Layout,
-    redirect: 'index',
-    icon: 'document',
-    children: [
-      { path: 'index', component: ClipBoard, name: '粘贴板', icon: 'document', meta: { title: 'Clipboard demo' } }
     ]
   }
 ]

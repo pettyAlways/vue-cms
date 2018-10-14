@@ -76,7 +76,8 @@
         let tmp = []
         data.forEach(record => {
           if (record._expanded === undefined) {
-            this.$set(record, '_expanded', expandedAll)
+            let expanded = parent ? expandedAll : true
+            this.$set(record, '_expanded', expanded)
           }
           if (parent) {
             this.$set(record, '_parent', parent)

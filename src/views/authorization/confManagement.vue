@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'configuration-manage',
+    name: 'configurationManage',
     data() {
       return {
         activeName: 'constManagement'

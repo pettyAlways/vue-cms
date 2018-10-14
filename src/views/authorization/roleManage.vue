@@ -97,7 +97,7 @@
   import { list, save, edit, deleteAll, resourceAuth, acquireResource } from '../../api/role'
   import { getMenu } from '../../api/permission'
   export default {
-    name: 'organizationManage',
+    name: 'roleManage',
     data() {
       return {
         loading: false,

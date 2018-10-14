@@ -27,7 +27,7 @@ function resolveMenuTree(menuTree) {
     if (item.type === 'menu') {
       let leaves = resolveMenuTree(item.children)
       allLeaves = [...allLeaves, ...leaves]
-    } else if (item.type === 'leaf') {
+    } else if (item.type === 'page') {
       allLeaves.push(item.path)
     }
   })
