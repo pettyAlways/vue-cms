@@ -4,10 +4,6 @@ import Router from 'vue-router'
 import Login from '@/views/login'
 import Layout from '@/views/layout/layout'
 import HomePage from '@/views/homepage/homepage'
-import Introduction from '@/views/introduction/index'
-import ExportExcel from '@/views/excel/export-excel'
-import UploadExcel from '@/views/excel/upload-excel'
-import ClipBoard from '@/views/clipboard'
 
 Vue.use(Router)
 

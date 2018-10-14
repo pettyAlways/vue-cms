@@ -5,14 +5,14 @@
         <h2 class="login-title">{{$t('login.title')}}</h2>
       </div>
       <el-form :rules="rules" :model="loginForm" ref="loginForm" label-width="60px">
-        <el-form-item :label="$t('login.account')" prop="username" style="position:relative">
-          <el-input type="text" v-model="loginForm.username" @keyup.enter.native="goToPwdInput"></el-input>
+        <el-form-item :label="$t('login.account')" prop="userAccount" style="position:relative">
+          <el-input type="text" v-model="loginForm.userAccount" @keyup.enter.native="goToPwdInput"></el-input>
           <span class="svg-container svg-container_user">
             <icon-svg icon-class="user" />
           </span>
         </el-form-item>
-        <el-form-item :label="$t('login.password')" prop="pwd">
-          <el-input type="password" v-model="loginForm.pwd" @keyup.enter.native="onLogin" ref="pwd"></el-input>
+        <el-form-item :label="$t('login.password')" prop="userPassword">
+          <el-input type="password" v-model="loginForm.userPassword" @keyup.enter.native="onLogin" ref="pwd"></el-input>
           <span class="svg-container svg-container_password">
             <icon-svg icon-class="password" />
           </span>
@@ -28,23 +28,17 @@
   </el-container>
 </template>
 <script>
-  import { isValidUsername } from '@/utils/validate'
   import { saveToLocal, loadFromLocal } from '@/common/local-storage'
   import { mapActions } from 'vuex'
   /* eslint-disable*/
   import particles from 'particles.js'
   export default {
     data() {
-      // username 验证
-      const validateUsername = (rule, value, callback) => {
-        if (!isValidUsername(value)) {
-          callback(new Error('请输入正确的用户名'))
-        } else {
-          callback()
-        }
-      }
       // pwd 验证
       const validatePwd = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入与密码'))
+        }
         if (value.length < 6) {
           callback(new Error('密码不能小于6位'))
         } else {
@@ -53,18 +47,16 @@
       }
       return {
         loginForm: {
-          username: 'admin',
-          pwd: '123456'
+          userAccount: '',
+          userPassword: ''
         },
         remember: false,
         loading: false,
         rules: {
-          username: [
-            { required: true, message: '请输入账号', trigger: 'blur' },
-            { required: true, trigger: 'blur', validator: validateUsername }
+          userAccount: [
+            { required: true, message: '请输入账号', trigger: 'blur' }
           ],
-          pwd: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
+          userPassword: [
             { required: true, trigger: 'blur', validator: validatePwd }
           ]
         }
@@ -73,11 +65,11 @@
     created() {
       // 初始化时读取localStorage用户信息
       if (loadFromLocal('remember', false)) {
-        this.loginForm.username = loadFromLocal('username', '')
-        this.loginForm.pwd = loadFromLocal('password', '')
+        this.loginForm.userAccount = loadFromLocal('username', '')
+        this.loginForm.userPassword = loadFromLocal('password', '')
       } else {
-        this.loginForm.username = ''
-        this.loginForm.pwd = ''
+        this.loginForm.userAccount = ''
+        this.loginForm.userPassword = ''
       }
     },
     methods: {
@@ -97,8 +89,8 @@
             this.login(this.loginForm).then(() => {
               // 保存账号
               if (this.remember) {
-                saveToLocal('username', this.loginForm.username)
-                saveToLocal('password', this.loginForm.pwd)
+                saveToLocal('username', this.loginForm.userName)
+                saveToLocal('password', this.loginForm.userPassword)
                 saveToLocal('remember', true)
               } else {
                 saveToLocal('username', '')

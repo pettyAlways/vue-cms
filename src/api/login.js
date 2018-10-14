@@ -1,8 +1,11 @@
-import axios from 'axios'
 import remote from '../utils/remote'
 
-export function login(userInfo) {
-  return axios.post('/user/login.do', userInfo)
+export function login(data) {
+  return remote({
+    url: '/login/login.do',
+    method: 'post',
+    data
+  })
 }
 
 export function userInfo() {
@@ -13,5 +16,8 @@ export function userInfo() {
 }
 
 export function logout() {
-  return axios.post('/login/logout')
+  return remote({
+    url: '/login/logout',
+    method: 'post'
+  })
 }

@@ -11,8 +11,6 @@ import i18n from './lang'
 import './permission'
 // 全局图标
 import './icons'
-// 全局 Mock 接口
-import './mock'
 // 全局日志
 import log from './utils/logger'
 
