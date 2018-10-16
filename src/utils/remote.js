@@ -19,7 +19,6 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(function (response) {
   // 预留一些错误不提示，如code为2018
-  debugger
   if (!response.data.flag && response.data.code !== '2018') {
     Vue.prototype.$message({
       message: response.data.message,

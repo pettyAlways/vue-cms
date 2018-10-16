@@ -38,13 +38,17 @@ const user = {
     login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(resp => {
-          setToken(resp.token)
-          commit(SET_TOKEN, resp.token)
-          // commit(SET_NAME, data.name)
-          // commit(SET_AGE, data.age)
-          // commit(SET_AVATAR, data.avatar)
-          // commit(SET_PERMISSIONS, data.permissions)
-          return resolve()
+          if (resp.flag) {
+            setToken(resp.token)
+            commit(SET_TOKEN, resp.token)
+            // commit(SET_NAME, data.name)
+            // commit(SET_AGE, data.age)
+            // commit(SET_AVATAR, data.avatar)
+            // commit(SET_PERMISSIONS, data.permissions)
+            return resolve()
+          } else {
+            reject(resp.message)
+          }
         }).catch(err => {
           return reject(err)
         })

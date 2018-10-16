@@ -98,6 +98,8 @@
                 saveToLocal('remember', false)
               }
               this.$router.push({ path: '/' })
+            }, () => {
+              this.loading = false
             }).catch(() => {
               this.loading = false
             })

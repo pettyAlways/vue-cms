@@ -1,13 +1,15 @@
 import Cookies from 'js-cookie'
-// import Mock from 'mockjs'
 
-const TokenKey = 'Vue-cms'
+const TokenKey = 'JSESSIONID'
 
 function getToken() {
+  console.log(Cookies.get())
+  console.log(Cookies)
+  console.log(Cookies.get(TokenKey))
   return Cookies.get(TokenKey)
 }
 
-function setToken(token) {
+export function setToken(token) {
   return Cookies.set(TokenKey, token)
 }
 
@@ -15,4 +17,4 @@ function removeToken() {
   return Cookies.remove(TokenKey)
 }
 
-export { getToken, setToken, removeToken }
+export { getToken, removeToken }
