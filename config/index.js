@@ -6,6 +6,7 @@ const path = require('path')
 
 module.exports = {
   dev: {
+    contextPath: 'cms_web',
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
