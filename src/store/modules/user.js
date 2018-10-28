@@ -1,5 +1,5 @@
 import { login, userInfo, logout } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/common/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import store from '../index'
 
 const SET_TOKEN = 'SET_TOKEN'

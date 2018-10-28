@@ -1,4 +1,4 @@
-import { getToken } from '@/common/auth'
+import { getToken } from '@/utils/auth'
 
 const userMap = {
   // 键名和token保持一致

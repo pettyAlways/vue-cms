@@ -6,14 +6,13 @@
 import router from './router'
 import store from './store'
 import NProgress from 'nprogress'
-import { getToken } from '@/common/auth'
+import { getToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
 // 路由全局前置守卫
 const whiteList = ['/login']  // 白名单
 router.beforeEach((to, from, next) => {
-  debugger
   if (getToken()) {
     // 有token访问login页面，就跳到首页
     if (to.path === '/login') {

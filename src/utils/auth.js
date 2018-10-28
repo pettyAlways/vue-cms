@@ -1,16 +1,14 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'JSESSIONID'
+// shiro返回的cookie带HttpOnly防止跨域，所以无法通过document.cookie等方式获取，前端需要存一个新cookie进行判断
+const TokenKey = 'login-token'
 
 function getToken() {
-  console.log(Cookies.get())
-  console.log(Cookies)
-  console.log(Cookies.get(TokenKey))
   return Cookies.get(TokenKey)
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  return Cookies.set(TokenKey, 'token')
 }
 
 function removeToken() {

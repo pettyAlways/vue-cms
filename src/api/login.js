@@ -17,7 +17,7 @@ export function userInfo() {
 
 export function logout() {
   return remote({
-    url: '/login/logout',
+    url: '/login/logout.do',
     method: 'post'
   })
 }

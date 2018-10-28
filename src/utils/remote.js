@@ -1,4 +1,5 @@
 import axios from 'axios/index'
+import { removeToken } from '@/utils/auth'
 import Vue from 'vue'
 function remote(params) {
   let instance = axios(params).catch(error => {
@@ -18,12 +19,27 @@ axios.interceptors.request.use(function (config) {
 })
 
 axios.interceptors.response.use(function (response) {
-  // 预留一些错误不提示，如code为2018
-  if (!response.data.flag && response.data.code !== '2018') {
-    Vue.prototype.$message({
-      message: response.data.message,
-      type: 'error'
-    })
+  if (!response.data.flag) {
+    // 未登陆
+    if (response.data.code === '401') {
+      removeToken()
+      setTimeout(() => {
+        location.href = '/#/login'
+      }, 3 * 1000 + 1)
+    }
+    // 未授权
+    if (response.data.code === '403') {
+      setTimeout(() => {
+        location.href = '/#/home'
+      }, 3 * 1000 + 1)
+    }
+    // 预留一些错误不提示，如code为2018
+    if (response.data.code !== '2018') {
+      Vue.prototype.$message({
+        message: response.data.message,
+        type: 'error'
+      })
+    }
   }
   return response.data
 }, function (error) {
