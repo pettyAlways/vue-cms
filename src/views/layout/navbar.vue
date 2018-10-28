@@ -47,14 +47,8 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import LangSelect from '@/components/langselect'
-  import Screenfull from '@/components/screenfull'
   export default {
     name: 'NavBar',
-    components: {
-      LangSelect,
-      Screenfull
-    },
     computed: {
       ...mapGetters([
         'name',
