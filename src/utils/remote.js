@@ -1,8 +1,6 @@
 import axios from 'axios/index'
 import { removeToken } from '@/utils/auth'
 import Vue from 'vue'
-const config = require('../../config')
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? config.build.host : `http://${config.dev.host}:${config.dev.port}`
 function remote(params) {
   let instance = axios(params).catch(error => {
     // 出异常则关闭遮罩层
