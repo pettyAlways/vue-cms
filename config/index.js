@@ -6,7 +6,6 @@ const path = require('path')
 
 module.exports = {
   dev: {
-    contextPath: 'cms_web',
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -17,7 +16,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -44,10 +43,11 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true,
+    cssSourcsrdreMap: true,
   },
 
   build: {
+    host: 'http://47.100.44.21/cms_web',
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
