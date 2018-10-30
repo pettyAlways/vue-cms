@@ -2,7 +2,7 @@ import remote from '../utils/remote'
 
 export function list(data) {
   return remote({
-    url: '/role/list.do',
+    url: '/cms_web/role/list.do',
     method: 'get',
     params: data
   })
@@ -10,7 +10,7 @@ export function list(data) {
 
 export function listAll(data) {
   return remote({
-    url: '/role/listAll.do',
+    url: '/cms_web/role/listAll.do',
     method: 'get',
     params: data
   })
@@ -18,7 +18,7 @@ export function listAll(data) {
 
 export function save(data) {
   return remote({
-    url: '/role/save.do',
+    url: '/cms_web/role/save.do',
     method: 'post',
     data: data
   })
@@ -26,7 +26,7 @@ export function save(data) {
 
 export function edit(data) {
   return remote({
-    url: '/role/edit.do',
+    url: '/cms_web/role/edit.do',
     method: 'put',
     data: data
   })
@@ -34,7 +34,7 @@ export function edit(data) {
 
 export function deleteAll(params) {
   return remote({
-    url: '/role/delete.do',
+    url: '/cms_web/role/delete.do',
     method: 'delete',
     params
   })
@@ -50,7 +50,7 @@ export function resourceAuth(data) {
 
 export function acquireResource(params) {
   return remote({
-    url: '/role/acquireResource.do',
+    url: '/cms_web/role/acquireResource.do',
     method: 'get',
     params
   })

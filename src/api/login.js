@@ -10,14 +10,14 @@ export function login(data) {
 
 export function userInfo() {
   return remote({
-    url: '/user/userInfo.do',
+    url: '/cms_web/user/userInfo.do',
     method: 'get'
   })
 }
 
 export function logout() {
   return remote({
-    url: '/login/logout.do',
+    url: '/cms_web/login/logout.do',
     method: 'post'
   })
 }

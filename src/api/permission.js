@@ -2,21 +2,21 @@ import remote from '../utils/remote'
 
 export function getMenu() {
   return remote({
-    url: '/permission/listPower.do',
+    url: '/cms_web/permission/listPower.do',
     method: 'get'
   })
 }
 
 export function subPower(params) {
   return remote({
-    url: '/permission/subPower.do',
+    url: '/cms_web/permission/subPower.do',
     method: 'get',
     params
   })
 }
 export function deleteAll(params) {
   return remote({
-    url: '/permission/deletePower.do',
+    url: '/cms_web/permission/deletePower.do',
     method: 'delete',
     params
   })
@@ -24,7 +24,7 @@ export function deleteAll(params) {
 
 export function editResource(data) {
   return remote({
-    url: '/permission/updatePower.do',
+    url: '/cms_web/permission/updatePower.do',
     method: 'put',
     data
   })
@@ -32,7 +32,7 @@ export function editResource(data) {
 
 export function saveResource(data) {
   return remote({
-    url: '/permission/savePower.do',
+    url: '/cms_web/permission/savePower.do',
     method: 'post',
     data
   })
