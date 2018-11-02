@@ -58,7 +58,7 @@ const menuswitch = {
       commit(SET_CURCONFIGURE, curMenuName)
     },
     // F5刷新vuex状态丢失需要路由全局守卫调用该Action进行重新设置默认页面,也可以在切换导航菜单时调用
-    resolveDefaultPage({ commit }, {permissions, alias}) {
+    resolveDefaultPage({ commit }, { permissions, alias }) {
       let sidebarPage = alias === 'HomePage' ? '/home' : (findDefaultPage(permissions) || firtLeafNode)
       commit(SET_DEFAULTPAGE, {configure: alias, sidebarPage: sidebarPage})
     },

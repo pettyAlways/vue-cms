@@ -27,14 +27,14 @@
             <el-input v-model="resourceSearchForm.resourceName" placeholder="模糊匹配权限名称"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-delete" size="small" @click="searchForm">查询</el-button>
+            <el-button v-if="power['资源查询']" type="primary" icon="el-icon-delete" size="small" @click="searchForm">查询</el-button>
             <el-button type="primary" icon="el-icon-delete" size="small" @click="resourceSearchForm.resourceName = ''">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
       <el-row class="operate-btn-group" type="flex" justify="start">
-        <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-        <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
+        <el-button v-if="power['资源新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+        <el-button v-if="power['资源删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -77,9 +77,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
-              <a type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
+              <a v-if="power['资源更新']" type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
+              <a v-if="power['资源查询']" type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
+              <a v-if="power['资源删除']" type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
             </template>
           </el-table-column>
         </el-table>
@@ -140,6 +140,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import { getMenu, subPower, saveResource, editResource, deleteAll } from '../../api/permission'
   export default {
     name: 'resourceManage',
@@ -186,18 +187,30 @@
         defaultProps: {
           children: 'children',
           label: 'name'
-        }
+        },
+        power: []
       }
     },
     watch: {
       filterText(val) {
         this.$refs.aTree.filter(val)
+      },
+      pageMenus: {
+        handler(newMenus) {
+          this.power = newMenus[this.$route.path]
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
       }
     },
     components: {
       commonDialog: () => import('@/components/common-dialog')
     },
     computed: {
+      ...mapGetters([
+        'pageMenus'
+      ]),
       isView() {
         return this.dialogType === 'view'
       }

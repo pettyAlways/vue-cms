@@ -7,6 +7,26 @@ const SET_NAME = 'SET_NAME'
 const SET_AGE = 'SET_AGE'
 const SET_AVATAR = 'SET_AVATAR'
 const SET_PERMISSIONS = 'SET_PERMISSIONS'
+const SET_PAGEMENUS = 'SET_PAGEMENUS'
+
+function plainPageMenus(permissions) {
+  let pageMenus = {}
+  if (permissions) {
+    permissions.forEach(item => {
+      if (item.type === 'page') {
+        let menus = item.children.length ? item.children.map(tItem => { return tItem.name }) : []
+        let power = {}
+        menus.forEach(cItem => {
+          power = { ...power, [cItem]: true }
+        })
+        pageMenus = { ...pageMenus, ...{ [item.path]: power } }
+      } else if (item.type === 'menu') {
+        pageMenus = { ...pageMenus, ...plainPageMenus(item.children) }
+      }
+    })
+  }
+  return pageMenus
+}
 
 const user = {
   state: {
@@ -14,7 +34,8 @@ const user = {
     name: '',
     age: 0,
     avatar: '',
-    permissions: ''
+    permissions: '',
+    pageMenus: {}
   },
   mutations: {
     [SET_TOKEN](state, token) {
@@ -31,6 +52,16 @@ const user = {
     },
     [SET_PERMISSIONS](state, permissions) {
       state.permissions = permissions
+    },
+    [SET_PAGEMENUS](state, permissions) {
+      if (permissions) {
+        for (let key in permissions) {
+          let menus = plainPageMenus(permissions[key])
+          state.pageMenus = Object.assign({}, state.pageMenus, {
+            [key]: menus
+          })
+        }
+      }
     }
   },
   actions: {
@@ -67,6 +98,7 @@ const user = {
             partition[item.alias] = item.children
           })
           commit(SET_PERMISSIONS, partition)
+          commit(SET_PAGEMENUS, partition)
           // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
           let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
           return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
@@ -94,7 +126,8 @@ const user = {
     name: state => state.name,
     age: state => state.age,
     avatar: state => state.avatar,
-    permissions: state => state.permissions
+    permissions: state => state.permissions,
+    pageMenus: state => state.pageMenus[store.getters.curConfigure]
   }
 }
 

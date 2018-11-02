@@ -42,7 +42,7 @@ export function deleteAll(params) {
 
 export function resourceAuth(data) {
   return remote({
-    url: '/role/resourceAuth.do',
+    url: '/cms_web/role/resourceAuth.do',
     method: 'post',
     data
   })
