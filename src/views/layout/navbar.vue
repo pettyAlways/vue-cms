@@ -11,13 +11,8 @@
       <router-link to="/home" v-if="!isCollapse"><div index="1">{{$t('navbar.title')}}</div></router-link>
     </div>
     <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
-    <el-menu-item index="SysConfigure"><i class="el-icon-setting"></i>系统配置</el-menu-item>
-    <el-menu-item index="SysService"><i class="el-icon-service"></i>服务配置</el-menu-item>
-    <el-menu-item index="SysProfile"><i class="el-icon-message"></i>工具集成</el-menu-item>
-    <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
-      <screenfull class="screenfull right-menu-item"></screenfull>
-    </el-tooltip>
-    <lang-select class="right-menu-item"></lang-select>
+    <!--模块权限管理 -->
+    <el-menu-item v-for="item in moduleList" :index="item.index"><i :class="item.icon"></i>{{item.name}}</el-menu-item>
 
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
@@ -57,7 +52,8 @@
         'curConfigure',
         'defaultPage',
         'permissions',
-        'isCollapse'
+        'isCollapse',
+        'moduleList'
       ])
     },
     methods: {

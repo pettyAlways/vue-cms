@@ -8,6 +8,7 @@ const SET_AGE = 'SET_AGE'
 const SET_AVATAR = 'SET_AVATAR'
 const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
+const SET_MODULELIST = 'SET_MODULELIST'
 
 function plainPageMenus(permissions) {
   let pageMenus = {}
@@ -35,7 +36,8 @@ const user = {
     age: 0,
     avatar: '',
     permissions: '',
-    pageMenus: {}
+    pageMenus: {},
+    moduleList: []
   },
   mutations: {
     [SET_TOKEN](state, token) {
@@ -52,6 +54,9 @@ const user = {
     },
     [SET_PERMISSIONS](state, permissions) {
       state.permissions = permissions
+    },
+    [SET_MODULELIST](state, modules) {
+      state.moduleList = modules
     },
     [SET_PAGEMENUS](state, permissions) {
       if (permissions) {
@@ -97,6 +102,10 @@ const user = {
           data.resourceTree.children.forEach(item => {
             partition[item.alias] = item.children
           })
+          let modules = data.resourceTree.children.map(item => {
+            return { index: item.alias, icon: item.icon, name: item.name }
+          })
+          commit(SET_MODULELIST, modules)
           commit(SET_PERMISSIONS, partition)
           commit(SET_PAGEMENUS, partition)
           // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
@@ -127,7 +136,8 @@ const user = {
     age: state => state.age,
     avatar: state => state.avatar,
     permissions: state => state.permissions,
-    pageMenus: state => state.pageMenus[store.getters.curConfigure]
+    pageMenus: state => state.pageMenus[store.getters.curConfigure],
+    moduleList: state => state.moduleList
   }
 }
 

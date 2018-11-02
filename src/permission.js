@@ -24,7 +24,6 @@ router.beforeEach((to, from, next) => {
         store.dispatch('pullUserInfo').then(permissions => {
           // 每个导航栏菜单下的左菜单栏都有一个默认打开的页面，这个页面可以在系统配置的功能树页面配置
           store.dispatch('resolveDefaultPage', { permissions: permissions, alias: store.getters.curConfigure })
-          store.dispatch('pageMenus', { permissions: permissions, alias: store.getters.curConfigure })
           store.dispatch('GenerateRoutes', { permissions }).then(() => {
             // 动态添加可访问路由表
             router.addRoutes(store.getters.addRouters)
