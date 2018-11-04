@@ -12,7 +12,10 @@
     </div>
     <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
     <!--模块权限管理 -->
-    <el-menu-item v-for="item in moduleList" :index="item.index"><i :class="item.icon"></i>{{item.name}}</el-menu-item>
+    <el-menu-item v-for="(item, index) in moduleList" :key="index" :index="item.index">
+      <icon-svg v-if="item.icon" :iconClass="item.icon"></icon-svg>
+      <span>{{item.name}}</span>
+    </el-menu-item>
 
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">

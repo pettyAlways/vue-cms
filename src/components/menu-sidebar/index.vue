@@ -25,9 +25,6 @@
     props: {
       menus: Array
     },
-    components: {
-      iconSvg: () => import('../icon-svg')
-    },
     name: 'menuSidebar'
   }
 </script>

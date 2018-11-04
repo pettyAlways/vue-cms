@@ -18,6 +18,23 @@
         @node-click="nodeClick"
         :filter-node-method="filterNode"
         ref="aTree">
+         <span style="display: flex; flex-direction: row; align-items: center" slot-scope="{ node, data }">
+           <icon-svg :iconClass="resType[data.type]"></icon-svg>
+           <span>{{node.label}}</span>
+         </span>
+        <span>
+          <el-button
+            type="text"
+            size="mini">
+            Append
+          </el-button>
+          <el-button
+            type="text"
+            size="mini">
+            Delete
+          </el-button>
+        </span>
+        </span>
       </el-tree>
     </el-col>
     <el-col :span="19" class="resource-represent">
@@ -58,7 +75,11 @@
           </el-table-column>
           <el-table-column
             prop="resourceIcon"
-            label="资源图标">
+            label="资源图标"
+            align="center">
+            <template slot-scope="scope">
+              <icon-svg v-if="scope.row.resourceIcon" :iconClass="scope.row.resourceIcon"></icon-svg>
+            </template>
           </el-table-column>
           <el-table-column
             prop="resourceTypeName"
@@ -104,32 +125,44 @@
           <el-form-item label="权限名称" prop="resourceName">
             <el-input v-model="resourceForm.resourceName" :disabled="isView"></el-input>
           </el-form-item>
-          <el-form-item label="资源图标" prop="resourceIcon">
-            <el-input v-model="resourceForm.resourceIcon" :disabled="isView" placeholder="确保唯一"></el-input>
-          </el-form-item>
-          <el-form-item label="资源路径" prop="resourcePath">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="类型" prop="resourceType">
+                <el-select v-model="resourceForm.resourceType" :disabled="isView">
+                  <el-option label="模块" value="module"></el-option>
+                  <el-option label="菜单" value="menu"></el-option>
+                  <el-option label="页面" value="page"></el-option>
+                  <el-option label="按钮" value="button"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="资源图标" prop="resourceIcon">
+                <icons-show ref="iconPanel"></icons-show>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item v-if="['page', 'button'].indexOf(resourceForm.resourceType) != -1" label="资源路径" prop="resourcePath">
             <el-input v-model="resourceForm.resourcePath" :disabled="isView"></el-input>
           </el-form-item>
-          <el-form-item label="默认页面" prop="defaultPage">
-            <el-select v-model="resourceForm.defaultPage" :disabled="isView">
-              <el-option label="是" value="Y"></el-option>
-              <el-option label="否" value="N"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="类型" prop="resourceType">
-            <el-select v-model="resourceForm.resourceType" :disabled="isView">
-              <el-option label="模块" value="module"></el-option>
-              <el-option label="菜单" value="menu"></el-option>
-              <el-option label="页面" value="page"></el-option>
-              <el-option label="按钮" value="button"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="是否启用" prop="inUse">
-            <el-select v-model="resourceForm.inUse" :disabled="isView">
-              <el-option label="是" value="1"></el-option>
-              <el-option label="否" value="2"></el-option>
-            </el-select>
-          </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="默认页面" prop="defaultPage">
+                <el-select v-model="resourceForm.defaultPage" :disabled="isView">
+                  <el-option label="是" value="Y"></el-option>
+                  <el-option label="否" value="N"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="是否启用" prop="inUse">
+                <el-select v-model="resourceForm.inUse" :disabled="isView">
+                  <el-option label="是" value="1"></el-option>
+                  <el-option label="否" value="2"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item label="排序" prop="resourceSort">
             <el-input v-model="resourceForm.resourceSort" :disabled="isView"></el-input>
           </el-form-item>
@@ -172,23 +205,33 @@
           resourceSort: ''
         },
         rules: {
-          powerName: [
+          resourceName: [
             { required: true, message: '权限名称不能为空', trigger: 'blur' }
           ],
           powerUrl: [
             { required: true, message: '权限路径不能为空', trigger: 'blur' }
+          ],
+          resourcePath: [
+            { required: true, message: '资源路径不能为空', trigger: 'blur' }
           ]
 
         },
         dialogType: '',
-        dialogTitle: { save: '新增部门', edit: '修改部门', view: '查看部门' },
+        dialogTitle: { save: '新增资源', edit: '修改资源', view: '查看资源' },
         visible: false,
         viewVisible: false,
         defaultProps: {
           children: 'children',
           label: 'name'
         },
-        power: []
+        power: [],
+        resType: {
+          root: 'tree',
+          module: 'trunk',
+          menu: 'branch',
+          page: 'leaf',
+          button: 'bug'
+        }
       }
     },
     watch: {
@@ -205,7 +248,8 @@
       }
     },
     components: {
-      commonDialog: () => import('@/components/common-dialog')
+      commonDialog: () => import('@/components/common-dialog'),
+      iconsShow: () => import('@/components/custom-select/icon_show')
     },
     computed: {
       ...mapGetters([
@@ -303,6 +347,7 @@
       async loadPrepresentData() {
         // await必须是Promise对象才有意义（等待resolve的返回）
         let curNodeId = await this.loadTree()
+        this.$refs.aTree.setCurrentKey(curNodeId)
         this.loadTableDatas({parentId: curNodeId, ...{ page: this.paging.page, size: this.paging.size }})
       },
       // 树节点切换时一些公用数据重置
@@ -347,6 +392,7 @@
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
             this.resourceForm.parentId = this.curNode.id
+            this.resourceForm.resourceIcon = this.$refs.iconPanel.getSelectVal()
             let operMethod = this.dialogType === 'save' ? saveResource : editResource
             operMethod(this.resourceForm).then(res => {
               if (res.flag) {

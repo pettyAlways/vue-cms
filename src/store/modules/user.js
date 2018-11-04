@@ -9,6 +9,7 @@ const SET_AVATAR = 'SET_AVATAR'
 const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
 const SET_MODULELIST = 'SET_MODULELIST'
+const SAVE_SVG_ICONS = 'SAVE_SVG_ICONS'
 
 function plainPageMenus(permissions) {
   let pageMenus = {}
@@ -37,7 +38,8 @@ const user = {
     avatar: '',
     permissions: '',
     pageMenus: {},
-    moduleList: []
+    moduleList: [],
+    svgIconList: []
   },
   mutations: {
     [SET_TOKEN](state, token) {
@@ -67,6 +69,9 @@ const user = {
           })
         }
       }
+    },
+    [SAVE_SVG_ICONS](state, svgList) {
+      state.svgIconList = svgList
     }
   },
   actions: {
@@ -137,7 +142,8 @@ const user = {
     avatar: state => state.avatar,
     permissions: state => state.permissions,
     pageMenus: state => state.pageMenus[store.getters.curConfigure],
-    moduleList: state => state.moduleList
+    moduleList: state => state.moduleList,
+    svgIconList: state => state.svgIconList
   }
 }
 
