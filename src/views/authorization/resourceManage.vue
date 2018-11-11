@@ -34,7 +34,6 @@
             Delete
           </el-button>
         </span>
-        </span>
       </el-tree>
     </el-col>
     <el-col :span="19" class="resource-represent">
@@ -138,7 +137,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="资源图标" prop="resourceIcon">
-                <icons-show ref="iconPanel"></icons-show>
+                <icons-show :iconVal="resourceForm.resourceIcon" ref="iconPanel"></icons-show>
               </el-form-item>
             </el-col>
           </el-row>
@@ -378,11 +377,16 @@
         this.resourceForm = {
           parentPowerName: '',
           powerName: '',
+          resourceIcon: '',
           powerUrl: '',
           powerCode: '',
           powerType: '1',
           powerIndex: ''
         }
+        // 调用子组件方法清除，调用这个方法清除而不是置空resourceForm.resourceIcon触发props清空的原因：
+        // 主要是在新增的时候resourceForm.resourceIcon传递是空，点取消是置空resourceIcon,前后没有发生变化所以不会触发props
+        // 导致在选择图标再取消不会清空输入框图标内容
+        this.$refs.iconPanel.clearIcon()
         this.$refs.resourceForm.clearValidate()
       },
       cancel() {

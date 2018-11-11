@@ -21,6 +21,9 @@
 
   export default {
     name: 'icon_show',
+    props: {
+      iconVal: ''
+    },
     data() {
       return {
         selectVal: ''
@@ -31,9 +34,20 @@
         'svgIconList'
       ])
     },
+    watch: {
+      iconVal: {
+        handler(newIcon) {
+          this.selectVal = newIcon
+        },
+        immediate: true
+      }
+    },
     methods: {
       getSelectVal() {
         return this.selectVal
+      },
+      clearIcon() {
+        this.selectVal = ''
       }
     }
   }
