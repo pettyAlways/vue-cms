@@ -11,6 +11,7 @@ const SET_PAGEMENUS = 'SET_PAGEMENUS'
 const SET_MODULELIST = 'SET_MODULELIST'
 const SAVE_SVG_ICONS = 'SAVE_SVG_ICONS'
 
+// 将该用户有权限的按钮放入列表并标记为true,方便后面页面控制按钮的隐藏和显示
 function plainPageMenus(permissions) {
   let pageMenus = {}
   if (permissions) {
@@ -100,9 +101,11 @@ const user = {
       return new Promise((resolve, reject) => {
         userInfo().then(resp => {
           let data = resp.data
+          // 更新中心信息缓存其实没什么必要
           commit(SET_NAME, data.name)
           commit(SET_AGE, data.age)
           commit(SET_AVATAR, data.avatar)
+          // 模块权限路由缓存
           let partition = {}
           data.resourceTree.children.forEach(item => {
             partition[item.alias] = item.children
@@ -110,12 +113,16 @@ const user = {
           let modules = data.resourceTree.children.map(item => {
             return { index: item.alias, icon: item.icon, name: item.name }
           })
+          // 模块列表用于显示导航栏
           commit(SET_MODULELIST, modules)
+          // 整个系统当前用户的权限路径
           commit(SET_PERMISSIONS, partition)
+          // 缓存当前用户有权限的按钮
           commit(SET_PAGEMENUS, partition)
           // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
-          let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
-          return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
+          // let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
+          /// return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
+          return resolve(partition)
         }).catch(err => {
           return reject(err)
         })

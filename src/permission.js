@@ -22,8 +22,8 @@ router.beforeEach((to, from, next) => {
       // 刷新操作token存在但是vuex内容被清空执行下面代码
       if (store.getters.permissions.length === 0) {
         store.dispatch('pullUserInfo').then(permissions => {
-          // 每个导航栏菜单下的左菜单栏都有一个默认打开的页面，这个页面可以在系统配置的功能树页面配置
-          store.dispatch('resolveDefaultPage', { permissions: permissions, alias: store.getters.curConfigure })
+          // 缓存所有模块的默认页面（系统配置可配置）以及动态添加路由
+          store.dispatch('resolveDefaultPage', { permissions: permissions })
           store.dispatch('GenerateRoutes', { permissions }).then(() => {
             // 动态添加可访问路由表
             router.addRoutes(store.getters.addRouters)

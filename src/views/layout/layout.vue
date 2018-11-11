@@ -24,7 +24,6 @@
       ...mapGetters([
         'curConfigure',
         'curActive',
-        'curConfigure',
         'isCollapse'
       ])
     },

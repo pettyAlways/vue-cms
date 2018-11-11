@@ -18,6 +18,8 @@ function filterAsyncRouter(asyncRouterMap, roles, parentPath) {
   })
   return accessedRouters
 }
+
+// 将树结构数据变成平面化结构数据
 function resolveMenuTree(menuTree) {
   if (_.isEmpty(menuTree)) {
     return []
@@ -50,7 +52,12 @@ const permission = {
     GenerateRoutes({ commit }, routers) {
       return new Promise((resolve) => {
         const { permissions } = routers
-        const routersMap = resolveMenuTree(permissions)
+        // 将该用户的所有权限都存放到数组中
+        let routersMap = []
+        Object.keys(permissions).forEach(key => {
+          routersMap = [...routersMap, ...resolveMenuTree(permissions[key])]
+        })
+        // 将数组中的用户权限比对异步路由并动态添加匹配的动态路由
         let accessedRouters = filterAsyncRouter(asyncRouterMap, routersMap)
         commit(SET_ROUTERS, accessedRouters)
         resolve()

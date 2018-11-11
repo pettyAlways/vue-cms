@@ -48,5 +48,12 @@ export const asyncRouterMap = [
       { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
       { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} }
     ]
+  },
+  {
+    path: '/service-config',
+    component: Layout,
+    children: [
+      { name: 'helloService', path: 'hello-service', component: () => import('../views/service/helloService.vue'), meta: {tagName: '简单例子'} }
+    ]
   }
 ]

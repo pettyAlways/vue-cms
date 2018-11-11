@@ -231,7 +231,8 @@
           menu: 'branch',
           page: 'leaf',
           button: 'bug'
-        }
+        },
+        timer: ''
       }
     },
     watch: {

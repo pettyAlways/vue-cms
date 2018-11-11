@@ -16,7 +16,6 @@
       <icon-svg v-if="item.icon" :iconClass="item.icon"></icon-svg>
       <span>{{item.name}}</span>
     </el-menu-item>
-
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img class="user-avatar" :src="avatar">
@@ -73,7 +72,6 @@
         // 通过vuex管理导航栏功能切换
         this.switchConfigureMenu(key)
         // 切换导航配置功能菜单时重新刷新页面
-        this.resolveDefaultPage({permissions: this.permissions[this.curConfigure], alias: this.curConfigure})
         let curActiveTab = this.curActive[key] || (key === 'HomePage' ? '/home' : this.defaultPage[this.curConfigure])
         curActiveTab = curActiveTab || '/home'
         this.$router.push(curActiveTab)
@@ -81,7 +79,8 @@
       logout() {
         this.userLogout().then(() => {
           // 为了重新实例化vue-router对象 避免bug
-          location.reload()
+          // location.reload()
+          this.$router.push({ path: '/login' })
         }).catch(err => {
           console.log(err)
         })
