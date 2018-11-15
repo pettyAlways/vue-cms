@@ -30,12 +30,13 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // 重定向登录页面
   if (error.response.status === 401) {
+    // 移除token则使用reload的时候在permission文件中跳转到login
     removeToken()
     setTimeout(() => {
-      router.replace('/login')
+      location.reload()
     }, 3 * 1000 + 1)
     Vue.prototype.$message({
-      message: '请先登录再访问资源',
+      message: '请先登录',
       type: 'error'
     })
     return { flag: false }
@@ -46,7 +47,7 @@ axios.interceptors.response.use(function (response) {
       router.replace('/home')
     }, 3 * 1000 + 1)
     Vue.prototype.$message({
-      message: '没有权限访问',
+      message: '没有权限访问,返回主页',
       type: 'error'
     })
     return { flag: false }
