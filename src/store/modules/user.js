@@ -123,8 +123,6 @@ const user = {
           // let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
           /// return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
           return resolve(partition)
-        }).catch(err => {
-          return reject(err)
         })
       })
     },

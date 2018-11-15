@@ -18,7 +18,7 @@
           </span>
         </el-form-item>
         <el-form-item :label="$t('login.remember')" label-width="80px">
-          <el-switch v-model="remember"></el-switch>
+          <el-switch v-model="remember" @change="rememberMe"></el-switch>
         </el-form-item>
         <el-button type="primary" @click="onLogin('loginForm')" :loading="loading">{{$t('login.login')}}</el-button>
       </el-form>
@@ -28,7 +28,7 @@
   </el-container>
 </template>
 <script>
-  import { saveToLocal, loadFromLocal } from '@/common/local-storage'
+  import { saveToLocal, loadFromLocal } from '@/utils/local-storage'
   import { mapActions } from 'vuex'
   /* eslint-disable*/
   import particles from 'particles.js'
@@ -63,8 +63,9 @@
       }
     },
     created() {
+      this.remember = loadFromLocal('rememberMe', false)
       // 初始化时读取localStorage用户信息
-      if (loadFromLocal('remember', false)) {
+      if (this.remember) {
         this.loginForm.userAccount = loadFromLocal('username', '')
         this.loginForm.userPassword = loadFromLocal('password', '')
       } else {
@@ -76,6 +77,9 @@
       ...mapActions([
         'login'
       ]),
+      rememberMe(val) {
+        saveToLocal('rememberMe', val)
+      },
       // 用户名输入框回车后切换到密码输入框
       goToPwdInput() {
         this.$refs.pwd.$el.getElementsByTagName('input')[0].focus()
@@ -89,13 +93,11 @@
             this.login(this.loginForm).then(() => {
               // 保存账号
               if (this.remember) {
-                saveToLocal('username', this.loginForm.userName)
+                saveToLocal('username', this.loginForm.userAccount)
                 saveToLocal('password', this.loginForm.userPassword)
-                saveToLocal('remember', true)
               } else {
                 saveToLocal('username', '')
                 saveToLocal('password', '')
-                saveToLocal('remember', false)
               }
               this.$router.push({ path: '/' })
             }, () => {
@@ -217,14 +219,14 @@
         }
       })
       this.$notify({
-        title: '账号：admin',
+        title: '账号：yangweixian',
         dangerouslyUseHTMLString: true,
         message: '<strong>密码：<i>123456</i></strong>',
         type: 'success',
         position: 'bottom-left'
       })
       this.$notify({
-        title: '账号：lucy',
+        title: '账号：yingzuidou',
         dangerouslyUseHTMLString: true,
         message: '<strong>密码：<i>123456</i></strong>',
         type: 'success',
