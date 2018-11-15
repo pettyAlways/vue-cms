@@ -35,10 +35,6 @@ router.beforeEach((to, from, next) => {
               next({ ...to, replace: true })
             }
           })
-        }).catch(() => {
-          store.dispatch('logout').then(() => {
-            next('/login')
-          })
         })
       } else {
         next()
