@@ -135,7 +135,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if="['module', 'menu', 'page'].indexOf(resourceForm.resourceType) != -1">
               <el-form-item label="资源图标" prop="resourceIcon">
                 <icons-show :iconVal="resourceForm.resourceIcon" ref="iconPanel"></icons-show>
               </el-form-item>
@@ -145,7 +145,7 @@
             <el-input v-model="resourceForm.resourcePath" :disabled="isView"></el-input>
           </el-form-item>
           <el-row>
-            <el-col :span="12">
+            <el-col v-if="['page'].indexOf(resourceForm.resourceType) != -1" :span="12">
               <el-form-item label="默认页面" prop="defaultPage">
                 <el-select v-model="resourceForm.defaultPage" :disabled="isView">
                   <el-option label="是" value="Y"></el-option>
@@ -198,7 +198,7 @@
           resourceName: '',
           resourceIcon: '',
           resourcePath: '',
-          resourceType: 'menu',
+          resourceType: 'page',
           defaultPage: 'N',
           inUse: '1',
           resourceSort: ''
@@ -375,18 +375,21 @@
       },
       initForm() {
         this.resourceForm = {
-          parentPowerName: '',
-          powerName: '',
+          parentResourceName: '',
+          resourceName: '',
           resourceIcon: '',
-          powerUrl: '',
-          powerCode: '',
-          powerType: '1',
-          powerIndex: ''
+          resourcePath: '',
+          resourceType: 'page',
+          defaultPage: 'N',
+          inUse: '1',
+          resourceSort: ''
         }
         // 调用子组件方法清除，调用这个方法清除而不是置空resourceForm.resourceIcon触发props清空的原因：
         // 主要是在新增的时候resourceForm.resourceIcon传递是空，点取消是置空resourceIcon,前后没有发生变化所以不会触发props
         // 导致在选择图标再取消不会清空输入框图标内容
-        this.$refs.iconPanel.clearIcon()
+        if (this.$refs.iconPanel) {
+          this.$refs.iconPanel.clearIcon()
+        }
         this.$refs.resourceForm.clearValidate()
       },
       cancel() {
@@ -397,7 +400,9 @@
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
             this.resourceForm.parentId = this.curNode.id
-            this.resourceForm.resourceIcon = this.$refs.iconPanel.getSelectVal()
+            if (this.$refs.iconPanel) {
+              this.resourceForm.resourceIcon = this.$refs.iconPanel.getSelectVal()
+            }
             let operMethod = this.dialogType === 'save' ? saveResource : editResource
             operMethod(this.resourceForm).then(res => {
               if (res.flag) {

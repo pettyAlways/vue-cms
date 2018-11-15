@@ -46,7 +46,8 @@ export const asyncRouterMap = [
       { name: 'roleManage', path: 'role-manage', component: () => import('../views/authorization/roleManage.vue'), meta: {tagName: '角色管理'} },
       { name: 'resourceManage', path: 'resource-manage', component: () => import('../views/authorization/resourceManage.vue'), meta: {tagName: '资源管理'} },
       { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
-      { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} }
+      { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} },
+      { name: 'confManagement', path: 'conf-manage', component: () => import('../views/authorization/dic/confManagement.vue'), meta: {tagName: '配置管理'} }
     ]
   },
   {
