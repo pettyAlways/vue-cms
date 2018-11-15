@@ -17,7 +17,6 @@ axios.interceptors.request.use(function (config) {
 
 // 请求码非200会进入到error函数处理等价于在上面axios(params)后面加个catch
 axios.interceptors.response.use(function (response) {
-  debugger
   if (!response.data.flag) {
     // 预留一些错误不提示，如code为2018
     if (response.data.code !== '2018') {

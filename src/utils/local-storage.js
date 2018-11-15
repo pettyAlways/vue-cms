@@ -1,5 +1,4 @@
 function saveToLocal(key, value) {
-  debugger
   let vuecms = window.localStorage.__vuecms__
   if (!vuecms) {
     vuecms = {}
