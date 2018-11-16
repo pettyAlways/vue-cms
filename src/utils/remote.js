@@ -8,7 +8,6 @@ function remote(params) {
   return instance
 }
 
-// 参考：http://www.php.cn/js-tutorial-390447.html
 axios.interceptors.request.use(function (config) {
   return config
 }, function (error) {
@@ -30,26 +29,12 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // 重定向登录页面
   if (error.response.status === 401) {
-    // 移除token则使用reload的时候在permission文件中跳转到login
-    removeToken()
-    setTimeout(() => {
-      location.reload()
-    }, 3 * 1000 + 1)
-    Vue.prototype.$message({
-      message: '请先登录',
-      type: 'error'
-    })
+    goLogin()
     return { flag: false }
   }
   // 重定向主页
   if (error.response.status === 403) {
-    setTimeout(() => {
-      router.replace('/home')
-    }, 3 * 1000 + 1)
-    Vue.prototype.$message({
-      message: '没有权限访问,返回主页',
-      type: 'error'
-    })
+    goHome()
     return { flag: false }
   }
   // 出异常则关闭遮罩层
@@ -58,5 +43,28 @@ axios.interceptors.response.use(function (response) {
   Vue.prototype.$logHelper.error(error, 'dev')
   return Promise.reject(error)
 })
+
+// 移除token则使用reload的时候在permission文件中跳转到login
+function goLogin() {
+  removeToken()
+  setTimeout(() => {
+    location.reload()
+  }, 3 * 1000 + 1)
+  Vue.prototype.$message({
+    message: '请先登录',
+    type: 'error'
+  })
+}
+
+// 403返回主页面
+function goHome() {
+  setTimeout(() => {
+    router.replace('/home')
+  }, 3 * 1000 + 1)
+  Vue.prototype.$message({
+    message: '没有权限访问,返回主页',
+    type: 'error'
+  })
+}
 
 export default remote
