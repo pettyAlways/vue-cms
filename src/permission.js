@@ -14,7 +14,6 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login']  // 白名单
 router.beforeEach((to, from, next) => {
   if (getToken()) {
-    console.error(to.path)
     // 有token访问login页面，就跳到首页
     if (to.path === '/login') {
       next('/home/homePage')

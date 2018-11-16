@@ -59,7 +59,7 @@ function goLogin() {
 // 403返回主页面
 function goHome() {
   setTimeout(() => {
-    router.replace('/home')
+    router.replace('/home/homePage')
   }, 3 * 1000 + 1)
   Vue.prototype.$message({
     message: '没有权限访问,返回主页',

@@ -82,14 +82,14 @@
       },
       switchMenu(key) {
         if (key === 'HomePage') {
-          this.$router.push('/home')
+          this.$router.push('/home/homePage')
           return
         }
         // 通过vuex管理导航栏功能切换
         this.switchConfigureMenu(key)
         // 切换导航配置功能菜单时重新刷新页面
-        let curActiveTab = this.curActive[key] || (key === 'HomePage' ? '/home' : this.defaultPage[this.curConfigure])
-        curActiveTab = curActiveTab || '/home'
+        let curActiveTab = this.curActive[key] || (key === 'HomePage' ? '/home/homePage' : this.defaultPage[this.curConfigure])
+        curActiveTab = curActiveTab || '/home/homePage'
         this.$router.push(curActiveTab)
       },
       logout() {

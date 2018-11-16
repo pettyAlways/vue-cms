@@ -55,7 +55,7 @@
               this.$router.push(lastTag.path)
             } else {
               routePath['path'] = ''
-              distPath = '/home'
+              distPath = '/home/homePage'
             }
           }
           routePath['menuSwitch'] = this.curConfigure

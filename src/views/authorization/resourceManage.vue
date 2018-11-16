@@ -347,7 +347,10 @@
       async loadPrepresentData() {
         // await必须是Promise对象才有意义（等待resolve的返回）
         let curNodeId = await this.loadTree()
-        this.$refs.aTree.setCurrentKey(curNodeId)
+        // 异步加载需要时间，在这个事件内切换其他模块当前的this注销，则这个树引用找不到，所以需要判断
+        if (this.$refs.aTree) {
+          this.$refs.aTree.setCurrentKey(curNodeId)
+        }
         this.loadTableDatas({parentId: curNodeId, ...{ page: this.paging.page, size: this.paging.size }})
       },
       // 树节点切换时一些公用数据重置
