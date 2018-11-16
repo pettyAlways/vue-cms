@@ -17,18 +17,20 @@ Vue.use(Router)
 
 export const constantRouterMap = [
   {
+    path: '/',
+    // 使用redirect路由守卫最终监听到的是/login
+    redirect: '/login'
+  },
+  {
     path: '/login',
     name: '登录',
-    hidden: true,
     component: Login
   },
   {
-    path: '/',
-    hidden: true,
+    path: '/home',
     component: Layout,
-    redirect: '/home',
     children: [
-      { path: 'home', component: HomePage, name: '首页', meta: {tagName: '首页'} }
+      { path: 'homePage', component: HomePage, name: '首页', meta: {tagName: '首页'} }
     ]
   }
 ]

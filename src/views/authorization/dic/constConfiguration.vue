@@ -18,7 +18,7 @@
       <el-row class="operate-btn-group" type="flex" justify="start">
         <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
         <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
-        <el-button type="primary" icon="el-icon-delete" size="small" @click="">刷新缓存</el-button>
+        <el-button type="primary" icon="el-icon-delete" size="small" @click="refresh">刷新缓存</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -62,7 +62,7 @@
             <template slot-scope="scope">
               <a type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
               <a type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a type="text" size="small" @click="curDelete(scope.row.sysConstantsId)" class="ml10 del">删除</a>
+              <a type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
             </template>
           </el-table-column>
         </el-table>
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-  import { list, save, edit, deleteAll } from '../../../api/const'
+  import { list, save, edit, deleteAll, refresh } from '../../../api/const'
   export default {
     name: 'constConfiguration',
     data() {
@@ -194,6 +194,16 @@
           }
         })
       },
+      refresh() {
+        refresh({ type: '1' }).then(res => {
+          if (res.flag) {
+            this.$message({
+              type: 'success',
+              message: '刷新成功'
+            })
+          }
+        })
+      },
       batchDelete() {
         if (!this.selectionIds.length) {
           this.$message({
@@ -220,7 +230,7 @@
         })
       },
       selectDelIds(val) {
-        this.selectionIds = val.map(item => item.sysConstantsId)
+        this.selectionIds = val.map(item => item.id)
       },
       async loadPrepresentData() {
         this.loadConstItems(this.paging)

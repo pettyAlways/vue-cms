@@ -99,7 +99,7 @@
                 saveToLocal('username', '')
                 saveToLocal('password', '')
               }
-              this.$router.push({ path: '/' })
+              this.$router.push({ path: '/home/homePage' })
             }, () => {
               this.loading = false
             }).catch(() => {

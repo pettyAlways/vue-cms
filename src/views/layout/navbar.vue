@@ -8,7 +8,7 @@
     active-text-color="#00b4aa">
     <div :class="[isCollapse ? 'hide-navbar-header' : '', 'navbar-header']">
       <icon-svg iconClass="logo" class="site-logo"></icon-svg>
-      <router-link to="/home" v-if="!isCollapse"><div index="1">{{$t('navbar.title')}}</div></router-link>
+      <router-link to="/home" v-if="!isCollapse"><div index="1">{{sysParam.systemTitle}}</div></router-link>
     </div>
     <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
     <!--模块权限管理 -->
@@ -44,8 +44,14 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
+  import { sysParams } from '../../api/system'
   export default {
     name: 'NavBar',
+    data() {
+      return {
+        sysParam: ''
+      }
+    },
     computed: {
       ...mapGetters([
         'name',
@@ -58,12 +64,22 @@
         'moduleList'
       ])
     },
+    created() {
+      this.initParam()
+    },
     methods: {
       ...mapActions({
         userLogout: 'logout',
         switchConfigureMenu: 'switchConfigureMenu',
         resolveDefaultPage: 'resolveDefaultPage'
       }),
+      initParam() {
+        sysParams().then(res => {
+          if (res.flag) {
+            this.sysParam = res.data
+          }
+        })
+      },
       switchMenu(key) {
         if (key === 'HomePage') {
           this.$router.push('/home')

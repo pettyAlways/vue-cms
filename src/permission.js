@@ -14,9 +14,10 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login']  // 白名单
 router.beforeEach((to, from, next) => {
   if (getToken()) {
+    console.error(to.path)
     // 有token访问login页面，就跳到首页
     if (to.path === '/login') {
-      next('/')
+      next('/home/homePage')
       NProgress.done()
     } else {
       // 刷新操作token存在但是vuex内容被清空执行下面代码
@@ -29,7 +30,7 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(store.getters.addRouters)
             if (store.getters.curConfigure === 'HomePage') {
               // 页面刷新回到首页
-              next('/home')
+              next('/home/homePage')
             } else {
               // addRouters可能还没完成就执行next导致出错，这里使用next(to) 终端当前路由并重定向指定地址（这里重新再来一遍~），replace：true 重定向地址代替当前中断的路由的历史记录
               next({ ...to, replace: true })
@@ -47,7 +48,7 @@ router.beforeEach((to, from, next) => {
       next('/login')
     }
   }
-  if (to.path === '/home') {
+  if (to.path === '/home/homePage') {
     store.dispatch('switchConfigureMenu', 'HomePage')
   }
 })
