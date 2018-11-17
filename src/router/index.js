@@ -39,6 +39,12 @@ export default new Router({
   routes: constantRouterMap
 })
 
+/**
+ * 注意点
+ * 1、需要配置tagName,它是tab的显示名称
+ * 2、路由中的name必须要和vue页面export default对象的name一致才能页面缓存生效
+ * 3、子组件的路由路径需要和资源配置的路径相同才能动态加入路由中
+ */
 export const asyncRouterMap = [
   {
     path: '/sys-config',
@@ -49,7 +55,7 @@ export const asyncRouterMap = [
       { name: 'resourceManage', path: 'resource-manage', component: () => import('../views/authorization/resourceManage.vue'), meta: {tagName: '资源管理'} },
       { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
       { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} },
-      { name: 'confManagement', path: 'conf-manage', component: () => import('../views/authorization/dic/confManagement.vue'), meta: {tagName: '配置管理'} }
+      { name: 'configurationManage', path: 'conf-manage', component: () => import('../views/authorization/dic/confManagement.vue'), meta: {tagName: '配置管理'} }
     ]
   },
   {

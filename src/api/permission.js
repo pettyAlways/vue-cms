@@ -37,3 +37,10 @@ export function saveResource(data) {
     data
   })
 }
+
+export function refresh() {
+  return remote({
+    url: '/cms_web/permission/refresh.do',
+    method: 'get'
+  })
+}

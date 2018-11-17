@@ -64,10 +64,11 @@
     },
     created() {
       this.remember = loadFromLocal('rememberMe', false)
-      // 初始化时读取localStorage用户信息
+      // 初始化时读取localStorage用户信息,注意google有记住密码功能会覆盖当前获取到的密码
       if (this.remember) {
         this.loginForm.userAccount = loadFromLocal('username', '')
         this.loginForm.userPassword = loadFromLocal('password', '')
+        console.error(this.loginForm.userPassword)
       } else {
         this.loginForm.userAccount = ''
         this.loginForm.userPassword = ''

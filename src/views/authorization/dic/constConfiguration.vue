@@ -18,7 +18,6 @@
       <el-row class="operate-btn-group" type="flex" justify="start">
         <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
         <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
-        <el-button type="primary" icon="el-icon-delete" size="small" @click="refresh">刷新缓存</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -103,7 +102,7 @@
 </template>
 
 <script>
-  import { list, save, edit, deleteAll, refresh } from '../../../api/const'
+  import { list, save, edit, deleteAll } from '../../../api/const'
   export default {
     name: 'constConfiguration',
     data() {
@@ -194,16 +193,6 @@
           }
         })
       },
-      refresh() {
-        refresh({ type: '1' }).then(res => {
-          if (res.flag) {
-            this.$message({
-              type: 'success',
-              message: '刷新成功'
-            })
-          }
-        })
-      },
       batchDelete() {
         if (!this.selectionIds.length) {
           this.$message({
@@ -279,7 +268,7 @@
             if (res.flag) {
               this.loading = false
               this.constList = res.data
-              this.paging.total = res.total
+              this.paging.total = res.counts
               this.constList.forEach(resource => {
                 resource.inUseName = ['', '是', '否'][resource.inUse]
               })

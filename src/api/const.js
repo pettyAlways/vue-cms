@@ -31,11 +31,3 @@ export function deleteAll(params) {
     params
   })
 }
-
-export function refresh(params) {
-  return remote({
-    url: '/cms_web/const/refresh.do',
-    method: 'get',
-    params
-  })
-}
