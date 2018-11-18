@@ -36,16 +36,22 @@ function resolveMenuTree(menuTree) {
   return allLeaves
 }
 const SET_ROUTERS = 'SET_ROUTERS'
+const SET_SYS_PARAM = 'SET_SYS_PARAM'
 
 const permission = {
   state: {
     addRouters: '',
-    routers: constantRouterMap
+    routers: constantRouterMap,
+    sysParam: {}
   },
   mutations: {
     [SET_ROUTERS](state, routers) {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
+    },
+    [SET_SYS_PARAM](state, sysParam) {
+      debugger
+      state.sysParam = sysParam
     }
   },
   actions: {
@@ -66,7 +72,8 @@ const permission = {
   },
   getters: {
     addRouters: state => state.addRouters,
-    routers: state => state.routers
+    routers: state => state.routers,
+    sysParam: state => state.sysParam
   }
 }
 

@@ -20,7 +20,7 @@
         ref="aTree">
          <span style="display: flex; flex-direction: row; align-items: center" slot-scope="{ node, data }">
            <icon-svg :iconClass="resType[data.type]"></icon-svg>
-           <span>{{node.label}}</span>
+           <span style="margin-left: 5px">{{node.label}}</span>
          </span>
         <span>
           <el-button
@@ -43,14 +43,14 @@
             <el-input v-model="resourceSearchForm.resourceName" placeholder="模糊匹配权限名称"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button v-if="power['资源查询']" type="primary" icon="el-icon-delete" size="small" @click="searchForm">查询</el-button>
+            <el-button type="primary" icon="el-icon-delete" size="small" @click="searchForm">查询</el-button>
             <el-button type="primary" icon="el-icon-delete" size="small" @click="resourceSearchForm.resourceName = ''">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
       <el-row class="operate-btn-group" type="flex" justify="start">
-        <el-button v-if="power['资源新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-        <el-button v-if="power['资源删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
+        <el-button v-if="noAuthShowBtn || power['资源新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+        <el-button v-if="noAuthShowBtn || power['资源删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -97,9 +97,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a v-if="power['资源更新']" type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
-              <a v-if="power['资源查询']" type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a v-if="power['资源删除']" type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
+              <a v-if="noAuthShowBtn || power['资源更新']" type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
+              <a v-if="noAuthShowBtn || power['资源查询']" type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
+              <a v-if="noAuthShowBtn || power['资源删除']" type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
             </template>
           </el-table-column>
         </el-table>
@@ -253,10 +253,14 @@
     },
     computed: {
       ...mapGetters([
-        'pageMenus'
+        'pageMenus',
+        'sysParam'
       ]),
       isView() {
         return this.dialogType === 'view'
+      },
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
       }
     },
     mounted() {

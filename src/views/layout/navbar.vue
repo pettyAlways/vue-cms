@@ -8,7 +8,7 @@
     active-text-color="#00b4aa">
     <div :class="[isCollapse ? 'hide-navbar-header' : '', 'navbar-header']">
       <icon-svg iconClass="logo" class="site-logo"></icon-svg>
-      <router-link to="/home" v-if="!isCollapse"><div index="1">{{sysParam.systemTitle}}</div></router-link>
+      <router-link to="/home" v-if="!isCollapse"><div index="1">{{sysParam.system_title}}</div></router-link>
     </div>
     <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
     <!--模块权限管理 -->
@@ -43,7 +43,7 @@
   </el-menu>
 </template>
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
   import { sysParams } from '../../api/system'
   export default {
     name: 'NavBar',
@@ -68,6 +68,9 @@
       this.initParam()
     },
     methods: {
+      ...mapMutations([
+        'SET_SYS_PARAM'
+      ]),
       ...mapActions({
         userLogout: 'logout',
         switchConfigureMenu: 'switchConfigureMenu',
@@ -77,6 +80,7 @@
         sysParams().then(res => {
           if (res.flag) {
             this.sysParam = res.data
+            this.SET_SYS_PARAM(this.sysParam)
           }
         })
       },
