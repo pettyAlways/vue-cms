@@ -52,6 +52,9 @@
               prop="id"
               label="编号"
               width="180">
+              <template slot-scope="scope">
+                {{(paging.page-1) * paging.size + scope.$index+1}}
+              </template>
             </el-table-column>
             <el-table-column
               prop="orgName"
