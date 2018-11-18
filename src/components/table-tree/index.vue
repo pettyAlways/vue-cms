@@ -9,6 +9,7 @@
             <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
           </span>
           <span v-else-if="index===0 && scope.row._level==0" class="ms-tree-space"></span>
+          <!-- change方法传入自定义的变量的写法 -->
           <span v-else><el-checkbox @change="checked => selectDeal(checked, scope.row)" v-model="scope.row.isSelect"></el-checkbox></span>
           {{scope.row[column.name]}}
         </template>
@@ -130,7 +131,7 @@
       selectDeal(checked, row) {
         // 本级设置选中状态
         this.$set(row, 'isSelect', checked)
-        // 组先级设置选中状态
+        // 祖先级设置选中状态
         this.ancestorHandle(checked, row)
         // 子孙级设置选中状态
         this.descendantHandle(checked, row)

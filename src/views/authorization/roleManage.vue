@@ -143,6 +143,7 @@
       this.loadPrepresentData()
     },
     methods: {
+      // 递归所有资源，根据当前配置角色授权的资源判断是否选中资源
       recursiveResource(resource, chooseResource) {
         let result = []
         if (resource) {
@@ -176,12 +177,15 @@
               message: '配置成功'
             })
             this.authVisible = false
+            this.resourceTree = []
           }
         })
       },
       authCancel() {
         this.authVisible = false
+        this.resourceTree = []
       },
+      // 查询当前配置角色的资源然后递归设置树结构资源是否选中
       auth(item) {
         this.curRoleId = item.id
         getMenu().then(res => {
