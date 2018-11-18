@@ -180,7 +180,7 @@
         this.$confirm('请确认删除当前数据', '确认删除', {
           callback(action) {
             if (action === 'confirm') {
-              deleteAll({ ids: id }).then(res => {
+              deleteAll({ ids: id, type: '1' }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',
@@ -205,7 +205,7 @@
         this.$confirm('请确认删除当前数据', '确认删除', {
           callback(action) {
             if (action === 'confirm') {
-              deleteAll({ ids: _this.selectionIds.join(',') }).then(res => {
+              deleteAll({ ids: _this.selectionIds.join(','), type: '1' }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',
