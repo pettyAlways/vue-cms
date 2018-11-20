@@ -125,6 +125,7 @@
           <el-select v-model="userForm.userStatus" :disabled="isView">
             <el-option label="正常" value="1"></el-option>
             <el-option label="锁定" value="2"></el-option>
+            <el-option label="禁用" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="电话" prop="userTel">
@@ -410,7 +411,7 @@
               this.userList = res.data.users
               this.userList.map(item => {
                 item.userSexName = ['未知', '女', '男'][item.userSex]
-                item.userStatusName = ['', '正常', '锁定'][item.userStatus]
+                item.userStatusName = ['', '正常', '锁定', '禁用'][item.userStatus]
               })
               this.paging.total = res.counts
             }
