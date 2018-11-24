@@ -127,8 +127,16 @@
           inUse: '1'
         },
         rules: {
-          value: [
-            { required: true, message: '值不能为空', trigger: 'blur' }
+          constKey: [
+            { required: true, message: '键不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 30, message: '键不能超过30个字符', trigger: ['blur', 'change'] }
+          ],
+          constValue: [
+            { required: true, message: '值不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 100, message: '值不能超过100个字符', trigger: ['blur', 'change'] }
+          ],
+          constName: [
+            { min: 0, max: 30, message: '值不能超过30个字符', trigger: ['blur', 'change'] }
           ]
         },
         dialogType: '',

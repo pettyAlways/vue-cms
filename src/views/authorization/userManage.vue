@@ -111,25 +111,31 @@
         <el-form-item label="姓名" prop="userName">
           <el-input v-model="userForm.userName" :disabled="isView"></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="userSex">
-          <el-select v-model="userForm.userSex" :disabled="isView">
-            <el-option label="未知" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
-            <el-option label="男" value="2"></el-option>
-          </el-select>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="userSex">
+              <el-select v-model="userForm.userSex" :disabled="isView">
+                <el-option label="未知" value="0"></el-option>
+                <el-option label="女" value="1"></el-option>
+                <el-option label="男" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="用户状态" prop="userStatus">
+              <el-select v-model="userForm.userStatus" :disabled="isView">
+                <el-option label="正常" value="1"></el-option>
+                <el-option label="锁定" value="2"></el-option>
+                <el-option label="禁用" value="3"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="账号" prop="userAccount">
           <el-input v-model="userForm.userAccount" :disabled="isView"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="userPassword">
           <el-input v-model="userForm.userPassword" :disabled="isView"></el-input>
-        </el-form-item>
-        <el-form-item label="用户状态" prop="userStatus">
-          <el-select v-model="userForm.userStatus" :disabled="isView">
-            <el-option label="正常" value="1"></el-option>
-            <el-option label="锁定" value="2"></el-option>
-            <el-option label="禁用" value="3"></el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label="电话" prop="userTel">
           <el-input v-model="userForm.userTel" :disabled="isView"></el-input>
@@ -148,6 +154,7 @@
 <script>
   import { list, save, edit, deleteAll, authUser } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
+  import { telValidate } from '../../utils/validate'
   export default {
     name: 'userManage',
     data() {
@@ -178,14 +185,24 @@
           userMail: ''
         },
         rules: {
-          parentName: [
-            { required: true, message: '上级部门不能为空', trigger: 'blur' }
+          userName: [
+            // 同一个校验字段里面trigger必须保持相同
+            { required: true, message: '用户名字不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 30, message: '用户名不能超过30个字符', trigger: ['blur', 'change'] }
           ],
-          orgName: [
-            { required: true, message: '部门名称不能为空', trigger: 'blur' }
+          userAccount: [
+            { required: true, message: '账号不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 30, message: '账号不能超过30个字符', trigger: ['blur', 'change'] }
           ],
-          expand: [
-            { required: true, message: '请选择是否展开', trigger: 'change' }
+          userPassword: [
+            { required: true, message: '密码不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 30, message: '密码不能超过30个字符', trigger: ['blur', 'change'] }
+          ],
+          userMail: [
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          ],
+          userTel: [
+            { validator: telValidate, trigger: ['blur', 'change'] }
           ]
         },
         dialogType: '',
@@ -268,6 +285,8 @@
       add() {
         this.dialogType = 'save'
         this.visible = true
+        // 会将初始化的值设置并校验因此移除开始的校验
+        this.$refs.userForm.clearValidate()
       },
       edit(item) {
         this.visible = true
