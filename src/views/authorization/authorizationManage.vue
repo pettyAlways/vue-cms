@@ -41,7 +41,6 @@
           class="role-manage-table"
           :data="resourceList"
           @selection-change="selectDelIds"
-          border
           stripe>
           <el-table-column
             type="selection"

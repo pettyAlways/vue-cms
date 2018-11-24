@@ -10,13 +10,17 @@
         class="filter-tree"
         :data="orgTree"
         :props="defaultProps"
+        node-key="id"
         highlight-current
-        default-expand-all
         :default-expanded-keys="expandKey"
         :expand-on-click-node="false"
         @node-click="nodeClick"
         :filter-node-method="filterNode"
         ref="aTree">
+        <span style="display: flex; flex-direction: row; align-items: center" slot-scope="{ node, data }">
+           <icon-svg :iconClass="treeIcon[data.children.length ? 0 : 1]"></icon-svg>
+           <span style="margin-left: 5px">{{node.label}}</span>
+        </span>
       </el-tree>
     </el-col>
     <el-col :span="19" class="resource-represent">
@@ -32,17 +36,14 @@
           </el-form>
         </div>
         <el-row class="operate-btn-group" type="flex" justify="start">
-          <el-button-group>
-            <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-            <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
-          </el-button-group>
+          <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+          <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
         </el-row>
         <div class="table-represent">
           <el-table
             class="role-manage-table"
             :data="orgList"
             @selection-change="selectDelIds"
-            border
             stripe>
             <el-table-column
               type="selection"
@@ -51,19 +52,22 @@
             <el-table-column
               prop="id"
               label="编号"
-              width="180">
+              width="55">
               <template slot-scope="scope">
                 {{(paging.page-1) * paging.size + scope.$index+1}}
               </template>
             </el-table-column>
             <el-table-column
               prop="orgName"
-              label="部门名称"
-              width="180">
+              label="部门名称">
             </el-table-column>
             <el-table-column
               prop="parentName"
               label="上级部门">
+            </el-table-column>
+            <el-table-column
+              prop="expandName"
+              label="是否展开">
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -128,7 +132,7 @@
         orgList: [],
         filterText: '',
         orgTree: [],
-        expandKey: ['1'],
+        expandKey: [],
         curNode: '',
         orgForm: {
           parentName: '',
@@ -153,7 +157,8 @@
         defaultProps: {
           children: 'children',
           label: 'label'
-        }
+        },
+        treeIcon: ['folder', 'file']
       }
     },
     watch: {
@@ -245,8 +250,12 @@
       },
       async loadPrepresentData() {
         // await必须是Promise对象才有意义（等待resolve的返回）
-        let parentId = await this.loadTree()
-        this.loadChildren({ parentId: parentId, ...this.paging })
+        let curNodeId = await this.loadTree()
+        // 异步加载需要时间，在这个事件内切换其他模块当前的this注销，则这个树引用找不到，所以需要判断
+        if (this.$refs.aTree) {
+          this.$refs.aTree.setCurrentKey(curNodeId)
+        }
+        this.loadChildren({ parentId: curNodeId, ...this.paging })
       },
       // 树节点切换时一些公用数据重置
       switchNodeClear() {
@@ -260,16 +269,31 @@
         }
       },
       loadTree() {
-        let _this = this
         return new Promise(resolve => {
           loadOrgTree().then(res => {
             if (res.flag) {
               this.orgTree = [res.data]
-              this.curNode = _this.curNode || res.data
+              // 重新加载的时候需要清空展开的key
+              this.expandKey = []
+              // 指定展开部门
+              this.expandNode(res.data)
+              this.curNode = this.curNode || res.data
+              this.expandKey.push(this.curNode.id)
               resolve(this.curNode.id)
             }
           })
         })
+      },
+      expandNode(orgItems) {
+        if (orgItems.children && orgItems.children.length) {
+          orgItems.children.forEach(item => {
+            debugger
+            if (item.expand === 'Y') {
+              this.expandKey.push(item.id)
+            }
+            this.expandNode(item.children)
+          })
+        }
       },
       initForm() {
         this.orgForm = {
@@ -316,6 +340,7 @@
               this.paging.total = res.counts
               this.orgList.map(org => {
                 org.parentName = res.data.label
+                org.expandName = org.expand === 'Y' ? '是' : '否'
               })
             }
           })

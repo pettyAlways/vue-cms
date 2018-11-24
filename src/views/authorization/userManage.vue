@@ -12,12 +12,15 @@
         node-key="id"
         :props="defaultProps"
         highlight-current
-        default-expand-all
         :default-expanded-keys="expandKey"
         :expand-on-click-node="false"
         @node-click="nodeClick"
         :filter-node-method="filterNode"
         ref="aTree">
+        <span style="display: flex; flex-direction: row; align-items: center" slot-scope="{ node, data }">
+           <icon-svg :iconClass="treeIcon[data.children.length ? 0 : 1]"></icon-svg>
+           <span style="margin-left: 5px">{{node.label}}</span>
+        </span>
       </el-tree>
     </el-col>
     <el-col :span="19" class="resource-represent">
@@ -44,7 +47,6 @@
           class="role-manage-table"
           :data="userList"
           @selection-change="selectDelIds"
-          border
           stripe>
           <el-table-column
             type="selection"
@@ -54,6 +56,9 @@
             prop="id"
             label="编号"
             width="55">
+            <template slot-scope="scope">
+              {{(paging.page-1) * paging.size + scope.$index+1}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="userAccount"
@@ -61,8 +66,7 @@
           </el-table-column>
           <el-table-column
             prop="userName"
-            label="姓名"
-            width="180">
+            label="姓名">
           </el-table-column>
           <el-table-column
             prop="userAccount"
@@ -76,7 +80,6 @@
             prop="userSexName"
             label="性别">
           </el-table-column>
-
           <el-table-column
             fixed="right"
             label="操作"
@@ -163,7 +166,7 @@
         userList: [],
         filterText: '',
         orgTree: [],
-        expandKey: ['1'],
+        expandKey: [],
         curNode: '',
         userForm: {
           userName: '',
@@ -195,7 +198,8 @@
           label: 'label'
         },
         authorTitles: ['待选角色', '已选角色'],
-        curAuthUser: ''
+        curAuthUser: '',
+        treeIcon: ['folder', 'file']
       }
     },
     watch: {
@@ -327,8 +331,12 @@
       },
       async loadPrepresentData() {
         // await必须是Promise对象才有意义（等待resolve的返回）
-        let departId = await this.loadTree()
-        this.loadUser({ userDepart: departId, ...this.paging })
+        let curNodeId = await this.loadTree()
+        // 异步加载需要时间，在这个事件内切换其他模块当前的this注销，则这个树引用找不到，所以需要判断
+        if (this.$refs.aTree) {
+          this.$refs.aTree.setCurrentKey(curNodeId)
+        }
+        this.loadUser({ userDepart: curNodeId, ...this.paging })
       },
       // 树节点切换时一些公用数据重置
       switchNodeClear() {
@@ -347,6 +355,7 @@
             if (res.flag) {
               this.orgTree = [res.data]
               this.curNode = this.curNode || res.data
+              this.expandKey.push(this.curNode.id)
               resolve(this.curNode.id)
             }
           })

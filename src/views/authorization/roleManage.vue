@@ -21,7 +21,6 @@
           class="role-manage-table"
           :data="roleList"
           @selection-change="selectDelIds"
-          border
           stripe>
           <el-table-column
             type="selection"

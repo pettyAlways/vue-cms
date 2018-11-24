@@ -24,7 +24,6 @@
           class="role-manage-table"
           :data="constList"
           @selection-change="selectDelIds"
-          border
           stripe>
           <el-table-column
             type="selection"
@@ -32,15 +31,14 @@
           </el-table-column>
           <el-table-column
             label="编号"
-            width="180">
+            width="55">
             <template slot-scope="scope">
               {{(paging.page-1) * paging.size + scope.$index+1}}
             </template>
           </el-table-column>
           <el-table-column
             prop="constName"
-            label="名称"
-            width="180">
+            label="名称">
           </el-table-column>
           <el-table-column
             prop="constKey"
@@ -59,9 +57,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
-              <a type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
+              <a type="text" size="small" @click="edit(scope.row)">编辑</a>
+              <a type="text" size="small" @click="view(scope.row)">查看</a>
+              <a type="text" size="small" @click="curDelete(scope.row.id)">删除</a>
             </template>
           </el-table-column>
         </el-table>
