@@ -36,8 +36,8 @@
           </el-form>
         </div>
         <el-row class="operate-btn-group" type="flex" justify="start">
-          <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-          <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
+          <el-button v-if="noAuthShowBtn || power['组织新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+          <el-button v-if="noAuthShowBtn || power['组织删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
         </el-row>
         <div class="table-represent">
           <el-table
@@ -74,9 +74,9 @@
               label="操作"
               width="220">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
-                <el-button type="text" size="small" @click="view(scope.row)">查看</el-button>
+                <el-button v-if="noAuthShowBtn || power['组织更新']" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+                <el-button v-if="noAuthShowBtn || power['组织删除']" type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
+                <el-button v-if="noAuthShowBtn || power['组织查询']" type="text" size="small" @click="view(scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -115,6 +115,7 @@
 
 <script>
   import { loadOrgTree, list, save, edit, deleteAll } from '../../api/organization'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'organizationManage',
     data() {
@@ -164,11 +165,26 @@
     watch: {
       filterText(val) {
         this.$refs.aTree.filter(val)
+      },
+      pageMenus: {
+        handler(newMenus) {
+          this.power = newMenus[this.$route.path]
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
       }
     },
     computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam'
+      ]),
       isView() {
         return this.dialogType === 'view'
+      },
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
       }
     },
     components: {

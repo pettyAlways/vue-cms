@@ -39,8 +39,8 @@
         </el-form>
       </div>
       <el-row class="operate-btn-group" type="flex" justify="start">
-        <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-        <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
+        <el-button v-if="noAuthShowBtn || power['用户新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+        <el-button v-if="noAuthShowBtn || power['用户删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -85,10 +85,10 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-              <el-button type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
-              <el-button type="text" size="small" @click="view(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="auth(scope.row)">授权</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户更新']" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户删除']" type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户查询']" type="text" size="small" @click="view(scope.row)">查看</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户赋角']" type="text" size="small" @click="auth(scope.row)">赋角</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -155,6 +155,7 @@
   import { list, save, edit, deleteAll, authUser } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
   import { telValidate } from '../../utils/validate'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'userManage',
     data() {
@@ -216,17 +217,33 @@
         },
         authorTitles: ['待选角色', '已选角色'],
         curAuthUser: '',
-        treeIcon: ['folder', 'file']
+        treeIcon: ['folder', 'file'],
+        power: []
       }
     },
     watch: {
       filterText(val) {
         this.$refs.aTree.filter(val)
+      },
+      pageMenus: {
+        handler(newMenus) {
+          this.power = newMenus[this.$route.path]
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
       }
     },
     computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam'
+      ]),
       isView() {
         return this.dialogType === 'view'
+      },
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
       }
     },
     components: {
@@ -286,7 +303,9 @@
         this.dialogType = 'save'
         this.visible = true
         // 会将初始化的值设置并校验因此移除开始的校验
-        this.$refs.userForm.clearValidate()
+        this.$nextTick(() => {
+          this.$refs.userForm.clearValidate()
+        })
       },
       edit(item) {
         this.visible = true

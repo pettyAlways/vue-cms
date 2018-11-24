@@ -25,4 +25,5 @@ export function telValidate(rule, value, cback) {
   if (!isEmpty(value) && !isTel(value)) {
     cback('请输入正确的电话')
   }
+  cback()
 }

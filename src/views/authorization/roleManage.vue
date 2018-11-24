@@ -13,8 +13,8 @@
         </el-form>
       </div>
       <el-row class="operate-btn-group" type="flex" justify="start">
-        <el-button type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
-        <el-button type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
+        <el-button v-if="noAuthShowBtn || power['角色新增']" type="primary" icon="el-icon-circle-plus" size="small" @click="add">新增</el-button>
+        <el-button v-if="noAuthShowBtn || power['角色删除']" type="primary" icon="el-icon-delete" size="small" @click="batchDelete">批量删除</el-button>
       </el-row>
       <div class="table-represent">
         <el-table
@@ -49,10 +49,10 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-              <el-button type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
-              <el-button type="text" size="small" @click="view(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="auth(scope.row)">配置</el-button>
+              <el-button v-if="noAuthShowBtn || power['角色更新']" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['角色删除']" type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
+              <el-button v-if="noAuthShowBtn || power['角色查询']" type="text" size="small" @click="view(scope.row)">查看</el-button>
+              <el-button v-if="noAuthShowBtn || power['角色授权']" type="text" size="small" @click="auth(scope.row)">授权</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -95,6 +95,7 @@
 <script>
   import { list, save, edit, deleteAll, resourceAuth, acquireResource } from '../../api/role'
   import { getMenu } from '../../api/permission'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'roleManage',
     data() {
@@ -126,12 +127,30 @@
         visible: false,
         authVisible: false,
         resourceTree: [],
-        curRoleId: ''
+        curRoleId: '',
+        power: []
       }
     },
     computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam'
+      ]),
       isView() {
         return this.dialogType === 'view'
+      },
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
+      }
+    },
+    watch: {
+      pageMenus: {
+        handler(newMenus) {
+          this.power = newMenus[this.$route.path]
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
       }
     },
     components: {
