@@ -143,7 +143,7 @@
 </template>
 
 <script>
-  import { list, save, edit, deleteAll, authUser, acquireRoles } from '../../api/user'
+  import { list, save, edit, deleteAll, authUser } from '../../api/user'
   import { loadOrgTree } from '../../api/organization'
   export default {
     name: 'userManage',
@@ -239,17 +239,13 @@
         // 等授权结果完成在关闭对话框
         this.authUser({ roles: chooseRole, id: this.curAuthUser })
       },
-      auth(item) {
-        acquireRoles({ id: item.id }).then(res => {
-          if (res.flag) {
-            this.dialogType = 'auth'
-            this.authVisible = true
-            this.curAuthUser = item.id
-            // 打开对话框并渲染穿梭框需要一定的时间
-            this.$nextTick(function () {
-              this.$refs.authTransfer.setChooseRole(res.data)
-            })
-          }
+      // 资源授权
+      async auth(item) {
+        this.dialogType = 'auth'
+        this.authVisible = true
+        this.curAuthUser = item.id
+        this.$nextTick(() => {
+          this.$refs.authTransfer.loadRoleInfomation(item.id)
         })
       },
       view(item) {

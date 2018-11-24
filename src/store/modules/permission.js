@@ -50,7 +50,6 @@ const permission = {
       state.routers = constantRouterMap.concat(routers)
     },
     [SET_SYS_PARAM](state, sysParam) {
-      debugger
       state.sysParam = sysParam
     }
   },

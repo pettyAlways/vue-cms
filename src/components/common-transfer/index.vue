@@ -13,6 +13,7 @@
 
 <script>
   import { listAll } from '../../api/role'
+  import { acquireRoles } from '../../api/user'
   export default {
     name: 'my-transfer',
     props: {
@@ -24,12 +25,13 @@
         chooseRole: []
       }
     },
-    mounted() {
-      this.loadRoleList()
-    },
     methods: {
-      setChooseRole(roles) {
-        this.chooseRole = roles
+      async loadRoleInfomation(userId) {
+        let res = await acquireRoles({ id: userId })
+        if (res.flag) {
+          this.chooseRole = res.data
+          this.loadRoleList()
+        }
       },
       // 提供清除选中内容接口
       clearTransfer() {

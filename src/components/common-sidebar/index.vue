@@ -24,6 +24,7 @@
         'curActive',
         'tabViews'
       ]),
+      // 路由的name需要和资源管理定义的资源name一致
       activeTagName() {
         let activeName
         if (this.tabViews[this.curConfigure]) {
