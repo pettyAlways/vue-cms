@@ -11,12 +11,14 @@
     <div class="home-container" v-else>
       <router-view></router-view>
     </div>
+    <web-socket></web-socket>
   </div>
 </template>
 <script>
   import Navbar from './navbar'
   import TabsView from './tabs-view'
   import AppMain from './app-main'
+  import WebSocket from './WebSocket'
   import { mapGetters, mapActions, mapMutations } from 'vuex'
   import loadComponents from '../../utils/loadComponents'
   export default {
@@ -31,6 +33,7 @@
       Navbar,
       TabsView,
       AppMain,
+      WebSocket,
       ...loadComponents
     },
     methods: {

@@ -3,9 +3,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 import store from '../index'
 
 const SET_TOKEN = 'SET_TOKEN'
-const SET_NAME = 'SET_NAME'
-const SET_AGE = 'SET_AGE'
-const SET_AVATAR = 'SET_AVATAR'
+const SET_USER = 'SET_USER'
 const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
 const SET_MODULELIST = 'SET_MODULELIST'
@@ -34,9 +32,7 @@ function plainPageMenus(permissions) {
 const user = {
   state: {
     token: getToken(),
-    name: '',
-    age: 0,
-    avatar: '',
+    currentUser: {},
     permissions: '',
     pageMenus: {},
     moduleList: [],
@@ -46,14 +42,8 @@ const user = {
     [SET_TOKEN](state, token) {
       state.token = token
     },
-    [SET_NAME](state, name) {
-      state.name = name
-    },
-    [SET_AGE](state, age) {
-      state.age = age
-    },
-    [SET_AVATAR](state, avatar) {
-      state.avatar = avatar
+    [SET_USER](state, user) {
+      state.currentUser = user
     },
     [SET_PERMISSIONS](state, permissions) {
       state.permissions = permissions
@@ -83,10 +73,6 @@ const user = {
           if (resp.flag) {
             setToken(resp.token)
             commit(SET_TOKEN, resp.token)
-            // commit(SET_NAME, data.name)
-            // commit(SET_AGE, data.age)
-            // commit(SET_AVATAR, data.avatar)
-            // commit(SET_PERMISSIONS, data.permissions)
             return resolve()
           } else {
             reject(resp.message)
@@ -102,9 +88,7 @@ const user = {
         userInfo().then(resp => {
           let data = resp.data
           // 更新中心信息缓存其实没什么必要
-          commit(SET_NAME, data.name)
-          commit(SET_AGE, data.age)
-          commit(SET_AVATAR, data.avatar)
+          commit(SET_USER, resp.currentUser)
           // 模块权限路由缓存
           let partition = {}
           data.resourceTree.children.forEach(item => {
@@ -119,9 +103,6 @@ const user = {
           commit(SET_PERMISSIONS, partition)
           // 缓存当前用户有权限的按钮
           commit(SET_PAGEMENUS, partition)
-          // 如果当前的导航菜单是首页则默认缓存SysConfigure的左侧菜单栏数据
-          // let cacheSideBar = store.getters.curConfigure === 'HomePage' ? 'SysConfigure' : store.getters.curConfigure
-          /// return resolve(partition[cacheSideBar], store.getters.curConfigure === 'HomePage')
           return resolve(partition)
         })
       })
@@ -131,8 +112,7 @@ const user = {
       return new Promise((resolve, reject) => {
         logout().then(resp => {
           removeToken()
-          commit(SET_TOKEN, '')
-          commit(SET_NAME, '')
+          commit(SET_USER, {})
           return resolve()
         }).catch(err => {
           return reject(err)
@@ -148,7 +128,8 @@ const user = {
     permissions: state => state.permissions,
     pageMenus: state => state.pageMenus[store.getters.curConfigure],
     moduleList: state => state.moduleList,
-    svgIconList: state => state.svgIconList
+    svgIconList: state => state.svgIconList,
+    currentUser: state => state.currentUser
   }
 }
 

@@ -91,7 +91,7 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.login(this.loginForm).then(() => {
+            this.login(this.loginForm).then((res) => {
               // 保存账号
               if (this.remember) {
                 saveToLocal('username', this.loginForm.userAccount)

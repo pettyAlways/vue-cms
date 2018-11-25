@@ -303,7 +303,6 @@
       expandNode(orgItems) {
         if (orgItems.children && orgItems.children.length) {
           orgItems.children.forEach(item => {
-            debugger
             if (item.expand === 'Y') {
               this.expandKey.push(item.id)
             }

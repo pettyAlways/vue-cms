@@ -20,7 +20,7 @@
       <div class="avatar-wrapper">
         <img class="user-avatar" :src="avatar">
         <div class="username-wrapper">
-          <span class="user-name">{{name}}</span>
+          <span class="user-name">{{currentUser.userName}}</span>
           <i class="el-icon-caret-bottom"></i>
         </div>
       </div>
@@ -49,19 +49,20 @@
     name: 'NavBar',
     data() {
       return {
-        sysParam: ''
+        sysParam: '',
+        'avatar': require('../../assets/guitar.gif')
       }
     },
     computed: {
       ...mapGetters([
         'name',
-        'avatar',
         'curActive',
         'curConfigure',
         'defaultPage',
         'permissions',
         'isCollapse',
-        'moduleList'
+        'moduleList',
+        'currentUser'
       ])
     },
     created() {
@@ -198,8 +199,8 @@
     .avatar-wrapper {
       cursor: pointer;
       .user-avatar {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 35px;
         border-radius: 50%;
         vertical-align: middle;
       }
