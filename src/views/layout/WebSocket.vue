@@ -48,13 +48,13 @@
             console.info('=========拿到心跳包重新发送心跳=========')
             this.reset()
             break
-          case 'kickout':
+          case 'tip':
             this.$alert(resData.msg, '提示', {
               confirmButtonText: '确定',
               callback: () => {
                 // 移除当前登录的cookies
                 removeToken()
-                this.$router.replace('/login')
+                location.reload()
               }
             })
             break

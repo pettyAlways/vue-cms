@@ -197,7 +197,7 @@
           ],
           userPassword: [
             { required: true, message: '密码不能为空', trigger: ['blur', 'change'] },
-            { min: 0, max: 30, message: '密码不能超过30个字符', trigger: ['blur', 'change'] }
+            { min: 0, max: 50, message: '密码不能超过50个字符', trigger: ['blur', 'change'] }
           ],
           userMail: [
             { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }

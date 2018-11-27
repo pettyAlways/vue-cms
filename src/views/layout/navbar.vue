@@ -16,41 +16,47 @@
       <icon-svg v-if="item.icon" :iconClass="item.icon"></icon-svg>
       <span>{{item.name}}</span>
     </el-menu-item>
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar">
-        <div class="username-wrapper">
-          <span class="user-name">{{currentUser.userName}}</span>
-          <i class="el-icon-caret-bottom"></i>
+    <div class="avatar-container">
+      <span>{{currentTime}}</span>
+      <img class="user-avatar" :src="avatar">
+      <el-dropdown  trigger="click">
+        <div class="avatar-wrapper">
+          <div class="username-wrapper">
+            <span class="user-name">{{currentUser.userName}}</span>
+            <i class="el-icon-caret-bottom"></i>
+          </div>
         </div>
-      </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class='inlineBlock' to="/user/profile">
-          <el-dropdown-item>
-            个人中心
+        <el-dropdown-menu class="user-dropdown" slot="dropdown">
+          <router-link class='inlineBlock' to="/user/profile">
+            <el-dropdown-item>
+              个人中心
+            </el-dropdown-item>
+          </router-link>
+          <router-link class='inlineBlock' to="/user/profile">
+            <el-dropdown-item>
+              修改头像
+            </el-dropdown-item>
+          </router-link>
+          <el-dropdown-item @click.native="logout">
+            <span style="display:block;">退出登录</span>
           </el-dropdown-item>
-        </router-link>
-        <router-link class='inlineBlock' to="/user/profile">
-          <el-dropdown-item>
-            修改头像
-          </el-dropdown-item>
-        </router-link>
-        <el-dropdown-item @click.native="logout">
-          <span style="display:block;">退出登录</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+
   </el-menu>
 </template>
 <script>
   import { mapGetters, mapActions, mapMutations } from 'vuex'
   import { sysParams } from '../../api/system'
+  import { formatDate } from '../../utils/dateUtil'
   export default {
     name: 'NavBar',
     data() {
       return {
         sysParam: '',
-        'avatar': require('../../assets/guitar.gif')
+        avatar: require('../../assets/guitar.gif'),
+        currentTime: ''
       }
     },
     computed: {
@@ -67,6 +73,12 @@
     },
     created() {
       this.initParam()
+      this.timer = setInterval(() => {
+        this.currentTime = formatDate(new Date())
+      }, 1000)
+    },
+    destroyed() {
+      clearInterval(this.timer)
     },
     methods: {
       ...mapMutations([
@@ -196,19 +208,21 @@
     top: 15px;
     right: 40px;
     color: #fff;
-    .avatar-wrapper {
-      cursor: pointer;
-      .user-avatar {
-        width: 40px;
-        height: 35px;
-        border-radius: 50%;
-        vertical-align: middle;
-      }
-      .username-wrapper {
-        display: inline-block;
-        height: 30px;
-        line-height: 30px;
-      }
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    .user-avatar {
+      width: 40px;
+      height: 35px;
+      border-radius: 50%;
+    }
+    .username-wrapper {
+      color: white;
+      display: inline-block;
+      height: 30px;
+      line-height: 30px;
     }
   }
 </style>
