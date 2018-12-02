@@ -135,6 +135,8 @@
             type: 'success',
             message: `已踢出用户[${row.userName}]`
           })
+          this.paging.page = 1
+          this.loadPrepresentData()
         }
       },
       async invalidUser(row) {
@@ -144,6 +146,8 @@
             type: 'success',
             message: `已禁用用户[${row.userName}]`
           })
+          this.paging.page = 1
+          this.loadPrepresentData()
         }
       },
       async loadPrepresentData() {
