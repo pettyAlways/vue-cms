@@ -1,6 +1,6 @@
 <template>
   <el-menu mode="vertical"
-           class="el-menu-vertical"
+           class="menus-group--vertical"
            unique-opened
            background-color=""
            :collapse="isCollapse"
@@ -41,7 +41,7 @@
 </script>
 
 <style scoped lang="scss">
-  .el-menu-vertical:not(.el-menu--collapse) {
+  .menus-group--vertical:not(.el-menu--collapse) {
     position: fixed;
     top: 61px;
     width: 200px;

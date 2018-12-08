@@ -1,6 +1,6 @@
 <template>
-    <div class="menu-sidebar">
-      <div v-for="item in menus" :key="item.name" class="menu-sidebar-items">
+    <div class="sidebar-menu">
+      <div v-for="item in menus" :key="item.name" class="sidebar-menu__item">
         <router-link v-if="item.type == 'page'" :to="item.path">
           <el-menu-item :index="item.name">
             <icon-svg :iconClass="item.icon"></icon-svg>
@@ -30,7 +30,7 @@
 </script>
 
 <style scoped lang='scss'>
-  .menu-sidebar {
+  .sidebar-menu {
     color: gold;
     font-size: 11px !important;
   }

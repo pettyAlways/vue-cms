@@ -159,7 +159,7 @@
       justify-content: center ;
       transition: width .3s;
       border-right: 1px solid rgba(grey, .8);
-      width: 64px;
+      width: 90px;
       .site-logo {
         width: 3em;
         height: 3em;

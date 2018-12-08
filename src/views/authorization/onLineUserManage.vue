@@ -15,7 +15,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="table-represent">
+      <div class="table-represent" style="margin-top: 15px">
         <el-table
           class="role-manage-table"
           :data="onlineList"

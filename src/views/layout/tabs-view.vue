@@ -1,6 +1,6 @@
 <template>
   <div class="tabs-container">
-    <div style="display: inline-block; vertical-align: middle;">
+    <div class="tabs-container__sidebarSwitch">
       <icon-svg :iconClass="switchIcon" @click.native="switchSidebar"></icon-svg>
     </div>
     <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' " v-for="(tag, index) in tabViews[curConfigure]" :to="tag.path" :key="index">
@@ -75,10 +75,13 @@
     position: fixed;
     height: 40px;
     width: 100%;
-    background: white;
     padding: 5px;
     border-bottom: 1px solid #dfdfdf;
     z-index: 1999;
+    .tabs-container__sidebarSwitch {
+      display: inline-block;
+      vertical-align: middle;
+    }
     .tags-view-item {
       .el-tag {
         margin: 0 3px;

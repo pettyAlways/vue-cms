@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <button class="btn_1">点击</button>
+  <button class="btn_2">点击</button>
+  <button class="btn_3">点击</button>
+  <script>
+    /*
+    js的特点是方法里面能访问方法外的变量，反之不行如果我想要在外部访问方法内的变量如何做？
+    那么就可以使用闭包先“记住”当前function(){}作用域内的变量，然后返回这个闭包
+    到外部，外部直接通过调用这个闭包去访问方法体中的变量，可能会疑惑，这些变量的作用域不是已经执行了吗，为什么这些变量没有
+    被内存回收？这就是闭包的一个特性，虽然这些变量出了作用域，但是还存活在内存中，利用这个特性可以做很多事情
+    var的作用域是function(){}的范围内，所以这里index变量作用域是在IIEF里面,和onclick绑定的是一个函数对象，这个函数对象在
+    全局中被3个按钮dom引用，那么这个被onclick引用的函数是一个闭包吗？闭包满足的条件是：通过闭包可以访问到方法体
+    （一个封闭的环境，正常情况外部不能访问这个封闭的环境里面的变量）中的变量，即使这些变量在被闭包访问时作用域已经执行完了
+    但它们依然存活在内存中
+     */
+    (function run() {
+      for (var index = 1; index < 4; index++) {
+        let btn = document.querySelector('.btn_' + index)
+        btn.onclick = function() {
+          console.log(index)
+        }
+      }
+    })()
+  </script>
+  <script>
+    /*
+     如果我非要使用var变量该如何做？将var赋值给作用域在循环体内的变量A，每次
+     循环都是这个变量A的新的一次开始，然后利用闭包去记住这个变量A,虽然它在使用
+     时已经出了作用域
+     */
+    for (var index = 1; index < 4; index++) {
+      let value = index
+      let btn = document.querySelector('.btn_' + value)
+      btn.onclick = function() {
+        console.log(value)
+      }
+    }
+    for (var index1 = 1; index1 < 4; index1++) {
+      function closure(value) {
+        let btn = document.querySelector('.btn_' + value)
+        btn.onclick = function() {
+          console.log(value)
+        }
+      }
+      closure(index1)
+    }
+    for (var index2 = 1; index2 < 4; index2++) {
+      (function closure(value) {
+        let btn = document.querySelector('.btn_' + value)
+        btn.onclick = function() {
+          console.log(value)
+        }
+      })(index2)
+    }
+  </script>
+</body>
+</html>

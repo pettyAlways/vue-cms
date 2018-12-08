@@ -1,5 +1,5 @@
 <template>
-  <div class="main-app">
+  <div class="main-container">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cacheViews">
         <router-view></router-view>
@@ -35,7 +35,7 @@
 </script>
 
 <style scoped lang="scss">
-  .main-app {
+  .main-container {
     position: relative;
     top: 40px;
     height: calc(100% - 40px);

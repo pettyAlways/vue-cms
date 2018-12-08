@@ -1,14 +1,14 @@
 <template>
-  <div class="app-wrapper">
+  <div class="cms-container">
     <navbar></navbar>
     <template v-if="curConfigure !== 'HomePage'">
-      <div :class="[isCollapse ? 'hide-sidebar-container' : '', 'sys-sidebar']" :is="curConfigure"></div>
-      <div :class="[isCollapse ? 'hide-sidebar-main-container' : 'main-container']">
+      <div :class="[isCollapse ? 'cms-container__sidebar--hide' : '', 'cms-container__sidebar']" :is="curConfigure"></div>
+      <div :class="[isCollapse ? 'cms-container__main--hide' : 'cms-container__main']">
         <tabs-view></tabs-view>
         <app-main></app-main>
       </div>
     </template>
-    <div class="home-container" v-else>
+    <div class="cms-container__home" v-else>
       <router-view></router-view>
     </div>
     <web-socket></web-socket>
@@ -65,65 +65,72 @@
   }
 </script>
 <style scoped lang="scss">
-  .app-wrapper {
+  .cms-container {
     position: absolute;
     width: 100%;
     height: 100%;
-    .main-container {
-      position: relative;
-      height: 100%;
-      padding-left: 201px;
-      padding-top: 61px;
-    }
-    .hide-sidebar-main-container {
-      position: relative;
-      height: 100%;
-      padding-left: 64px;
-      padding-top: 61px;
-    }
-    .home-container {
+    .cms-container__home {
       padding-top: 70px;
     }
-    .sys-sidebar:not(.hide-sidebar-container) {
+    .cms-container__sidebar:not(.cms-container__sidebar--hide) {
       position: fixed;
       top: 61px;
       height: 100%;
       width: 200px;
       z-index: 2000
     }
-    .sys-sidebar.hide-sidebar-container {
+    .cms-container__sidebar.cms-container__sidebar--hide {
       position: fixed;
       top: 61px;
       height: 100%;
       z-index: 10000;
+      /deep/ .el-menu--collapse {
+        width: 90px;
+      }
       /deep/ .el-menu-vertical {
         height: 100%
       }
-      /deep/ .menu-sidebar:not(.secondary_menu) {
-        > .menu-sidebar-items > .el-submenu > .el-submenu__title {
-          padding: 0px !important;
-          margin-bottom: 15px;
-          height: 100%;
-          width: 100%;
-          line-height: 100%;
-          .sidebar-menus-bar {
-            text-align: center;
-            .collapse_menu_title {
-              display: block !important;
-              margin-top: 5px;
-            }
-            .collapse_icon {
-              width: 2em;
-              height: 2em;
+      /deep/ .sidebar-menu:not(.secondary_menu) {
+          > .sidebar-menu__item  {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            > .el-submenu > .el-submenu__title {
+              padding: 0px !important;
+              height: 100%;
+              width: 100%;
+              line-height: 100%;
+              .sidebar-menus-bar {
+                text-align: center;
+                .collapse_menu_title {
+                  display: block !important;
+                  margin-top: 5px;
+                }
+                .collapse_icon {
+                  width: 2em;
+                  height: 2em;
+                }
+              }
+              .el-submenu__icon-arrow {
+                display: none !important;
+              }
             }
           }
-          .el-submenu__icon-arrow {
-            display: none !important;
-          }
-        }
       }
-
     }
-
+    .cms-container__main {
+      position: relative;
+      height: 100%;
+      padding-left: 210px;
+      padding-top: 61px;
+    }
+    .cms-container__main--hide {
+      position: relative;
+      height: 100%;
+      padding-left: 100px;
+      padding-top: 61px;
+    }
   }
 </style>

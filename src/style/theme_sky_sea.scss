@@ -1,0 +1,132 @@
+// 网站配色
+$menusActive: #ffc09f;
+// elementui主题色
+$elementPrimaryColor: #f4f2f1;
+// 网站配色 底色、字体颜色 和$primaryColor的对比色
+$e2dbbe: #e2dbbe;
+// 网站主色调
+$primaryColor: #a3a380;
+
+/* 改变主题色变量 */
+$--color-primary: $elementPrimaryColor;
+/* elementu所有组件的白底色*/
+$--color-white: darken($primaryColor, 6%);
+
+/* 表格自定义样式*/
+$--table-header-color: $e2dbbe;
+$--table-header-background: darken($primaryColor, 16%);
+$--table-text-color: lighten($e2dbbe, 10%);
+$--color-text-secondary: $--color-primary;
+$--input-border: 1px solid darken($primaryColor, 20%);
+
+/* 树组件自定义样式*/
+$--tree-text-color: lighten($e2dbbe, 10%);
+$--tree-node-hover-color: darken($primaryColor, 20%);
+
+/*对话框*/
+$--color-info: $elementPrimaryColor;
+$--color-text-regular: darken($elementPrimaryColor, 10%);
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+/* elementui组件所有的样式文件*/
+@import "~element-ui/packages/theme-chalk/src/index";
+
+.cms-container {
+  // 树节点选中
+  .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+    background-color: darken($primaryColor, 20%);
+  }
+  // 遮罩层颜色
+  .el-loading-mask {
+    background: lighten($primaryColor, 10%);
+  }
+
+  // 菜单下拉箭头大小默认12px
+  .el-submenu__icon-arrow {
+    font-size: 16px;
+  }
+  // 定义网站底色
+  background: $e2dbbe;
+  // 定义左边栏颜色
+  .sys-configure__sidebar {
+    .menus-group--vertical {
+      background: darken($primaryColor, 10%);
+      .sidebar-menu {
+        .sidebar-menu__item {
+          background: $primaryColor;
+          margin-bottom: 1px;
+          .el-menu-item {
+            border-top: 1px solid darken($primaryColor, 10%);
+          }
+        }
+      }
+      .el-submenu {
+        &.is-opened {
+          background: $primaryColor;
+          .el-menu {
+            background: $primaryColor;
+          }
+        }
+        .el-menu {
+          background: $primaryColor;
+        }
+      }
+      .el-submenu__title {
+        padding: 0 0 0 10px !important;
+        &:hover {
+          background-color: $primaryColor;
+        }
+        &:focus, &:hover {
+          outline: 0;
+          background-color: $primaryColor;
+        }
+        i {
+          color: black;
+        }
+      }
+      // 菜单聚焦时字体颜色
+      .el-menu-item.is-active {
+        color: $e2dbbe;
+      }
+      // 菜单聚焦时背景色
+      .el-menu-item:focus, .el-menu-item:hover, .el-menu-item.is-active {
+        background: darken($primaryColor, 20%);;
+        color: $e2dbbe;
+      }
+    }
+  }
+  .cms-container__sidebar--hide {
+    background: darken($primaryColor, 10%);
+  }
+
+  // 定义中间区域样式
+  .cms-container__main, .cms-container__main--hide {
+    // tab页颜色样式
+    .tabs-container {
+      background: darken($primaryColor, 10%);
+      .tags-view-item {
+        .el-tag {
+          background: $primaryColor;
+          border: 1px solid darken($primaryColor, 16%);
+          color: lighten($e2dbbe, 10%);
+          .el-icon-close {
+            color: lighten($e2dbbe, 10%);
+          }
+        }
+      }
+    }
+    // main面板颜色样式
+    .main-container {
+      background: lighten($primaryColor, 10%);
+    }
+  }
+
+  // 表格不同行颜色
+  .el-table--striped .el-table__body tr.el-table__row--striped {
+    td {
+      background: $primaryColor !important;
+    }
+  }
+}

@@ -96,9 +96,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a v-if="noAuthShowBtn || power['资源更新']" type="text" size="small" @click="edit(scope.row)" class="ml10">编辑</a>
-              <a v-if="noAuthShowBtn || power['资源查询']" type="text" size="small" @click="view(scope.row)" class="ml10">查看</a>
-              <a v-if="noAuthShowBtn || power['资源删除']" type="text" size="small" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
+              <a v-if="noAuthShowBtn || power['资源更新']" type="text" @click="edit(scope.row)" class="ml10">编辑</a>
+              <a v-if="noAuthShowBtn || power['资源查询']" type="text" @click="view(scope.row)" class="ml10">查看</a>
+              <a v-if="noAuthShowBtn || power['资源删除']" type="text" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
             </template>
           </el-table-column>
         </el-table>

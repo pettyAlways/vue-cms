@@ -7,6 +7,7 @@
         v-model="filterText">
       </el-input>
       <el-tree
+        style="margin-top: 5px;"
         class="filter-tree"
         :data="orgTree"
         node-key="id"
