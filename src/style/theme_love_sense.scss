@@ -1,10 +1,10 @@
 @charset "utf-8";
 // 点缀色：elementui主题色
-$elementPrimaryColor: #f4f2f1;
+$elementPrimaryColor: #a45915;
 // 网站配色($primaryColor的对比色)
-$contrastColor: #e2dbbe;
+$contrastColor: #f6f6e7;
 // 网站主色调
-$primaryColor: #a3a380;
+$primaryColor: #FFCCCC;
 
 /* 改变主题色变量 */
 $--color-primary: $elementPrimaryColor;
@@ -169,4 +169,5 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
   }
 }
+
 

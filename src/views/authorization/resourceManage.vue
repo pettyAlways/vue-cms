@@ -1,28 +1,29 @@
 <template>
   <el-row class="permission-management">
-    <el-col :span="5" class="resource-tree">
+    <el-col :span="5">
       <el-input
         placeholder="输入关键字进行过滤"
         size="small"
         v-model="filterText">
       </el-input>
-      <el-tree
-        style="margin-top: 5px;"
-        class="resource-tree"
-        :data="resourceTree"
-        :props="defaultProps"
-        node-key="id"
-        highlight-current
-        :default-expanded-keys="expandKey"
-        :expand-on-click-node="false"
-        @node-click="nodeClick"
-        :filter-node-method="filterNode"
-        ref="aTree">
+      <div class="resource-panel" :style="{ height: clientHeight + 'px' }">
+        <el-tree
+          style="margin-top: 5px;"
+          class="resource-panel__tree"
+          :data="resourceTree"
+          :props="defaultProps"
+          node-key="id"
+          highlight-current
+          :default-expanded-keys="expandKey"
+          :expand-on-click-node="false"
+          @node-click="nodeClick"
+          :filter-node-method="filterNode"
+          ref="aTree">
          <span style="display: flex; flex-direction: row; align-items: center" slot-scope="{ node, data }">
            <icon-svg :iconClass="resType[data.type]"></icon-svg>
            <span style="margin-left: 5px">{{node.label}}</span>
          </span>
-        <span>
+          <span>
           <el-button
             type="text"
             size="mini">
@@ -34,7 +35,8 @@
             Delete
           </el-button>
         </span>
-      </el-tree>
+        </el-tree>
+      </div>
     </el-col>
     <el-col :span="19" class="resource-represent">
       <div class="search-form">
@@ -96,9 +98,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a v-if="noAuthShowBtn || power['资源更新']" type="text" @click="edit(scope.row)" class="ml10">编辑</a>
-              <a v-if="noAuthShowBtn || power['资源查询']" type="text" @click="view(scope.row)" class="ml10">查看</a>
-              <a v-if="noAuthShowBtn || power['资源删除']" type="text" @click="curDelete(scope.row.id)" class="ml10 del">删除</a>
+              <el-button v-if="noAuthShowBtn || power['资源更新']" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['资源查询']" type="text" @click="view(scope.row)">查看</el-button>
+              <el-button v-if="noAuthShowBtn || power['资源删除']" type="text" @click="curDelete(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -177,6 +179,7 @@
     name: 'resourceManage',
     data() {
       return {
+        clientHeight: '',
         loading: false,
         paging: {
           page: 1,
@@ -263,6 +266,7 @@
       }
     },
     mounted() {
+      this.clientHeight = document.body.clientHeight - 168
       this.loadPrepresentData()
     },
     methods: {
@@ -466,8 +470,18 @@
 
 <style scoped lang='scss'>
   .permission-management {
+    height: 100%;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     font-size: 14px;
+    .resource-panel {
+      overflow: hidden;
+      .resource-panel__tree {
+        border: 0px;
+        width: calc(100% + 20px);
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
     .resource-represent {
       padding: 0px 10px;
       /deep/ .el-table__empty-block {
@@ -478,7 +492,6 @@
       }
       a{
         cursor: pointer;
-        color: #20a0ff ;
       }
     }
     .table-pagination {

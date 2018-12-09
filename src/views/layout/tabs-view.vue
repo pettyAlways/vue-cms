@@ -3,7 +3,8 @@
     <div class="tabs-container__sidebarSwitch">
       <icon-svg :iconClass="switchIcon" @click.native="switchSidebar"></icon-svg>
     </div>
-    <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' " v-for="(tag, index) in tabViews[curConfigure]" :to="tag.path" :key="index">
+    <router-link class="tags-view-item" :class="isActive(tag) ? 'active' : '' "
+                 v-for="(tag, index) in tabViews[curConfigure]" :to="tag.path" :key="index">
       <el-tag
         closable
         :disable-transitions="false"
@@ -73,14 +74,17 @@
 <style scoped lang="scss">
   .tabs-container {
     position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     height: 40px;
     width: 100%;
     padding: 5px;
     border-bottom: 1px solid #dfdfdf;
     z-index: 1999;
     .tabs-container__sidebarSwitch {
-      display: inline-block;
-      vertical-align: middle;
+      margin-left: 5px;
+      margin-right: 6px;
     }
     .tags-view-item {
       .el-tag {

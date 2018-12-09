@@ -1,8 +1,12 @@
 <template>
   <div class="cms-container">
+    <!-- 采用fixed固定脱离文档流-->
     <navbar></navbar>
     <template v-if="curConfigure !== 'HomePage'">
-      <div :class="[isCollapse ? 'cms-container__sidebar--hide' : '', 'cms-container__sidebar']" :is="curConfigure"></div>
+      <!-- 采用fixed固定脱离文档流-->
+      <div :class="[isCollapse ? 'cms-container__sidebar--hide' : '', 'cms-container__sidebar']" :is="curConfigure">
+      </div>
+      <!-- 使用relative定位从navbar和sidebar位置偏离到中间-->
       <div :class="[isCollapse ? 'cms-container__main--hide' : 'cms-container__main']">
         <tabs-view></tabs-view>
         <app-main></app-main>
@@ -22,6 +26,14 @@
   import { mapGetters, mapActions, mapMutations } from 'vuex'
   import loadComponents from '../../utils/loadComponents'
   export default {
+    data() {
+      return {
+        clientHeight: ''
+      }
+    },
+    mounted() {
+      this.clientHeight = document.body.clientHeight - 61
+    },
     computed: {
       ...mapGetters([
         'curConfigure',
@@ -66,7 +78,7 @@
 </script>
 <style scoped lang="scss">
   .cms-container {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
     .cms-container__home {
@@ -77,7 +89,7 @@
       top: 61px;
       height: 100%;
       width: 200px;
-      z-index: 2000
+      z-index: 2000;
     }
     .cms-container__sidebar.cms-container__sidebar--hide {
       position: fixed;
@@ -122,14 +134,16 @@
     }
     .cms-container__main {
       position: relative;
-      height: 100%;
-      padding-left: 210px;
-      padding-top: 61px;
+      left: 201px;
+      top: 61px;
+      width: calc(100% - 201px);
+      height: calc(100% - 61px);
+      background: #3a8ee6;
     }
     .cms-container__main--hide {
       position: relative;
       height: 100%;
-      padding-left: 100px;
+      padding-left: 91px;
       padding-top: 61px;
     }
   }

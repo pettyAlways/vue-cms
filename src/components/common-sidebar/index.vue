@@ -1,18 +1,28 @@
 <template>
-  <el-menu mode="vertical"
-           class="menus-group--vertical"
-           unique-opened
-           background-color=""
-           :collapse="isCollapse"
-           :default-active="activeTagName">
-    <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
-  </el-menu>
+  <div class="menus-group" :style="{ height: clientHeight + 'px' }">
+    <el-menu mode="vertical"
+             class="menus-group--vertical"
+             unique-opened
+             background-color=""
+             :collapse="isCollapse"
+             :default-active="activeTagName">
+      <menuSidebar :menus="permissions[curConfigure]"></menuSidebar>
+    </el-menu>
+  </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   import menuSidebar from '../menu-sidebar'
   export default {
+    data() {
+      return {
+        clientHeight: ''
+      }
+    },
+    mounted() {
+      this.clientHeight = document.body.clientHeight - 61
+    },
     components: {
       menuSidebar
     },
@@ -41,17 +51,15 @@
 </script>
 
 <style scoped lang="scss">
-  .menus-group--vertical:not(.el-menu--collapse) {
-    position: fixed;
-    top: 61px;
-    width: 200px;
-    height: 100%;
-    min-height: 500px;
-    /*background: {
-      image: -webkit-gradient(linear, left top, right top, from(#1278f6), to(#00b4aa));
-      image: -webkit-linear-gradient(left, #1278f6, #00b4aa);
-      image: -moz-linear-gradient(left, #1278f6, #00b4aa);
-      image: linear-gradient(to bottom, #f2f2f2, #f5f5f5);
-    }*/
+  .menus-group {
+    overflow: hidden;
+    .menus-group--vertical:not(.el-menu--collapse) {
+      height: 100%;
+      width: calc(100% + 20px);
+      // 让滚动条一直出现占据上面扩展的20px，否则在高度没有超出的情况下没有滚动条
+      // 占据导致菜单的宽度拉长了20px,最右侧的收缩箭头右移20px
+      overflow-y: scroll;
+    }
   }
+
 </style>

@@ -86,10 +86,10 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <el-button v-if="noAuthShowBtn || power['用户更新']" type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-              <el-button v-if="noAuthShowBtn || power['用户删除']" type="text" size="small" @click="curDelete(scope.row.id)">删除</el-button>
-              <el-button v-if="noAuthShowBtn || power['用户查询']" type="text" size="small" @click="view(scope.row)">查看</el-button>
-              <el-button v-if="noAuthShowBtn || power['用户赋角']" type="text" size="small" @click="auth(scope.row)">赋角</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户更新']" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户删除']" type="text" @click="curDelete(scope.row.id)">删除</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户查询']" type="text" @click="view(scope.row)">查看</el-button>
+              <el-button v-if="noAuthShowBtn || power['用户赋角']" type="text" @click="auth(scope.row)">赋角</el-button>
             </template>
           </el-table-column>
         </el-table>

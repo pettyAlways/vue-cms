@@ -57,9 +57,9 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a v-if="noAuthShowBtn || power['常量更新']" type="text" size="small" @click="edit(scope.row)">编辑</a>
-              <a v-if="noAuthShowBtn || power['常量查询']" type="text" size="small" @click="view(scope.row)">查看</a>
-              <a v-if="noAuthShowBtn || power['常量删除']" type="text" size="small" @click="curDelete(scope.row.id)">删除</a>
+              <el-button v-if="noAuthShowBtn || power['常量更新']" type="text" @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['常量查询']" type="text" @click="view(scope.row)">查看</el-button>
+              <el-button v-if="noAuthShowBtn || power['常量删除']" type="text" @click="curDelete(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -323,8 +323,6 @@
 
 <style scoped lang='scss'>
   .constConfiguration-manage {
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-    font-size: 14px;
     .resource-represent {
       padding: 0px 10px;
       .operate-btn-group {
@@ -332,7 +330,6 @@
       }
       a{
         cursor: pointer;
-        color: #20a0ff ;
       }
     }
   }

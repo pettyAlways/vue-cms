@@ -2,7 +2,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
-import '@/style/theme_sky_sea.scss'
+// import '@/style/theme_sky_sea.scss'
+import '@/style/theme_love_sense.scss'
 // 状态机
 import store from './store'
 // 国际化

@@ -1,50 +1,47 @@
 <template>
-  <el-menu
-    class="navbar"
-    mode="horizontal"
-    @select="switchMenu"
-    text-color="#fff"
-    :default-active="curConfigure"
-    active-text-color="#00b4aa">
-    <div :class="[isCollapse ? 'hide-navbar-header' : '', 'navbar-header']">
-      <icon-svg iconClass="logo" class="site-logo"></icon-svg>
-      <router-link to="/home" v-if="!isCollapse"><div index="1">{{sysParam.system_title}}</div></router-link>
+  <div class="navbar-container">
+    <el-menu
+      class="navbar-container__menu"
+      mode="horizontal"
+      @select="switchMenu"
+      text-color="#fff"
+      :default-active="curConfigure"
+      active-text-color="#00b4aa">
+      <div :class="[isCollapse ? 'navbar-container__header--hide' : '', 'navbar-container__header']">
+        <icon-svg iconClass="logo" class="site-logo"></icon-svg>
+        <router-link to="/home" v-if="!isCollapse"><div index="1">{{sysParam.system_title}}</div></router-link>
+      </div>
+      <div class="navbar-container__navigation">
+        <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
+        <!--模块权限管理 -->
+        <el-menu-item v-for="(item, index) in moduleList" :key="index" :index="item.index">
+          <icon-svg v-if="item.icon" :iconClass="item.icon"></icon-svg>
+          <span>{{item.name}}</span>
+        </el-menu-item>
+      </div>
+    </el-menu>
+    <div class="navbar-container__information">
+      <div class="information-common">
+        <span>当前时间:{{currentTime}}</span>
+        <router-link to="/user/profile">个人中心</router-link>
+        <a @click="logout">退出登录</a>
+        <el-dropdown class="theme" @command="switchTheme">
+          <span class="el-dropdown-link">
+            切换主题<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="theme_sky_sea">厚实羊</el-dropdown-item>
+            <el-dropdown-item command="theme_love_sense">少女心</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div class="information-function">
+        <img class="user-avatar" :src="avatar">
+        <span class="user-name">{{currentUser.userName}}</span>
+      </div>
     </div>
-    <el-menu-item index="HomePage"><i class="el-icon-setting"></i>首页</el-menu-item>
-    <!--模块权限管理 -->
-    <el-menu-item v-for="(item, index) in moduleList" :key="index" :index="item.index">
-      <icon-svg v-if="item.icon" :iconClass="item.icon"></icon-svg>
-      <span>{{item.name}}</span>
-    </el-menu-item>
-    <div class="avatar-container">
-      <span>{{currentTime}}</span>
-      <img class="user-avatar" :src="avatar">
-      <el-dropdown  trigger="click">
-        <div class="avatar-wrapper">
-          <div class="username-wrapper">
-            <span class="user-name">{{currentUser.userName}}</span>
-            <i class="el-icon-caret-bottom"></i>
-          </div>
-        </div>
-        <el-dropdown-menu class="user-dropdown" slot="dropdown">
-          <router-link class='inlineBlock' to="/user/profile">
-            <el-dropdown-item>
-              个人中心
-            </el-dropdown-item>
-          </router-link>
-          <router-link class='inlineBlock' to="/user/profile">
-            <el-dropdown-item>
-              修改头像
-            </el-dropdown-item>
-          </router-link>
-          <el-dropdown-item @click.native="logout">
-            <span style="display:block;">退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+  </div>
 
-  </el-menu>
 </template>
 <script>
   import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -89,6 +86,14 @@
         switchConfigureMenu: 'switchConfigureMenu',
         resolveDefaultPage: 'resolveDefaultPage'
       }),
+      switchTheme(theme) {
+        var head = document.getElementsByTagName('head')[0]
+        var link = document.createElement('link')
+        link.href = `static/css/${theme}.css`
+        link.rel = 'stylesheet'
+        link.type = 'text/css'
+        head.appendChild(link)
+      },
       initParam() {
         sysParams().then(res => {
           if (res.flag) {
@@ -122,107 +127,100 @@
 </script>
 
 <style scoped lang="scss">
-  .navbar {
+  .navbar-container {
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
     position: fixed;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: stretch;
     width: 100%;
     z-index: 10;
-    background: {
-      image: -webkit-gradient(linear, left top, right top, from(#1278f6), to(#00b4aa));
-      image: -webkit-linear-gradient(45deg, #1278f6, #00b4aa 50%, #1278f6);
-      image: -moz-linear-gradient(45deg, #1278f6, #00b4aa 50%, #1278f6);
-      image: linear-gradient(45deg,#1278f6,#00b4aa 50%, #1278f6);
+    border-bottom: solid 1px #e6e6e6;
+    /deep/ .el-menu.el-menu--horizontal {
+      border-bottom: 0px;
     }
-    .navbar-header {
+    .navbar-container__menu {
       display: flex;
       flex-flow: row nowrap;
-      justify-content: flex-start;
-      align-items: center;
-      width: 200px;
-      height: 60px;
-      color: white;
-      &-switch {
-        margin-right: 15px;
-        .svg-icon {
-          width: 1.5em;
-          height: 1.5em;
+      .navbar-container__header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 18px;
+        width: 200px;
+        height: 60px;
+        color: white;
+        &-switch {
+          margin-right: 15px;
+          .svg-icon {
+            width: 1.5em;
+            height: 1.5em;
+          }
+        }
+        .site-logo {
+          width: 2em;
+          height: 2em;
         }
       }
-      .site-logo {
-        width: 2em;
-        height: 2em;
+      .navbar-container__header--hide {
+        justify-content: center ;
+        transition: width .3s;
+        border-right: 1px solid rgba(grey, .8);
+        width: 90px;
+        font-size: 18px;
+        .site-logo {
+          width: 3em;
+          height: 3em;
+        }
+      }
+      .navbar-container__navigation {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        font-size: 16px;
+        /deep/ .el-menu-item {
+          margin: 0px 1px;
+          height: 100%;
+          &.is-active {
+            background: cornsilk;
+          }
+          border-bottom: none;
+          &:hover {
+            background-color: cornsilk;
+            color: #00b4aa !important;
+          }
+          &:focus {
+            background-color: cornsilk;
+          }
+        }
       }
     }
-    .hide-navbar-header {
-      justify-content: center ;
-      transition: width .3s;
-      border-right: 1px solid rgba(grey, .8);
-      width: 90px;
-      .site-logo {
-        width: 3em;
-        height: 3em;
-      }
-    }
-    .site-title {
-      float: left;
-      height: 60px;
-      line-height: 60px;
-      margin: 0;
-      margin-left: 15px;
-      cursor: pointer;
-      position: relative;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
+  }
+  .navbar-container__information {
+    margin-right: 15px;
       color: #fff;
-    }
-  }
-  .navbar /deep/ .el-menu-item {
-    margin: 0px 1px;
-    &.is-active {
-      background: cornsilk;
-    }
-    border-bottom: none;
-    &:hover {
-      background-color: cornsilk;
-      color: #00b4aa !important;
-    }
-    &:focus {
-      background-color: cornsilk;
-    }
-  }
-  .navbar /deep/ .screenfull {
-    position: absolute;
-    top: 20px;
-    right: 190px;
-  }
-  .right-menu-item {
-    position: absolute;
-    top: 20px;
-    right: 150px;
-    color: #fff;
-  }
-  .avatar-container {
-    position: absolute;
-    top: 15px;
-    right: 40px;
-    color: #fff;
     cursor: pointer;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    .user-avatar {
-      width: 40px;
-      height: 35px;
-      border-radius: 50%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+    font-size: 14px;
+    .information-common {
+      font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+      font-size: 13px;
     }
-    .username-wrapper {
-      color: white;
-      display: inline-block;
-      height: 30px;
-      line-height: 30px;
+    .information-function {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .user-avatar {
+        height: 25px;
+        border-radius: 50%;
+      }
+      .theme {
+        margin-left: 5px;
+      }
     }
   }
 </style>

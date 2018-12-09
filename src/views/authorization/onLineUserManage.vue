@@ -57,8 +57,8 @@
             label="操作"
             width="220">
             <template slot-scope="scope">
-              <a v-if="(noAuthShowBtn || power['用户踢出']) && currentUser.id !== scope.row.userId" type="text" size="small" @click="kickout(scope.row)">踢出</a>
-              <a v-if="(noAuthShowBtn || power['用户禁用']) && currentUser.id !== scope.row.userId" type="text" size="small" @click="invalidUser(scope.row)">禁用</a>
+              <el-button v-if="(noAuthShowBtn || power['用户踢出']) && currentUser.id !== scope.row.userId" type="text" @click="kickout(scope.row)">踢出</el-button>
+              <el-button v-if="(noAuthShowBtn || power['用户禁用']) && currentUser.id !== scope.row.userId" type="text" @click="invalidUser(scope.row)">禁用</el-button>
             </template>
           </el-table-column>
         </el-table>
