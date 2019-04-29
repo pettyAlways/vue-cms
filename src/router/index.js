@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Login from '@/views/login'
+import Index from '@/views/index'
 import Layout from '@/views/layout/layout'
 import HomePage from '@/views/homepage/homepage'
 
@@ -19,7 +20,12 @@ export const constantRouterMap = [
   {
     path: '/',
     // 使用redirect路由守卫最终监听到的是/login
-    redirect: '/login'
+    redirect: '/index'
+  },
+  {
+    path: '/index',
+    name: '首页',
+    component: Index
   },
   {
     path: '/login',

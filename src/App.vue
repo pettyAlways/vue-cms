@@ -11,8 +11,8 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './style/index.scss';
   #app {
     height: 100%;
+    color: #6a6a6a;
   }
 </style>

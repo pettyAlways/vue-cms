@@ -8,7 +8,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font: 13px/1.5 Arial,"宋体";
+  color: #6a6a6a;
+  background: url(../assets/site-bg.jpg) repeat;
+  position: relative;
+  z-index: 10;
 }
 
 html {
