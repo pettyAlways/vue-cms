@@ -1,22 +1,25 @@
 <template>
   <div class="product-panel">
-    <div class="product-panel__left">
-      <el-image :src="productInfo.title.pic" style="width:200px; height:115px;"></el-image>
-      <ul class="product-panel__left__choose">
-        <li :class="{showRed:item.show}" v-for="(item, index) in productInfo.category" :key="index" @mouseenter="handlePanelShow(item)">
-          <div class="product-panel__left__choose__item">
-            <el-image :src="liPic" style="width:4px;height:7px;flex-shrink: 0"></el-image>
-            <a style="margin-left:8px;cursor: pointer">{{item.name}}</a>
-          </div>
-        </li>
-      </ul>
+    <div class="product-panel__header">
+      <wine-panel-title width="180px" height="40px" title="新品图鉴" note="Produce center"></wine-panel-title>
     </div>
-    <div class="product-panel__right">
-      <div class="product-panel__right__panel" v-for="(item, index) in productInfo.category" v-if="item.show">
-        <div class="product-panel__right__panel__item" v-for="(sItem, sIndex) in item.products">
-          <el-image :src="sItem.pic" style="widows: 175;height: 195px;cursor: pointer"></el-image>
-          <a :href="sItem.link">{{sItem.name}}</a>
-        </div>
+    <div class="product-panel__body">
+      <div class="product-panel__body__arrow">
+        <el-image :src="require('./asserts/arrow-left.jpg')"></el-image>
+      </div>
+      <div class="product-panel__body__panel">
+        <auto-scroll :linkInfo="produceInfo" height="258px" :speed="30" >
+          <template slot-scope="datas">
+            <div class="product-panel__body__panel__item" v-for="(item, index) in datas.data" :key="index" >
+              <a ><img :src="item.pic" style="width:150px; height: 210px;"></a>
+              <a class="product-panel__body__panel__item__title">{{item.title}}</a>
+              <span class="product-panel__body__panel__item__tip">{{item.tip}}</span>
+            </div>
+          </template>
+        </auto-scroll>
+      </div>
+      <div class="product-panel__body__arrow">
+        <el-image :src="require('./asserts/arrow-right.jpg')"></el-image>
       </div>
     </div>
   </div>
@@ -27,121 +30,53 @@
     name: 'produce',
     data() {
       return {
-        liPic: require('./asserts/liPic.png'),
-        productInfo: {
-          title: {
-            pic: require('./asserts/titlePic.jpg')
+        produceInfo: [
+          {
+            title: '首酱一号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
           },
-          category: [
-            {
-              name: '怀庄系列',
-              show: true,
-              products: [
-                {name: '怀庄景德镇瓶封坛30年酒4000ml', link: '', pic: require('./asserts/hz/hz01.jpg')},
-                {name: '怀庄景德镇瓶封坛30年酒500ml', link: '', pic: require('./asserts/hz/hz02.jpg')},
-                {name: '怀庄酒封坛30年老窖', link: '', pic: require('./asserts/hz/hz03.jpg')},
-                {name: '怀庄酒封坛20年老窖', link: '', pic: require('./asserts/hz/hz04.jpg')},
-                {name: '怀庄酒封坛10年老窖', link: '', pic: require('./asserts/hz/hz05.jpg')},
-                {name: '怀庄金质八年酒', link: '', pic: require('./asserts/hz/hz06.jpg')}
-              ]
-            },
-            {
-              name: '人名公社系列',
-              show: false,
-              products: [
-                {name: '人民公社30年', link: '', pic: require('./asserts/rm/rm01.jpg')},
-                {name: '人民公社20年', link: '', pic: require('./asserts/rm/rm02.jpg')},
-                {name: '人民公社1973', link: '', pic: require('./asserts/rm/rm03.jpg')},
-                {name: '人民公社10年', link: '', pic: require('./asserts/rm/rm04.jpg')},
-                {name: '人民公社酒简装500ml', link: '', pic: require('./asserts/rm/rm05.jpg')},
-                {name: '简装125ml', link: '', pic: require('./asserts/rm/rm06.jpg')},
-                {name: '人民公社（酱香老酒）', link: '', pic: require('./asserts/rm/rm07.jpg')}
-              ]
-            },
-            {
-              name: '政酒系列',
-              show: false,
-              products: [
-                {name: '政酒30年', link: '', pic: require('./asserts/zj/zj01.jpg')},
-                {name: '政酒20年(新)', link: '', pic: require('./asserts/zj/zj02.jpg')},
-                {name: '政酒20年', link: '', pic: require('./asserts/zj/zj03.jpg')}
-              ]
-            },
-            {
-              name: '精茅台系列',
-              show: false,
-              products: [
-                {name: '精品茅三品', link: '', pic: require('./asserts/mt/mt01.jpg')},
-                {name: '精品茅五品', link: '', pic: require('./asserts/mt/mt02.jpg')},
-                {name: '精品茅七品', link: '', pic: require('./asserts/mt/mt03.jpg')}
-              ]
-            },
-            {
-              name: '典酱台系列',
-              show: false,
-              products: [
-                {name: '国典', link: '', pic: require('./asserts/djt/djt01.jpg')},
-                {name: '庆典', link: '', pic: require('./asserts/djt/djt02.jpg')},
-                {name: '御典', link: '', pic: require('./asserts/djt/djt03.jpg')},
-                {name: '盛典', link: '', pic: require('./asserts/djt/djt04.jpg')},
-                {name: '雅典', link: '', pic: require('./asserts/djt/djt05.jpg')}
-              ]
-            },
-            {
-              name: '台酱坊系列',
-              show: false,
-              products: []
-            },
-            {
-              name: '倚天酱系列',
-              show: false,
-              products: []
-            },
-            {
-              name: '醉美怀庄',
-              show: false,
-              products: [
-                {name: '醉美怀庄 精品', link: '', pic: require('./asserts/zm/zm01.jpg')},
-                {name: '醉美怀庄30年', link: '', pic: require('./asserts/zm/zm02.jpg')},
-                {name: '醉美怀庄 8年', link: '', pic: require('./asserts/zm/zm03.jpg')}
-              ]
-            },
-            {
-              name: '百年怀庄',
-              show: false,
-              products: []
-            },
-            {
-              name: '怀庄烧坊系列',
-              show: false,
-              products: []
-            },
-            {
-              name: '老怀庄系列',
-              show: false,
-              products: []
-            },
-            {
-              name: '酱香原酒系列',
-              show: false,
-              products: []
-            },
-            {
-              name: '境品系列',
-              show: false,
-              products: []
-            }
-          ]
-        }
+          {
+            title: '首酱二号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱三号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱四号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱五号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱六号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱七号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          },
+          {
+            title: '首酱八号',
+            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+            pic: require('./asserts/wine01.jpg')
+          }
+        ]
       }
     },
-    methods: {
-      handlePanelShow(item) {
-        for (let temp of this.productInfo.category) {
-          temp.show = false
-        }
-        item.show = true
-      }
+    components: {
+      'winePanelTitle': () => import('@/components/wine-panel-title'),
+      'autoScroll': () => import('@/components/auto-scroll')
     }
   }
 </script>
@@ -149,69 +84,52 @@
 <style lang="scss" scoped>
   .product-panel {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    &__left {
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      width: 201px;
-      background: #ededed;
-      &__choose {
-        list-style: none;
-        padding: 0px;
-        &__item {
-          height: 100%;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          cursor: pointer;
-          font-family: 微软雅黑;
-          font-size: 13px;
-          font-weight: 400;
-        }
-        li {
-          height: 36px;
-          line-height: 36px;
-          padding-left: 30px;
-          border-bottom: 1px solid #FFF;
-          font-family: "微软雅黑";
-          line-height: 36px;
-          &:hover {
-            color: white;
-          }
-        }
-        .showRed {
-          color: #FFF;
-          width: 201px;
-          background: #d43039 !important;
-        }
-
-      }
+    flex-direction: column;
+    margin-bottom: 20px;
+    &__header {
+      margin-bottom: 20px;
     }
-    &__right {
-      width: 750px;
-      &__panel {
+    &__body {
+      display: flex;
+      flex-direction: row;
+      border: 1px solid #e0e0e0;
+      &__arrow {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
+        align-items: center;
+        color: red;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 79px;
+        height: 258px;
+      }
+      &__panel {
+        flex-grow: 1;
+        width: 1020px;
         &__item {
           display: flex;
           flex-direction: column;
-          width: 177px;
-          padding-top: 20px;
-          margin-left: 10px;
-          margin-bottom: 10px;
-          text-align: center;
-          line-height: 24px;
-          a {
-            cursor: pointer;
+          align-items: center;
+          justify-content: center;
+          margin: 0px 10px;
+          &__title {
+            font-size: 14px;
+            color: #676767;
+            &:hover {
+              color: #cc9966;
+            }
           }
-          a:hover {
-            color: red;
-            text-decoration: none;
+          &__tip {
+            height: 18px;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #808080;
+            line-height: 18px;
+            text-align: center;
+            overflow: hidden;
           }
         }
+
       }
     }
   }

@@ -1,22 +1,44 @@
 <template>
-  <div class="footer-panel">
-    <el-row type="flex" justify="center">
-      <div class="footer-panel__content">
-        <div class="footer-panel__content__item" v-for="(item, index) in footerInfo" :key="index">
-          <div class="footer-panel__content__item__header">
-            <span>{{item.type}}</span>
+  <div class="footer">
+    <div class="footer__panel w1200">
+      <div class="footer__panel__top">
+        <div class="footer__panel__top__left">
+          <el-image :src="require('./asserts/footer-left.jpg')"></el-image>
+        </div>
+        <div class="footer__panel__top__center">
+          <div class="footer__panel__top__center__header">
+            <div class="footer__panel__top__center__header__vx">
+              <el-image :src="require('./asserts/icon_vx.png')"></el-image>
+              <span>微信</span>
+            </div>
+            <div class="footer__panel__top__center__header__email">
+              <el-image :src="require('./asserts/icon-info.png')"></el-image>
+              <span>邮箱</span>
+            </div>
           </div>
-          <div class="footer-panel__content__item__body">
-            <ul>
-              <li v-for="(tItem, index) in item.items" :key="index">
-                <a :href="tItem.link" v-if="!tItem.vx">{{tItem.subName}}</a>
-                <el-image v-else :src="tItem.vx" style="width: 134px;height: 132px;margin-top: 8px"></el-image>
-              </li>
-            </ul>
+          <div class="footer__panel__top__center__body">
+            茅台镇散酒_茅台镇酒厂基酒_茅台酒厂代理_贵州首酒酒业官网&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            地址：贵州省仁怀市国威路国酒社区茅台白金酒厂&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>贵州贵阳市观山湖区长岭北路6号东原财富广场5楼<br>
+
+            电话：15338528869&nbsp;&nbsp;&nbsp;&nbsp;电话：0851-84105458 &nbsp;&nbsp;&nbsp;&nbsp;咨询热线：400-861-7998
+          </div>
+          <div class="footer__panel__top__center__bottom">
+            友情链接：
+            <a href="http://www.itmxx.com" target="_blank">贵州网站建设</a>
+            <a href="http://yinjiuren.com" target="_blank">引酒人</a>
+            <a href="http://www.txsizu.com" target="_blank">广州按摩</a>
+            <a href="http://www.qlpearl.com" target="_blank">上海按摩</a>
           </div>
         </div>
+        <div class="footer__panel__top__right">
+          <el-image :src="require('./asserts/footer-right.jpg')"></el-image>
+        </div>
       </div>
-    </el-row>
+      <div class="footer__panel__bottom">
+        <span>Copyright © 2018-2020 贵州首酒酒业有限公司 版权所有</span>
+        <a>黔ICP备18009371号-1</a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,167 +46,88 @@
   export default {
     name: 'footerNav',
     data() {
-      return {
-        footerInfo: [
-          {
-            type: '关于怀庄',
-            items: [
-              {
-                subName: '企业概况',
-                link: ''
-              },
-              {
-                subName: '企业领导',
-                link: ''
-              },
-              {
-                subName: '董事长致辞',
-                link: ''
-              },
-              {
-                subName: '组织机构',
-                link: ''
-              },
-              {
-                subName: '荣誉资质',
-                link: ''
-              },
-              {
-                subName: '企业文化',
-                link: ''
-              },
-              {
-                subName: '怀庄历程',
-                link: ''
-              }
-            ]
-          },
-          {
-            type: '产品中心',
-            items: [
-              {
-                subName: '怀庄系列',
-                link: ''
-              },
-              {
-                subName: '人民公社系列',
-                link: ''
-              },
-              {
-                subName: '政酒系列',
-                link: ''
-              },
-              {
-                subName: '精品茅系列',
-                link: ''
-              },
-              {
-                subName: '典酱台系列',
-                link: ''
-              },
-              {
-                subName: '台酱坊系列',
-                link: ''
-              },
-              {
-                subName: '倚天酱系列',
-                link: ''
-              },
-              {
-                subName: '醉美怀庄',
-                link: ''
-              }
-            ]
-          },
-          {
-            type: '怀庄酒韵',
-            items: [
-              {
-                subName: '私人定制',
-                link: ''
-              },
-              {
-                subName: '怀庄历程',
-                link: ''
-              },
-              {
-                subName: '企业歌曲',
-                link: ''
-              },
-              {
-                subName: '书画展示',
-                link: ''
-              },
-              {
-                subName: '怀庄赋',
-                link: ''
-              }
-            ]
-          },
-          {
-            type: '相关网站',
-            items: [
-              {
-                subName: '怀庄商城',
-                link: ''
-              },
-              {
-                subName: '手机商城',
-                link: ''
-              }
-            ]
-          },
-          {
-            type: '微信公众号',
-            items: [
-              {
-                vx: require('../fix-right/asserts/vx.jpg')
-              }
-            ]
-          }
-        ]
-      }
+      return {}
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .footer-panel {
-    margin-top: 20px;
-    background: url("./asserts/footer-bg.jpg") repeat-x;
-    &__content {
+  .footer{
+    background: #1a1a1a;
+    margin: 0px auto;
+    &__panel {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      width: 960px;
-      &__item {
+      flex-direction: column;
+      &__top {
         display: flex;
-        flex-direction: column;
-        &__header {
-          height: 40px;
-          line-height: 40px;
-          color: #cccccc;
-          font-size: 14px;
-          font-weight: bolder;
-          line-height: 35px;
+        height: 200px;
+        &__left {
+          align-self: center;
+          flex-shrink: 0;
+          width: 200px;
+          height: 80px;
+          border-right: 1px solid #cc9966;
         }
-        &__body {
-          ul {
-            list-style: none;
-            padding: 0px;
-            li {
-              margin-top: 8px;
-              color: #cccccc;
-              font: 14px/1.5 Arial 宋体;
-              a:hover {
-                color: #FFF;
+        &__center {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 20px;
+          flex-grow: 1;
+          &__header {
+            display: flex;
+            margin-bottom: 15px;
+            &__vx {
+              display: flex;
+              align-items: center;
+              margin-right: 10px;
+              span {
+                margin-left: 15px;
+              }
+            }
+            &__email {
+              display: flex;
+              align-items: center;
+              span {
+                margin-left: 15px;
+              }
+            }
+          }
+          &__body {
+            font-size: 14px;
+            color: #808080;
+          }
+          &__bottom {
+            margin-top: 15px;
+            a {
+              margin-left: 8px;
+              font-size: 14px;
+              color: #fff;
+              &:hover {
+                color: #fff;
                 text-decoration: underline;
               }
             }
           }
         }
+        &__right {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+          width: 150px;
+        }
+      }
+      &__bottom {
+        align-self: center;
+        span {
+          font-size: 14px;
+          color: #808080;
+        }
+        a {
+          color: #FFF;
+          font-size: 14px;
+        }
       }
     }
-
   }
 </style>

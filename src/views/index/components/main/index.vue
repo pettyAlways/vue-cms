@@ -1,16 +1,16 @@
 <template>
   <div class="main-panel">
-    <div class="main-panel__content">
-      <introduction></introduction>
-      <show-paint></show-paint>
-      <show-place></show-place>
-      <sub-banner></sub-banner>
-      <produce></produce>
+    <div class="main-panel__content w1200">
       <news></news>
-      <comments></comments>
-      <society></society>
+      <sub-banner></sub-banner>
+    </div>
+    <introduction></introduction>
+    <div class="main-panel__content w1200">
+      <show-place></show-place>
+      <produce></produce>
+      <brand></brand>
       <custom></custom>
-      <join></join>
+      <franchise></franchise>
       <link-panel></link-panel>
     </div>
   </div>
@@ -20,16 +20,14 @@
   export default {
     name: 'mainNav',
     components: {
-      'introduction': () => import('./components/introduction'),
-      'showPaint': () => import('./components/show-paint'),
-      'showPlace': () => import('./components/show-place'),
-      'subBanner': () => import('./components/sub-banner'),
-      'produce': () => import('./components/show-product'),
       'news': () => import('./components/show-news'),
-      'comments': () => import('./components/show-comments'),
-      'society': () => import('./components/show-society'),
+      'subBanner': () => import('./components/sub-banner'),
+      'introduction': () => import('./components/introduction'),
+      'showPlace': () => import('./components/show-place'),
+      'produce': () => import('./components/show-product'),
+      'brand': () => import('./components/show-brand'),
       'custom': () => import('./components/show-custom'),
-      'join': () => import('./components/show-join'),
+      'franchise': () => import('./components/show-franchise'),
       'linkPanel': () => import('./components/show-link')
     }
 
@@ -39,14 +37,12 @@
 <style lang="scss" scoped>
   .main-panel {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     margin: 0px auto;
-    width: 1000px;
-    padding: 15px 20px;
+    padding: 15px 0px;
     background: white;
     &__content {
-      width: 960px;
     }
   }
 </style>

@@ -1,50 +1,58 @@
 <template>
-  <div class="new-panel">
-    <el-row>
-      <el-col class="new-panel__left" :span="13">
-        <div class="new-panel__left__header">
-          <el-image :src="newsInfo.left.titlePic" style="width: 23px;height: 23px"></el-image>
-          <span>{{newsInfo.left.title}}</span>
+  <div class="news-panel">
+    <div class="news-panel--left">
+      <div class="news-panel--left__header">
+        <div class="news-panel--left__header--left">
+          <a v-for="(item, index) in type" :key="index" @mouseenter="autoHandler(item)">{{item.name}}</a>
+          <span>News</span>
         </div>
-        <div class="new-panel__left__body">
-          <el-image class="new-panel__left__body__img" :src="newsInfo.left.bodyPic" style="width: 240px;height: 325px"></el-image>
-          <div class="new-panel__left__body__content">
-            <span v-html="newsInfo.left.bodyContent"></span>
-            <span class="hong"><a href="/profile/detail-100101-416.htm" title="董事长致辞">&nbsp;&nbsp;详细&gt;&gt;</a> </span>
+        <div class="news-panel--left__header--right">
+          <el-image :src="require('./asserts/more2.jpg')"></el-image>
+        </div>
+      </div>
+      <div class="news-panel--left__body">
+        <div class="news-panel--left__body__item">
+          <div class="news-panel--left__body__item--left">
+            <el-image :src="showData.item.pic" style="width: 130px;height:130px;"></el-image>
           </div>
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <el-row type="flex" justify="center">
-          <el-image :src="centerLine"></el-image>
-        </el-row>
-      </el-col>
-      <el-col class="new-panel__right" :span="10">
-        <div class="new-panel__right__header">
-          <el-image :src="newsInfo.right.titlePic" style="width:23px;height:23px"></el-image>
-          <span>{{newsInfo.right.title}}</span>
-        </div>
-        <div class="new-panel__right__body">
-          <div class="new-panel__right__body__top">
-            <el-image class="new-panel__right__body__top__pic" :src="newsInfo.right.topPic" style="width:147px;height:120px"></el-image>
-            <div class="new-panel__right__body__top__content">
-              <strong><a>{{newsInfo.right.topTitle}}</a></strong>
-              <span v-html="newsInfo.right.topContent"></span>
+          <div class="news-panel--left__body__item--right">
+            <h3><a>{{showData.item.title}}</a></h3>
+            <div class="news-panel--left__body__item--right__content">
+              <span>{{showData.item.content}}</span>
+              <a href="/a/gongsixinwen/20190114/34.html">[详情]</a>
             </div>
           </div>
-          <div class="new-panel__right__body__bottom">
-            <ul>
-              <li v-for="(item, index) in newsInfo.right.news" :key="index">
-                <el-row type="flex" align="middle">
-                  <el-image :src="ulPic" style="width: 3px;height: 5px;"></el-image>
-                  <a>{{item}}</a>
-                </el-row>
-              </li>
-            </ul>
+        </div>
+        <div class="news-panel--left__body__list">
+          <ul>
+            <li v-for="(item, index) in showData.listContent" :key="index">
+              <a :href="item.link">{{item.title}}</a>
+              <span>{{item.postTime}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="news-panel--right">
+      <div class="news-panel--right__header">
+        <div class="news-panel--right__header--left">
+          <a>首酒基酒</a>
+          <span>Latest Activity</span>
+        </div>
+        <div class="news-panel--right__header--right">
+          <el-image :src="require('./asserts/more2.jpg')"></el-image>
+        </div>
+      </div>
+      <div class="news-panel--right__body">
+        <div class="news-panel--right__body__list">
+          <div class="news-panel--right__body__list__item" v-for="(item, index) in listInfo" :key="index">
+            <a :href="item.link">
+              <el-image :src="item.pic" style="width: 250px"></el-image>
+            </a>
           </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -53,127 +61,297 @@
     name: 'news',
     data() {
       return {
-        ulPic: require('./asserts/ulPic.jpg'),
-        centerLine: require('./asserts/centerLine.jpg'),
-        newsInfo: {
-          left: {
-            title: '董事长致辞',
-            titlePic: require('./asserts/titlePic.jpg'),
-            bodyPic: require('./asserts/bodyPic.jpg'),
-            bodyContent: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;朋友们，真诚欢迎您打开怀庄酒业集团的官方网站，走进贵州省茅台镇怀庄酒业集团，并从里这感知中国酱酒。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 贵州怀庄酒业集团是酱香型白酒原产地——贵州省茅台镇建厂最早的民营酿酒企业，至今已有三十多年的历史。怀庄集团地处酱香白酒原产地核心位置，与驰名中外的国酒茅台同处一地，共拥一天。<br>\n' +
-              '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 建厂以来，我们始终坚持“诚信酿造未来·和谐发展怀庄”的信条，始终坚持“认认真真办事、踏踏实实做人、顾客永远是对的”原则，始终坚持“传承古法、至诚至信、合作共赢”的理念。致力于为广大消费者酿制酱香醇厚的怀庄美酒...'
+        type: [
+          {
+            id: 'companyNew',
+            name: '公司新闻'
           },
-          right: {
-            title: '怀庄新闻',
-            titlePic: require('./asserts/titlePic.jpg'),
-            topPic: require('./asserts/topPic.jpg'),
-            topTitle: '酒盒（人民公社酒）获得...',
-            topContent: '&nbsp;&nbsp;&nbsp;&nbsp;酒盒（人民公社酒）获得外观设计专利证书——【中华人民共和国国家知识产权局】...',
-            news: [
-              '酒盒（人民公社酒）获得外观设计专利证书',
-              '2015年贵州国际酒博会 怀庄酒业再次光荣绽放',
-              '“怀庄”商标荣获中国驰名商标',
-              '遵义市政协党的群众路线实践教育活动在怀庄酒业召开',
-              '怀庄酒业集团积极参加2014年春季成都糖酒会',
-              '怀庄集团召开党的群众路线教育实践活动动员大会'
+          {
+            id: 'industry',
+            name: '行业新闻'
+          }
+        ],
+        showData: {
+          item: {
+            pic: require('./asserts/1-1Z1141409290-L.jpg'),
+            title: '什么才是正宗的酱香酒？',
+            content: '现代人喝酒，除了要尽兴还要健康，酱香型白酒无疑成了不可替代的酒品之一。什么才是正宗的酱香酒? 白酒批发 为您在下文 '
+          },
+          listContent: [
+            {
+              title: '什么才是正宗的酱香酒？',
+              link: '',
+              postTime: '2019-01-14'
+            },
+            {
+              title: '收藏老酒要有丰富的鉴定经验',
+              link: '',
+              postTime: '2019-01-14'
+            },
+            {
+              title: '各种粮食酿出的白酒有什么缺点？',
+              link: '',
+              postTime: '2019-01-14'
+            },
+            {
+              title: '什么环节上征收的白酒税？',
+              link: '',
+              postTime: '2019-01-14'
+            }
+          ]
+        },
+        newsInfo: {
+          companyNew: {
+            item: {
+              pic: require('./asserts/1-1Z1141409290-L.jpg'),
+              title: '什么才是正宗的酱香酒？',
+              content: '现代人喝酒，除了要尽兴还要健康，酱香型白酒无疑成了不可替代的酒品之一。什么才是正宗的酱香酒? 白酒批发 为您在下文 '
+            },
+            listContent: [
+              {
+                title: '什么才是正宗的酱香酒？',
+                link: '',
+                postTime: '2019-01-14'
+              },
+              {
+                title: '收藏老酒要有丰富的鉴定经验',
+                link: '',
+                postTime: '2019-01-14'
+              },
+              {
+                title: '各种粮食酿出的白酒有什么缺点？',
+                link: '',
+                postTime: '2019-01-14'
+              },
+              {
+                title: '什么环节上征收的白酒税？',
+                link: '',
+                postTime: '2019-01-14'
+              }
+            ]
+          },
+          industry: {
+            item: {
+              pic: require('./asserts/1-1Z40Q5022A11-lp.jpg'),
+              title: '选购贵州茅台酒常见的几大误区',
+              content: '不知各位还是否记得，两年前由吴京主演的战狼2成功的创造了中国电影票房的传奇，仅仅国内就成功收入五十六个亿（正好 '
+            },
+            listContent: [
+              {
+                title: '选购贵州茅台酒常见的几大误区',
+                link: '',
+                postTime: '2019-04-28'
+              },
+              {
+                title: '茅台镇基酒价格？基酒贵吗？',
+                link: '',
+                postTime: '2019-04-25'
+              },
+              {
+                title: '茅台镇散酒成本是多少？',
+                link: '',
+                postTime: '2019-04-20'
+              },
+              {
+                title: '茅台镇散酒值不值得购买？茅台镇散酒值得入手',
+                link: '',
+                postTime: '2019-04-17'
+              }
             ]
           }
-        }
+        },
+        listInfo: [
+          {
+            pic: require('./asserts/wine01.png'),
+            link: ''
+          },
+          {
+            pic: require('./asserts/wine02.jpg'),
+            link: ''
+          }
+        ]
+      }
+    },
+    methods: {
+      autoHandler(item) {
+        this.showData = this.newsInfo[item.id]
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .new-panel {
-    margin-top: 15px;
-    padding: 10px 10px;
-    background: #f4f4f4;
-    &__left {
+  .news-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    &--left {
+      flex-shrink: 0;
+      width: 430px;
+      height: 356px;
       &__header {
-        height: 35px;
-        background: url("./asserts/bottom-line.png") bottom repeat-x;
-        span {
-          font-size: 16px;
-          color: #e50012;
-          font-family: "微软雅黑";
-        }
-      }
-      &__body {
         display: flex;
         flex-direction: row;
-        padding-top: 10px;
-        &__img {
-          flex-shrink: 0;
-          margin-right: 5px;
-        }
-        &__content {
-          color: #333;
-          line-height: 24px;
-          font-weight: 400;
-          .hong a {
-            color: Red;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        &--left {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: #323232;
+          a {
+            display: block;
+            padding-right: 8px;
+            margin-right: 8px;
+            &:nth-of-type(1) {
+              border-right: 3px solid #cc9966;
+            }
           }
-          a:hover {
-            color: red;
-            text-decoration: none;
+          span {
+            font-size: 12px;
+            color: #cccccc;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: normal;
           }
         }
-      }
-    }
-    &__right {
-      &__header {
-        height: 35px;
-        background: url("./asserts/bottom-line.png") bottom repeat-x;
-        span {
-          font-size: 16px;
-          color: #e50012;
-          font-family: "微软雅黑";
+        &--right {
+
         }
       }
       &__body {
-        margin-top: 10px;
-        &__top {
+        padding: 24px;
+        border: 1px solid #e6e6e6;
+        overflow: hidden;
+        &__item {
           display: flex;
           flex-direction: row;
-          &__pic {
+          align-items: center;
+          height: 145px;
+          border-bottom: 1px dashed #e6e6e6;
+          &--left {
+            width: 130px;
             flex-shrink: 0;
+            margin-right: 10px;
           }
-          &__content {
-            display: flex;
-            flex-direction: column;
+          &--right {
             flex-grow: 1;
-            padding-left: 5px;
-            font: 13px/1.5 Arial,"宋体";
-            strong {
-              margin-top: 5px;
-              color: #333;
+            h3 {
+              height: 24px;
+              overflow: hidden;
               a {
-                text-decoration: none;
+                font-size: 18px;
               }
             }
-            span {
-              margin-top: 5px;
+            &__content {
+              line-height: 22px;
               font-size: 12px;
+              color: #323232;
+              height: 66px;
+              overflow: hidden;
+              a {
+                color: #cc9966;
+              }
             }
           }
         }
-        &__bottom {
-          margin-top: 15px;
+        &__list {
           ul {
             list-style: none;
             padding: 0px;
             li {
-              margin-top: 10px;
-              cursor: pointer;
-              a {
-                margin-left: 5px;
-                text-decoration: none;
-              }
-              a:hover {
-                color:red;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              height: 30px;
+              line-height: 30px;
+              border-bottom: 1px dashed #e6e6e6;
+              span {
+                color: #999999;
               }
             }
+          }
+        }
+      }
+    }
+    &--right {
+      height: 356px;
+      width: 740px;
+      margin-left: 10px;
+      margin-right: 10px;
+      &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        &--left {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: #323232;
+          a {
+            display: block;
+            padding-right: 8px;
+            margin-right: 8px;
+          }
+          span {
+            font-size: 12px;
+            color: #cccccc;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: normal;
+          }
+        }
+      }
+      &__body {
+        width: 740px;
+        height: 356px;
+        overflow: hidden;
+        color: red;
+        &__item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 145px;
+          border-bottom: 1px dashed #e6e6e6;
+          &--left {
+            width: 130px;
+            flex-shrink: 0;
+            margin-right: 10px;
+          }
+          &--right {
+            flex-grow: 1;
+            h3 {
+              height: 24px;
+              overflow: hidden;
+              a {
+                font-size: 18px;
+              }
+            }
+            &__content {
+              line-height: 22px;
+              font-size: 12px;
+              color: #323232;
+              height: 66px;
+              overflow: hidden;
+              a {
+                color: #cc9966;
+              }
+            }
+          }
+        }
+        &__list {
+          display: flex;
+          justify-content: space-between;
+          &__item {
+            height: 315px;
+            border: 1px solid #e6e6e6;
+            width: 298px;
           }
         }
       }

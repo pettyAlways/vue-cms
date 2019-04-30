@@ -1,25 +1,15 @@
 <template>
   <div class="custom-panel">
-    <div class="custom-panel__header"></div>
+    <div class="custom-panel__header">
+      <wine-panel-title width="130px" height="40px" title="首酒品牌" note="Brand"></wine-panel-title>
+    </div>
     <div class="custom-panel__body">
-        <div class="custom-panel__body__left">
-          <div class="custom-panel__body__left__item" v-for="(item, index) in customInfo" :key="index">
-            <div class="custom-panel__body__left__item__header">
-              <span>{{item.title}}</span>
-            </div>
-            <div class="custom-panel__body__left__item__body">
-              <div class="custom-panel__body__left__item__body__row" v-for="(tItem, index) in item.contents" :key="index">
-                <div class="custom-panel__body__left__item__body__row__left">
-                  <span>{{tItem.tag}}</span>
-                </div>
-                <div class="custom-panel__body__left__item__body__row__right">
-                  <span>{{tItem.content}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="custom-panel__body__right"></div>
+      <div class="custom-panel__body__content">
+        白酒定制合作方案 茅台镇美酒，享誉天下。品茅台镇美酒，享白酒芬芳。茅台镇的美酒给人一种生活的享受，若是可以贴牌开发一个白酒子品牌，或者定制一款属于个人、属于机关单位的唯一的，不可复制的专用酒，那又是对茅台镇美酒另一番体验。 白酒贴牌定制趋势 现阶段，白酒贴牌模式正从粗放型经营管理阶段向品牌价值创新和商业模式升级并行驱动发展阶段迈进，白酒贴牌模式绝不会消失。在全国的市场背景下，有着数量庞大的消费群体，有着越来越个性化的消费需求，从而又衍生出一种新的生产模式--个性定制。个性定制更贴近于个体的独特需求，更是企业文化独到之处的最好的宣传。 ......
+      </div>
+      <div class="custom-panel__body__btn">
+        <a>贴牌定制</a>
+      </div>
     </div>
   </div>
 </template>
@@ -29,109 +19,48 @@
     name: 'custom',
     data() {
       return {
-        customInfo: [
-          {
-            title: '以定制群体划分',
-            contents: [
-              {
-                tag: '个人定制酒',
-                content: '具有强烈的个人色彩，酒的品质、包装风格都符合个人的喜好，个人的姓名、祝福语等融进酒盒中，无论自享或送礼都是品位的象征。'
-              },
-              {
-                tag: '企业定制酒',
-                content: '企事业单位在经营或商务活动中为了提高或扩大其知名度，提高产品的市场占有率，获取更高销售业绩和利润而特别定制，带有企事业标志，酒中融入了企业文化元素，是企业品牌形象的生动体现，是企业的一扇窗口，有良好的实用价值。'
-              },
-              {
-                tag: '社会团体定制酒',
-                content: '酒中融入团体理念等元素，是社会团体联谊、交流等活动的良好信使。'
-              }
-            ]
-          },
-          {
-            title: '以定制用途划分',
-            contents: [
-              {
-                tag: '庆典定制',
-                content: '企业大型庆典，一瓶举世无双的定制酒升华企业内涵，让每一个人铭记在心。'
-              },
-              {
-                tag: '婚庆定制',
-                content: '新人婚礼盛宴，一瓶配有新人照片、名字图案的个性定制酒，营造浪漫氛围，让每一个人感受真爱。'
-              },
-              {
-                tag: '赠礼定制',
-                content: '公司机构答谢客户，一瓶无可比拟的定制酒，彰显公司服务之道，让每一位客户心满意足。'
-              }
-            ]
-          }
-        ]
       }
+    },
+    components: {
+      'winePanelTitle': () => import('@/components/wine-panel-title'),
+      'autoScroll': () => import('@/components/auto-scroll')
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .custom-panel {
-    width: 960px;
-    height: 577px;
-    padding: 15px;
-    background: url("./asserts/custom-bg.jpg");
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
     &__header {
-      height: 100px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     &__body {
       display: flex;
-      flex-direction: row;
-      &__left {
-        &__item {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 15px;
-          &__header {
-            height: 33px;
-            width: 141px;
-            margin-bottom: 15px;
-            font-family: 微软雅黑;
-            font-size: 15px;
-            color: rgb(229, 0, 18);
-            line-height: 33px;
-            text-align: center;
-            background: url("./asserts/tag-bg.jpg");
-          }
-          &__body {
-            &__row {
-              display: flex;
-              flex-direction: row;
-              margin-bottom: 15px;
-              align-items: start;
-              &__left {
-                height: 26px;
-                width: 116px;
-                flex-shrink: 0;
-                font-family: 微软雅黑;
-                font-size: 13px;
-                color: white;
-                text-align: center;
-                line-height: 26px;
-                background: url("./asserts/tg01-bg.jpg");
-              }
-              &__right {
-                flex-grow: 1;
-                padding-left:20px;
-                color:#474747;
-                font-size: 13px;
-                font-family:'微软雅黑'
-              }
-            }
-          }
+      flex-direction: column;
+      align-items: center;
+      &__content {
+       font-size: 15px;
+      }
+      &__btn {
+        margin-top: 15px;
+        height: 32px;
+        width: 100px;
+        line-height: 30px;
+        border: 1px solid #b7642a;
+        border-radius: 3px;
+        font-size: 15px;
+        text-align: center;
+        a {
+          display: block;
+        }
+        &:hover {
+          background: #b7642a;
+          color: #FFF;
+          border: 2px solid #b7642a;
         }
       }
-      &__right {
-        width: 35%;
-        flex-shrink: 0;
-      }
-
     }
   }
 </style>

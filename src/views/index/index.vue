@@ -11,9 +11,6 @@
     <el-footer>
       <footer-nav></footer-nav>
     </el-footer>
-    <div class="fix-right" :class="{'fixed': fixed}">
-      <fix-right></fix-right>
-    </div>
   </el-container>
 </template>
 <script>
