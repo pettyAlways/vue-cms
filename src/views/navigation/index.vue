@@ -46,7 +46,8 @@
           },
           {
             name: '企业相关',
-            link: '',
+            link: '/relative',
+            index: '首酒简介',
             show: false
           },
           {
