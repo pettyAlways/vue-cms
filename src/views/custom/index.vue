@@ -245,6 +245,8 @@
         }
       }
       &__center {
+        display: flex;
+        flex-direction: column;
         width: 980px;
         &__bread {
           margin-bottom: 30px;
@@ -258,6 +260,7 @@
           }
         }
         &__main {
+          flex-grow: 1;
           &__custom-panel {
             &__list {
               display: flex;

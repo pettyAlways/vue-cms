@@ -17,7 +17,7 @@
         navInfo: [
           {
             name: '站点首页',
-            link: '',
+            link: '/index',
             show: false
           },
           {

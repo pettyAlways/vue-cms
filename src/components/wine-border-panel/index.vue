@@ -16,7 +16,8 @@
     name: 'wineBorderPanel',
     props: {
       title: String,
-      english: String
+      english: String,
+      height: '100%'
     }
   }
 </script>
@@ -26,6 +27,7 @@
     position: relative;
     border: 1px solid #f2f2f2;
     padding: 20px 9px;
+    min-height: 200px;
     &__header {
       display: flex;
       align-items: center;
