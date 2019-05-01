@@ -2,7 +2,7 @@
   <div class='nav' :class="{'nav-fix': fixed}">
     <ul class="nav-panel w1200">
       <li class="nav-panel__item" v-for="item in navInfo" :key="item.name" @mouseenter="item.show=true" @mouseleave="item.show=false">
-        <a :href="item.link">{{item.name}}</a>
+        <router-link :to="{path: item.link, query: {name: item.index}}">{{item.name}}</router-link>
       </li>
     </ul>
   </div>
@@ -22,12 +22,14 @@
           },
           {
             name: '基酒分类',
-            link: '',
+            link: '/category',
+            index: '常规基酒',
             show: false
           },
           {
             name: '首酒贴牌',
-            link: '',
+            link: '/brand',
+            index: '贴牌政策',
             show: false
           },
           {

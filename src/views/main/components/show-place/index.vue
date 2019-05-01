@@ -5,7 +5,7 @@
     </div>
     <div class="produce-place__body">
       <div class="produce-place__body--left">
-        <el-image :str="leftPic" style="width: 405px;height:355px;"></el-image>
+        <el-image :src="require('./asserts/left.jpg')" style="width: 405px;height:355px;"></el-image>
       </div>
       <div class="produce-place__body--right">
         <div class="produce-place__body--right__list">
@@ -25,7 +25,6 @@
     name: 'showPlace',
     data() {
       return {
-        leftPic: require('./asserts/left.jpg'),
         placeInfo: [
           {
             pic: require('./asserts/shop.jpg'),

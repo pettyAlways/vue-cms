@@ -10,7 +10,7 @@
       <div class="product-panel__body__panel">
         <auto-scroll :linkInfo="produceInfo" height="258px" :speed="30" >
           <template slot-scope="datas">
-            <div class="product-panel__body__panel__item" v-for="(item, index) in datas.data" :key="index" >
+            <div class="product-panel__body__panel__item" v-for="(item, index) in datas.data.produces" :key="index" >
               <a ><img :src="item.pic" style="width:150px; height: 210px;"></a>
               <a class="product-panel__body__panel__item__title">{{item.title}}</a>
               <span class="product-panel__body__panel__item__tip">{{item.tip}}</span>
@@ -30,48 +30,50 @@
     name: 'produce',
     data() {
       return {
-        produceInfo: [
-          {
-            title: '首酱一号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱二号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱三号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱四号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱五号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱六号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱七号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            title: '首酱八号',
-            tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
-            pic: require('./asserts/wine01.jpg')
-          }
-        ]
+        produceInfo: {
+          produces: [
+            {
+              title: '首酱一号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱二号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱三号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱四号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱五号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱六号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱七号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            },
+            {
+              title: '首酱八号',
+              tip: '贵州首酒酒业有限公司是一家专业从事基酒委托',
+              pic: require('./asserts/wine01.jpg')
+            }
+          ]
+        }
       }
     },
     components: {

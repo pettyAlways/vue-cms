@@ -44,7 +44,7 @@
       // 鼠标移开容器的时候开始定时器
       this.$refs.scrollPanel.onmouseout = () => { this.timer = setInterval(this.scrollHandler, this.speed) }
     },
-    destroy() {
+    destroyed() {
       clearInterval(this.timer)
     },
     methods: {
