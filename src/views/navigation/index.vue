@@ -52,7 +52,7 @@
           },
           {
             name: '联系我们',
-            link: '',
+            link: '/contact',
             show: false
           }
         ]

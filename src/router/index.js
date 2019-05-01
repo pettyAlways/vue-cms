@@ -7,6 +7,7 @@ import Brand from '@/views/brand'
 import Custom from '@/views/custom'
 import News from '@/views/news'
 import Relative from '@/views/relative'
+import Contact from '@/views/contact'
 
 Vue.use(Router)
 
@@ -53,6 +54,11 @@ export const constantRouterMap = [
     path: '/relative',
     name: 'relativePage',
     component: Relative
+  },
+  {
+    path: '/contact',
+    name: 'contactPage',
+    component: Contact
   }
 
 ]

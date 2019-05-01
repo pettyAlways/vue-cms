@@ -11,7 +11,7 @@ import { getToken } from '@/utils/auth'
 NProgress.configure({ showSpinner: false })
 
 // 路由全局前置守卫
-const whiteList = ['/login', '/index', '/category', '/brand', '/custom', '/news', '/relative']  // 白名单
+const whiteList = ['/login', '/index', '/category', '/brand', '/custom', '/news', '/relative', '/contact']  // 白名单
 router.beforeEach((to, from, next) => {
   if (getToken()) {
     // 有token访问login页面，就跳到首页
