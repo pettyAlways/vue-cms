@@ -34,12 +34,14 @@
           },
           {
             name: '首酒定制',
-            link: '',
+            link: '/custom',
+            index: '企业定制',
             show: false
           },
           {
             name: '行业资讯',
-            link: '',
+            link: '/news',
+            index: '公司新闻',
             show: false
           },
           {

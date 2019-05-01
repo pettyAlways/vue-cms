@@ -13,23 +13,22 @@
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>当前位置</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path: '/'}">主页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{path: '/category', query: {name: '常规基酒'}}">基酒分类</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{path: '/category', query: {name: '企业定制'}}">首酒定制</el-breadcrumb-item>
             <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="common-page__panel__center__main">
-          <div class="common-page__panel__center__main__category-panel">
+          <div class="common-page__panel__center__main__custom-panel">
             <wine-border-panel :title="title" :english="english">
-              <div class="common-page__panel__center__main__category-panel__list">
-                <div class="common-page__panel__center__main__category-panel__list__item" v-for="(item, index) in listDatas" :key="index">
+              <div class="common-page__panel__center__main__custom-panel__list">
+                <div class="common-page__panel__center__main__custom-panel__list__item" v-for="(item, index) in listDatas" :key="index">
                   <a :href="item.link"><el-image :src="item.pic"></el-image></a>
                   <span>{{item.name}}</span>
                 </div>
               </div>
-              <div class="common-page__panel__center__main__category-panel__pagination" v-if="listDatas.length!=0">
+              <div class="common-page__panel__center__main__custom-panel__pagination" v-if="listDatas.length!=0">
                 <el-pagination
                   :page-size="20"
-                  :pager-count="11"
                   layout="prev, pager, next"
                   :total="listDatas.length">
                 </el-pagination>
@@ -49,142 +48,131 @@
       return {
         showData: [
           {
-            name: '常规基酒',
-            link: '/category'
+            name: '企业定制',
+            link: '/custom'
           },
           {
-            name: '调味基酒',
-            link: '/category'
+            name: '宴席定制',
+            link: '/custom'
           },
           {
-            name: '轮次基酒',
-            link: '/category'
+            name: '私人定制',
+            link: '/custom'
           },
           {
-            name: '窖藏基酒',
-            link: '/category'
+            name: '封藏定制',
+            link: '/custom'
+          },
+          {
+            name: '封坛定制',
+            link: '/custom'
           }
         ],
         title: '',
         english: '',
         englishInfo: {
-          '常规基酒': 'PRODUCT DISPLAYS',
-          '调味基酒': 'Latest Activity',
-          '轮次基酒': 'PRODUCT DISPLAYS',
-          '窖藏基酒': 'PRODUCT DISPLAYS'
+          '企业定制': 'PRODUCT DISPLAYS',
+          '宴席定制': 'Latest Activity',
+          '私人定制': 'PRODUCT DISPLAYS',
+          '封藏定制': 'PRODUCT DISPLAYS',
+          '封坛定制': 'PRODUCT DISPLAYS'
         },
-        categoryInfo: {
-          '常规基酒': [
+        customInfo: {
+          '企业定制': [],
+          '宴席定制': [
             {
-              name: '兼香四号 ',
+              name: '迎宾酒7',
               link: '',
-              pic: require('./asserts/wine01.jpg')
+              pic: require('./asserts/feast/custom01.jpg')
             },
             {
-              name: '兼香三号',
+              name: '迎宾酒6',
               link: '',
-              pic: require('./asserts/wine02.jpg')
+              pic: require('./asserts/feast/custom02.jpg')
             },
             {
-              name: '兼香二号',
+              name: '迎宾酒5',
               link: '',
-              pic: require('./asserts/wine03.jpg')
+              pic: require('./asserts/feast/custom03.jpg')
             },
             {
-              name: '兼香一号',
+              name: '迎宾酒4',
               link: '',
-              pic: require('./asserts/wine04.jpg')
+              pic: require('./asserts/feast/custom04.jpg')
+            },
+            {
+              name: '迎宾酒3',
+              link: '',
+              pic: require('./asserts/feast/custom05.jpg')
+            },
+            {
+              name: '迎宾酒2',
+              link: '',
+              pic: require('./asserts/feast/custom06.jpg')
+            },
+            {
+              name: '迎宾酒1',
+              link: '',
+              pic: require('./asserts/feast/custom07.jpg')
             }
           ],
-          '调味基酒': [
+          '私人定制': [
             {
-              name: '兼香四号 ',
+              name: '国威酒6',
               link: '',
-              pic: require('./asserts/wine01.jpg')
+              pic: require('./asserts/private/custom01.jpg')
             },
             {
-              name: '兼香三号',
+              name: '国威酒5',
               link: '',
-              pic: require('./asserts/wine02.jpg')
+              pic: require('./asserts/private/custom02.jpg')
             },
             {
-              name: '兼香二号',
+              name: '国威酒4',
               link: '',
-              pic: require('./asserts/wine03.jpg')
+              pic: require('./asserts/private/custom03.jpg')
             },
             {
-              name: '兼香一号',
+              name: '国威酒3',
               link: '',
-              pic: require('./asserts/wine04.jpg')
+              pic: require('./asserts/private/custom04.jpg')
+            },
+            {
+              name: '国威酒2',
+              link: '',
+              pic: require('./asserts/private/custom05.jpg')
+            },
+            {
+              name: '国威酒1',
+              link: '',
+              pic: require('./asserts/private/custom06.jpg')
             }
           ],
-          '轮次基酒': [
+          '封藏定制': [
             {
-              name: '兼香四号 ',
+              name: '贵州迎宾酒',
               link: '',
-              pic: require('./asserts/wine01.jpg')
+              pic: require('./asserts/store/custom01.jpg')
             },
             {
-              name: '兼香三号',
+              name: '贵州嘉宾酒',
               link: '',
-              pic: require('./asserts/wine02.jpg')
+              pic: require('./asserts/store/custom02.jpg')
             },
             {
-              name: '兼香二号',
+              name: '贵州御宾酒',
               link: '',
-              pic: require('./asserts/wine03.jpg')
+              pic: require('./asserts/store/custom03.jpg')
             },
             {
-              name: '兼香一号',
+              name: '贵州贵宾酒',
               link: '',
-              pic: require('./asserts/wine04.jpg')
+              pic: require('./asserts/store/custom04.jpg')
             }
           ],
-          '窖藏基酒': [
-            {
-              name: '兼香四号 ',
-              link: '',
-              pic: require('./asserts/wine01.jpg')
-            },
-            {
-              name: '兼香三号',
-              link: '',
-              pic: require('./asserts/wine02.jpg')
-            },
-            {
-              name: '兼香二号',
-              link: '',
-              pic: require('./asserts/wine03.jpg')
-            },
-            {
-              name: '兼香一号',
-              link: '',
-              pic: require('./asserts/wine04.jpg')
-            }
-          ]
+          '封坛定制': []
         },
-        listDatas: [
-          {
-            name: '兼香四号 ',
-            link: '',
-            pic: require('./asserts/wine01.jpg')
-          },
-          {
-            name: '兼香三号',
-            link: '',
-            pic: require('./asserts/wine02.jpg')
-          },
-          {
-            name: '兼香二号',
-            link: '',
-            pic: require('./asserts/wine03.jpg')
-          },
-          {
-            name: '兼香一号',
-            link: '',
-            pic: require('./asserts/wine04.jpg')
-          }
-        ]
+        listDatas: []
       }
     },
     mounted() {
@@ -195,7 +183,7 @@
         this.$router.push({ path: item.link, query: { name: item.name } })
       },
       queryHandler(params) {
-        this.listDatas = this.categoryInfo[params]
+        this.listDatas = this.customInfo[params]
         this.title = params
         this.english = this.englishInfo[params]
       }
@@ -270,9 +258,10 @@
           }
         }
         &__main {
-          &__category-panel {
+          &__custom-panel {
             &__list {
               display: flex;
+              flex-wrap: wrap;
               margin-bottom: 20px;
               &__item {
                 display: flex;
@@ -284,7 +273,6 @@
                 margin-left: 8px;
                 margin-right: 7px;
                 a {
-                  color: red;
                   display: block;
                   width: 223px;
                   height: 312px;
