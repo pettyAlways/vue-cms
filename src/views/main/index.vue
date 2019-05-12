@@ -1,18 +1,17 @@
 <template>
   <div class="main-panel">
-    <div class="main-panel__content w1200">
+    <carousel></carousel>
+    <el-card class="main-panel__content w1200">
       <news></news>
       <sub-banner></sub-banner>
-    </div>
-    <introduction></introduction>
-    <div class="main-panel__content w1200">
+      <introduction></introduction>
       <show-place></show-place>
       <produce></produce>
       <brand></brand>
       <custom></custom>
       <franchise></franchise>
       <link-panel></link-panel>
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -20,6 +19,7 @@
   export default {
     name: 'mainNav',
     components: {
+      'carousel': () => import('../carousel'),
       'news': () => import('./components/show-news'),
       'subBanner': () => import('./components/sub-banner'),
       'introduction': () => import('./components/introduction'),
@@ -40,9 +40,9 @@
     flex-direction: column;
     justify-content: center;
     margin: 0px auto;
-    padding: 15px 0px;
-    background: white;
     &__content {
+      margin-top: 15px;
+      background: white;
     }
   }
 </style>

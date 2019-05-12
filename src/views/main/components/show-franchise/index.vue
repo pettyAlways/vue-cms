@@ -1,13 +1,13 @@
 <template>
   <div class="franchise-panel">
     <div class="franchise-panel__header">
-      <wine-panel-title width="200px" height="40px" title="综合体托管" note="Franchise policy"></wine-panel-title>
+      <wine-panel-title width="160px" height="40px" title="开源作品" note="Open Source"></wine-panel-title>
     </div>
     <div class="franchise-panel__body">
       <div class="franchise-panel__body__left">
         <div class="franchise-panel__body__left__item">
-          <div class="franchise-panel__body__left__item__title">
-            <span>{{showData.leftTitle}}</span>
+          <div class="franchise-panel__body__left__item__title-panel">
+            {{showData.leftTitle}}
           </div>
           <div class="franchise-panel__body__left__item__content">
             <div class="franchise-panel__body__left__item__content__li" v-for="(item, index) in showData.leftList" :key="index">
@@ -24,7 +24,7 @@
         <el-image :src="showData.centerPic" style="width:552px;height:322px;"></el-image>
       </div>
       <div class="franchise-panel__body__right">
-        <div class="franchise-panel__body__right__item" v-for="(item, index) in typeList" :key="index" @mouseenter="autoHandler(item)">
+        <div class="franchise-panel__body__right__item" :class="{'active': item.show}" v-for="(item, index) in typeList" :key="index" @mouseenter="autoHandler(item)">
           <div class="franchise-panel__body__right__item--left">{{item.name}}</div>
           <span class="franchise-panel__body__right__item--right">{{item.english}}</span>
         </div>
@@ -41,30 +41,34 @@
         typeList: [
           {
             id: 'condition',
-            name: '托管条件',
-            english: 'Franchise conditions'
+            name: '后台权限模版',
+            english: 'ENDPONIT',
+            show: true
           },
           {
             id: 'time',
-            name: '托管事件',
-            english: 'Support policy'
+            name: '前端权限模版',
+            english: 'FROMEND',
+            show: false
           },
           {
             id: 'advantage',
-            name: '托管服务形式',
-            english: 'Franchise advantage'
+            name: '个人博客',
+            english: 'BLOG',
+            show: false
           },
           {
             id: 'location',
-            name: '托管服务保障',
-            english: 'Main Store Location'
+            name: '首酒官网',
+            english: 'WINE',
+            show: false
           }
         ],
         showData: {
-          name: '托管条件',
-          english: 'Franchise conditions',
+          name: '后台权限模版',
+          english: 'ENDPONIT',
           centerPic: require('./asserts/condition.jpg'),
-          leftTitle: '托管基本条件',
+          leftTitle: '后台权限模版',
           leftList: [
             '1. 具有相应的人脉资源以及社会活动能力。',
             '2. 具有相应的资金投资保障。城市展厅首批货30-50万；酒类城市综合体100-150 万。'
@@ -75,10 +79,10 @@
             name: '托管条件',
             english: 'Franchise conditions',
             centerPic: require('./asserts/condition.jpg'),
-            leftTitle: '托管基本条件',
+            leftTitle: '后台权限模版',
             leftList: [
-              '1. 具有相应的人脉资源以及社会活动能力。',
-              '2. 具有相应的资金投资保障。城市展厅首批货30-50万；酒类城市综合体100-150 万。'
+              '1. 使用springboot、jpa、shiro框架基于java开发的后台系统',
+              '2. 网站预览地址http://www.thinkover.fun'
             ]
           },
           time: {
@@ -117,6 +121,10 @@
     },
     methods: {
       autoHandler(item) {
+        for (let type of this.typeList) {
+          type.show = false
+        }
+        item.show = true
         this.showData = this.franchiseInfo[item.id]
       }
     }
@@ -141,22 +149,23 @@
         background: #f1f1f1;
         width: 934px;
         height: 322px;
+        padding-right: 15px;
         &__item {
           height: 100%;
           display: flex;
           flex-direction: column;
           padding-left: 20px;
           padding-top: 40px;
-          &__title {
+          &__title-panel {
             flex-shrink: 0;
             height: 40px;
-            width: 150px;
             line-height: 40px;
             font-size: 20px;
             color: #676767;
             text-align: left;
             border-bottom: 4px solid #676767;
             font-weight: bold;
+            text-align: center;
           }
           &__content {
             flex-grow: 1;
@@ -165,7 +174,7 @@
             &__li {
               margin-bottom: 10px;
               color: #333;
-              font-size: 16px;
+              font-size: 14px;
             }
           }
           &__icons {
@@ -185,6 +194,10 @@
       &__right {
         width: 266px;
         height: 322px;
+        .active {
+          background: url("./asserts/item-hover-bg.jpg");
+          color: white;
+        }
         &__item {
           display: flex;
           flex-direction: row;

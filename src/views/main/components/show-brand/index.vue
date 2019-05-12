@@ -1,7 +1,7 @@
 <template>
   <div class="brand-panel">
     <div class="brand-panel__header">
-      <wine-panel-title width="130px" height="40px" title="首酒品牌" note="Brand"></wine-panel-title>
+      <wine-panel-title width="130px" height="40px" title="推荐音乐" note="MUSIC"></wine-panel-title>
     </div>
     <div class="brand-panel__body">
       <div class="brand-panel__body__item" v-for="(item, index) in brandInfo" :key="index">

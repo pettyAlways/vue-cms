@@ -13,7 +13,7 @@
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>当前位置</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path: '/'}">主页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{path: '/category', query: {name: '企业定制'}}">首酒定制</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{path: '/knowledge', query: {name: '企业定制'}}">首酒定制</el-breadcrumb-item>
             <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>

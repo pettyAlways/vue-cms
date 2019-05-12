@@ -1,7 +1,7 @@
 <template>
   <div class="custom-panel">
     <div class="custom-panel__header">
-      <wine-panel-title width="130px" height="40px" title="首酒品牌" note="Brand"></wine-panel-title>
+      <wine-panel-title width="160px" height="40px" title="网站定制" note="CUSTOM"></wine-panel-title>
     </div>
     <div class="custom-panel__body">
       <div class="custom-panel__body__content">

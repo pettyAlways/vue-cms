@@ -1,7 +1,7 @@
 <template>
   <div class="produce-place">
     <div class="produce-place__header">
-      <wine-panel-title width="220px" height="40px" title="懂酒帝工厂店" note="Franchise chain"></wine-panel-title>
+      <wine-panel-title width="160px" height="40px" title="最新文章" note="ARTICLES"></wine-panel-title>
     </div>
     <div class="produce-place__body">
       <div class="produce-place__body--left">

@@ -1,6 +1,6 @@
 <template>
   <div class="introduction">
-    
+
     <wired-card>
       {{$t('author.name')}}：
       <ul>

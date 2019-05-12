@@ -1,7 +1,7 @@
 <template>
   <div class="product-panel">
     <div class="product-panel__header">
-      <wine-panel-title width="180px" height="40px" title="新品图鉴" note="Produce center"></wine-panel-title>
+      <wine-panel-title width="160px" height="40px" title="推荐书籍" note="BOOKS"></wine-panel-title>
     </div>
     <div class="product-panel__body">
       <div class="product-panel__body__arrow">

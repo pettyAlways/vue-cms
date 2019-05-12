@@ -3,7 +3,6 @@
     <el-header height="100%">
       <header-nav></header-nav>
       <navigation></navigation>
-      <carousel></carousel>
     </el-header>
     <el-main>
       <router-view/>
@@ -23,7 +22,6 @@
     components: {
       'headerNav': () => import('./views/header'),
       'navigation': () => import('./views/navigation'),
-      'carousel': () => import('./views/carousel'),
       'footerNav': () => import('./views/footer-nav')
     },
     mounted() {

@@ -8,7 +8,7 @@
         <el-form-item :label="$t('login.account')" prop="userAccount" style="position:relative">
           <el-input type="text" v-model="loginForm.userAccount" @keyup.enter.native="goToPwdInput"></el-input>
           <span class="svg-container svg-container_user">
-            <icon-svg icon-class="user" />
+
           </span>
         </el-form-item>
         <el-form-item :label="$t('login.password')" prop="userPassword">

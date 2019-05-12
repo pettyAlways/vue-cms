@@ -4,7 +4,7 @@
       <div class="news-panel--left__header">
         <div class="news-panel--left__header--left">
           <a v-for="(item, index) in type" :key="index" @mouseenter="autoHandler(item)">{{item.name}}</a>
-          <span>News</span>
+          <span>RECOMMEND</span>
         </div>
         <div class="news-panel--left__header--right">
           <el-image :src="require('./asserts/more2.jpg')"></el-image>
@@ -36,8 +36,8 @@
     <div class="news-panel--right">
       <div class="news-panel--right__header">
         <div class="news-panel--right__header--left">
-          <a>首酒基酒</a>
-          <span>Latest Activity</span>
+          <a>最新知识库</a>
+          <span>LATEST</span>
         </div>
         <div class="news-panel--right__header--right">
           <el-image :src="require('./asserts/more2.jpg')"></el-image>
@@ -45,11 +45,22 @@
       </div>
       <div class="news-panel--right__body">
         <div class="news-panel--right__body__list">
-          <div class="news-panel--right__body__list__item" v-for="(item, index) in listInfo" :key="index">
+          <el-card class="news-panel--right__body__list__item" v-for="(item, index) in listInfo" :key="index">
             <a :href="item.link">
-              <el-image :src="item.pic" style="width: 250px"></el-image>
+              <el-image :src="item.pic" style="height: 120px;" fit="cover" lazy></el-image>
+              <div class="news-panel--right__body__list__item__text">
+                <div class="news-panel--right__body__list__item__text__title">
+                  <a>{{item.title}}</a>
+                </div>
+                <div class="news-panel--right__body__list__item__text__content">{{item.description}}</div>
+                <div class="news-panel--right__body__list__item__text__bottom">
+                  <span>收录:{{item.postNum}}</span>
+                  <span>创建:{{item.createTime}}</span>
+                  <span>点赞:{{item.likeNum}}</span>
+                </div>
+              </div>
             </a>
-          </div>
+          </el-card>
         </div>
       </div>
     </div>
@@ -64,11 +75,11 @@
         type: [
           {
             id: 'companyNew',
-            name: '公司新闻'
+            name: '推荐知识库'
           },
           {
             id: 'industry',
-            name: '行业新闻'
+            name: '推荐文章'
           }
         ],
         showData: {
@@ -162,11 +173,30 @@
         },
         listInfo: [
           {
-            pic: require('./asserts/wine01.png'),
+            title: 'Java高并发编程',
+            description: '在高并发的压力下，如何才能使用安全的java工具包进行高效安全的编写代码，是否理解了JMM里面的主要知识理论内容',
+            likeNum: '1',
+            createTime: '2019-05-19',
+            postNum: '10',
+            pic: require('./asserts/book01.jpg'),
             link: ''
           },
           {
-            pic: require('./asserts/wine02.jpg'),
+            title: 'Java高并发编程',
+            description: '在高并发的压力下，如何才能使用安全的java工具包进行高效安全的编写代码，是否理解了JMM里面的主要知识理论内容',
+            likeNum: '1',
+            createTime: '2019-05-19',
+            postNum: '10',
+            pic: require('./asserts/book02.jpg'),
+            link: ''
+          },
+          {
+            title: 'Java高并发编程',
+            description: '在高并发的压力下，如何才能使用安全的java工具包进行高效安全的编写代码，是否理解了JMM里面的主要知识理论内容',
+            likeNum: '1',
+            createTime: '2019-05-19',
+            postNum: '10',
+            pic: require('./asserts/book03.jpg'),
             link: ''
           }
         ]
@@ -217,9 +247,6 @@
             font-family: Arial, Helvetica, sans-serif;
             font-weight: normal;
           }
-        }
-        &--right {
-
         }
       }
       &__body {
@@ -347,11 +374,44 @@
         }
         &__list {
           display: flex;
-          justify-content: space-between;
           &__item {
+            position: relative;
             height: 315px;
+            width: 240px;
+            margin-right: 6px;
             border: 1px solid #e6e6e6;
-            width: 298px;
+            &__text {
+              display: flex;
+              flex-direction: column;
+              &__title {
+                height: 30px;
+                margin-top: 10px;
+                line-height: 30px;
+                font-size: 14px;
+                font-weight: 700;
+                a {
+                  display: block;
+                  cursor: pointer;
+                }
+              }
+              &__content {
+                heihgt: 70px;
+                margin-top: 5px;
+                color: #b2b2b2;
+                font-size: 12px;
+                overflow: hidden;
+              }
+              &__bottom {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-top: 5px;
+                span {
+                  font-size: 12px;
+                  color: #b2b2b2;
+                }
+              }
+            }
           }
         }
       }

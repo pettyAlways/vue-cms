@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import MainNav from '@/views/main'
-import Category from '@/views/category'
+import Knowledge from '@/views/knowledge'
+import KnowledgeMain from '@/views/knowledge/components/main'
+import KnowledgeDetail from '@/views/knowledge/components/detail'
 import Brand from '@/views/brand'
 import Custom from '@/views/custom'
 import News from '@/views/news'
@@ -31,9 +33,19 @@ export const constantRouterMap = [
     component: MainNav
   },
   {
-    path: '/category',
+    path: '/knowledge',
     name: 'categoryPage',
-    component: Category
+    component: Knowledge,
+    children: [
+      {
+        path: '',
+        component: KnowledgeMain
+      },
+      {
+        path: 'detail',
+        component: KnowledgeDetail
+      }
+    ]
   },
   {
     path: '/brand',
