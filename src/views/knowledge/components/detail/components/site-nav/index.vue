@@ -1,10 +1,6 @@
 <template>
   <div class="site-nav">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/knowledge' }">知识库</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">知识库详情</el-breadcrumb-item>
-      <el-breadcrumb-item>分布式应用</el-breadcrumb-item>
-    </el-breadcrumb>
+    <slot></slot>
   </div>
 </template>
 

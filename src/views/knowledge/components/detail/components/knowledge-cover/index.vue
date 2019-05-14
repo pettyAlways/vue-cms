@@ -16,7 +16,7 @@
         </div>
         <div class="introduce">
           <span>简介：</span>
-          <div class="content">互联网应用避免不免面临大量用户涌入导致应用服务器的资源瓶颈，如何做到应用的高可用易扩展和安全就是考验架构师的能力水平...</div>
+          <div class="content"><a>互联网应用避免不免面临大量用户涌入导致应用服务器的资源瓶颈，如何做到应用的高可用易扩展和安全就是考验架构师的能力水平...</a></div>
         </div>
         <div class="category">
           <span>所属分类：</span>
@@ -83,7 +83,7 @@
           margin-bottom: 10px;
         }
         .title {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 700;
         }
         .author {
@@ -116,6 +116,7 @@
           .content {
             margin-left: 10px;
             flex-wrap: wrap;
+            color:  #737373;
           }
         }
         .category {
@@ -125,6 +126,13 @@
           }
           .content {
             margin-left: 10px;
+            a {
+              color: #4c84be;
+              cursor: pointer;
+              &:hover {
+                color: #409EFF;
+              }
+            }
           }
         }
         .statistic {

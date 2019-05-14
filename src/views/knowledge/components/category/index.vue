@@ -112,10 +112,12 @@
             .title {
               margin-bottom: 5px;
               font-size: 14px;
-              font-weight: 700;
-              color: #6b747d;
+              font-weight: 400;
+              color: #333;
             };
             .content {
+              font-size: 12px;
+              color: #777;
               a {
                 color:  #4c84be;
                 cursor: pointer;

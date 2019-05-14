@@ -34,7 +34,7 @@
       <custom-card01 title="最新文章" note="ARTICLE">
         <ul>
           <li v-for="(index) in 12" :key="index" >
-            <a>分布式应用架构总括{{[index]}}</a>
+            <router-link :to="{ path: '/article' }">分布式应用架构总括{{[index]}}</router-link>
             <span>2019-05-11</span>
           </li>
         </ul>
@@ -92,7 +92,7 @@
               font-size: 12px;
               overflow: hidden;
             }
-            a {
+            > a {
               color:  #4c84be;
               cursor: pointer;
               &:hover {
@@ -181,6 +181,7 @@
             color: #409EFF;
           }
           span {
+            font-size: 12px;
             color: #999999;
           }
         }

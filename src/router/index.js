@@ -5,6 +5,7 @@ import MainNav from '@/views/main'
 import Knowledge from '@/views/knowledge'
 import KnowledgeMain from '@/views/knowledge/components/main'
 import KnowledgeDetail from '@/views/knowledge/components/detail'
+import KnowledgeArticle from '@/views/knowledge/components/article'
 import Brand from '@/views/brand'
 import Custom from '@/views/custom'
 import News from '@/views/news'
@@ -44,6 +45,10 @@ export const constantRouterMap = [
       {
         path: 'detail',
         component: KnowledgeDetail
+      },
+      {
+        path: '/article',
+        component: KnowledgeArticle
       }
     ]
   },

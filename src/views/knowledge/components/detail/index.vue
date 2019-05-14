@@ -1,16 +1,24 @@
 <template>
   <div class="knowledge-detail">
-    <site-nav></site-nav>
-    <div class="knowledge-detail__content">
-      <div class="knowledge-detail__content--left">
-        <konwledge-cover></konwledge-cover>
-        <konwledge-content></konwledge-content>
+    <site-nav class="w1200">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/knowledge' }">知识库</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">知识库详情</el-breadcrumb-item>
+        <el-breadcrumb-item>分布式应用</el-breadcrumb-item>
+      </el-breadcrumb>
+    </site-nav>
+    <el-card class="w1200">
+      <div class="knowledge-detail__content">
+        <div class="knowledge-detail__content--left">
+          <konwledge-cover></konwledge-cover>
+          <konwledge-content></konwledge-content>
+        </div>
+        <div class="knowledge-detail__content--right">
+          <author-list></author-list>
+          <knowledge-news></knowledge-news>
+        </div>
       </div>
-      <div class="knowledge-detail__content--right">
-        <author-list></author-list>
-        <knowledge-news></knowledge-news>
-      </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -21,7 +29,7 @@
       return {}
     },
     components: {
-      siteNav: () => import('./components/site-nav'),
+      siteNav: () => import('@/components/site-nav'),
       konwledgeCover: () => import('./components/knowledge-cover'),
       konwledgeContent: () => import('./components/knowledge-content'),
       authorList: () => import('./components/author-list'),
