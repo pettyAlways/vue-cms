@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^2.0.0",
     "axios": "^0.17.1",
     "better-scroll": "^1.10.0",
     "clipboard": "^2.0.1",
@@ -27,6 +28,7 @@
     "screenfull": "^3.3.2",
     "script-load": "^0.1.0",
     "script-loader": "^0.7.2",
+    "tinymce": "^5.0.5",
     "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
     "vue-router": "^3.0.1",

@@ -1,24 +1,36 @@
 <template>
-  <div class="header-logo">
-    <div class="header-logo__main w1200">
-      <div class="header-logo__main--left">
-        <div class="header-logo__main--left__logo"></div>
-        <div class="header-logo__main--left__text">
-          记录走过的点点滴滴
-        </div>
-        <div class="header-logo__main--left__search">
-          <input type="search" id="text-input" placeholder="全文搜索"/>
-          <input type="submit" id="search" value="搜索"/>
-        </div>
+  <el-card class="header-container" :class="{'fixed': fixed}" body-style="padding: 0px">
+    <div class="header-panel w1200">
+      <div class="header-panel__logo">
+        <icon-svg iconClass="laoying"></icon-svg>
+        <span>鹰嘴豆</span>
       </div>
-      <div class="header-logo__main--right">
+      <div class="header-panel__search">
+        <el-input placeholder="请输入内容" size="small" prefix-icon="el-icon-search"></el-input>
+      </div>
+      <div class="header-panel__nav">
         <ul>
-          <li>注册</li>
-          <li>登录</li>
+          <li><router-link class="active" :to="{ path: '/index/workbench' }">工作台</router-link></li>
+          <li><a>知识库</a></li>
+          <li><a>分类</a></li>
+          <li><a>审核</a></li>
+        </ul>
+      </div>
+      <div class="header-panel__btn">
+        <ul>
+          <li>
+            <router-link :to="{ path: '/newKnowledge' }"><i class="el-icon-circle-plus-outline"></i></router-link>
+          </li>
+          <li>
+            <a><i class="el-icon-message"></i></a>
+          </li>
+          <li class="author">
+            <img :src="require('./assets/author01.jpg')"/>
+          </li>
         </ul>
       </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script>
@@ -26,94 +38,104 @@
     name: 'headerNav',
     data() {
       return {
+        fixed: false
+      }
+    },
+    mounted() {
+      window.addEventListener('scroll', this.navHandler)
+    },
+    methods: {
+      navHandler() {
+        let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        if (scrollTop > 60) {
+          this.fixed = true
+        } else {
+          this.fixed = false
+        }
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .header-logo {
+  .fixed {
+    position: fixed;
+    width: 100%
+  }
+  .active {
+    color: #262626;
+    font-weight: 700;
+  }
+  .header-container {
+    z-index: 9999;
+  }
+  .header-panel {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    height: 150px;
-    &__main {
-      height: 100%;
+    height: 60px;
+    z-index: 9999;
+    &__logo {
       display: flex;
-      flex-direction: row;
+      flex-shrink: 0;
       align-items: center;
-      justify-content: space-between;
-      background: url("./asserts/header-bg.jpg");
-      background-size: cover;
-      &--left {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        flex-grow: 1;
-        &__logo {
-          height: 46px;
-          width: 200px;
-          background: url("./asserts/logo.png");
-        }
-        &__text {
-          height: 60px;
-          line-height: 60px;
-          font-size: 14px;
-          text-align: center;
-        }
-        &__search {
-          margin-left: 30px;
-          input#text-input {
-            height: 30px;
-            width: 300px;
-            padding: 8px 6px;
-            border: 1px solid darkgray;
-            box-sizing: border-box;
-            font-size: 12px;
-            &:focus {
-              outline:none;
-              border: 1px solid gray;
-            }
-          }
-          input#search {
-            width: 50px;
-            height: 30px;
-            padding: 6px 10px;
-            border: 1px solid darkgray;
-            background: #f8f8f8;
-            border-radius: 2px;
-            color: #555;
-            font-size: 12px;
-            cursor: pointer;
-            overflow: visible;
-            -ms-box-sizing: border-box;
-            box-sizing: border-box;
-            margin-left: 5px;
-            &:focus {
-              outline:none;
-              border: 1px solid gray;
-            }
-          }
-
-        }
+      width: 200px;
+      height: 60px;
+      /deep/ .svg-icon {
+        width: 48px;
+        height: 48px;
       }
-      &--right {
-        flex-shrink: 0;
-        width: 237px;
-        ul {
-          display: flex;
-          flex-direction: row;
-          list-style: none;
-          padding: 0px;
-          li {
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
+      span {
+        font-size: 20px;
+        line-height: 60px;
+        color: #262626;
+        font-weight: 700;
+      }
+    }
+    &__nav {
+      flex-grow: 1;
+      margin-left: 15px;
+      ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0px;
+        li {
+          margin-left: 15px;
+          a {
+            display: block;
+            font-size: 14px;
+            color: #595959;
           }
         }
       }
     }
-
+    &__btn {
+      display: flex;
+      align-items: center;
+      width: 200px;
+      height: 60px;
+      ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0px;
+        li {
+          margin-left: 15px;
+          i {
+            font-size: 25px;
+          }
+        }
+        li.author {
+          display: flex;
+          align-items: center;
+          img {
+            width: 25px;
+            height: 25px;
+            border: 2px solid darkorange;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
   }
 </style>

@@ -1,12 +1,11 @@
 <template>
   <el-container id="app" class="site-main">
-    <el-header height="100%">
+    <el-header>
       <header-nav></header-nav>
-      <navigation></navigation>
     </el-header>
-    <el-main>
+    <el-container>
       <router-view/>
-    </el-main>
+    </el-container>
     <el-footer>
       <footer-nav></footer-nav>
     </el-footer>
@@ -21,36 +20,13 @@
     },
     components: {
       'headerNav': () => import('./views/header'),
-      'navigation': () => import('./views/navigation'),
-      'footerNav': () => import('./views/footer-nav')
-    },
-    mounted() {
-      window.addEventListener('scroll', this.navHandler)
-    },
-    methods: {
-      navHandler() {
-        let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-        if (scrollTop > 310) {
-          this.fixed = true
-        } else {
-          this.fixed = false
-        }
-      }
+      'footerNav': () => import('./views/footer')
     }
   }
 </script>
 <style lang="scss" scoped>
   .site-main {
-    color: #6a6a6a;
-    .fix-right {
-      position: relative;
-      right: 45px;
-      top: 260px;
-      z-index: 9999;
-    }
-    .fixed {
-      position: fixed;
-    }
+    display: flex;
     /deep/ .el-header {
       padding: 0 0px;
     }

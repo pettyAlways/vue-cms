@@ -2,16 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import MainNav from '@/views/main'
-import Knowledge from '@/views/knowledge'
-import KnowledgeMain from '@/views/knowledge/components/main'
-import KnowledgeDetail from '@/views/knowledge/components/detail'
-import KnowledgeArticle from '@/views/knowledge/components/article'
-import Brand from '@/views/brand'
-import Custom from '@/views/custom'
-import News from '@/views/news'
-import Relative from '@/views/relative'
-import Contact from '@/views/contact'
-
+import Workbench from '@/views/main/components/workbench'
+import WorkbenchCategory from '@/views/main/components/category'
+import WorkbenchKnowledge from '@/views/main/components/knowledge'
+import NewKnowledge from '@/views/new-knowledge'
+import KnowledgeDetail from '@/views/knowledge-detail'
+import ArticleEditor from '@/views/article-editor'
 Vue.use(Router)
 
 /**
@@ -31,51 +27,37 @@ export const constantRouterMap = [
   {
     path: '/index',
     name: '首页',
-    component: MainNav
-  },
-  {
-    path: '/knowledge',
-    name: 'categoryPage',
-    component: Knowledge,
+    component: MainNav,
     children: [
       {
         path: '',
-        component: KnowledgeMain
+        component: Workbench
       },
       {
-        path: 'detail',
-        component: KnowledgeDetail
+        path: 'workbench',
+        component: Workbench
       },
       {
-        path: '/article',
-        component: KnowledgeArticle
+        path: 'category',
+        component: WorkbenchCategory
+      },
+      {
+        path: 'knowledge',
+        component: WorkbenchKnowledge
       }
     ]
   },
   {
-    path: '/brand',
-    name: 'brandPage',
-    component: Brand
+    path: '/newKnowledge',
+    component: NewKnowledge
   },
   {
-    path: '/custom',
-    name: 'customPage',
-    component: Custom
+    path: '/knowledge/detail',
+    component: KnowledgeDetail
   },
   {
-    path: '/news',
-    name: 'newsPage',
-    component: News
-  },
-  {
-    path: '/relative',
-    name: 'relativePage',
-    component: Relative
-  },
-  {
-    path: '/contact',
-    name: 'contactPage',
-    component: Contact
+    path: '/article/editor',
+    component: ArticleEditor
   }
 
 ]
