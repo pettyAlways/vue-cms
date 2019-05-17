@@ -8,6 +8,7 @@ import WorkbenchKnowledge from '@/views/main/components/knowledge'
 import NewKnowledge from '@/views/new-knowledge'
 import KnowledgeDetail from '@/views/knowledge-detail'
 import ArticleEditor from '@/views/article-editor'
+import ArticleShow from '@/views/article-show'
 Vue.use(Router)
 
 /**
@@ -58,6 +59,10 @@ export const constantRouterMap = [
   {
     path: '/article/editor',
     component: ArticleEditor
+  },
+  {
+    path: '/article/show',
+    component: ArticleShow
   }
 
 ]

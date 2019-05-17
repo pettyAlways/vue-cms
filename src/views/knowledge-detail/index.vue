@@ -31,7 +31,7 @@
       <div class="knowledge-detail__body">
         <ul>
           <li v-for="index in 12" :key="index">
-            <span class="name">实战卖酒官网搭建</span>
+            <span class="name"><router-link :to="{ path: '/article/show' }">实战卖酒官网搭建</router-link></span>
             <span class="line"></span>
             <span class="author">鹰嘴豆</span>
           </li>
