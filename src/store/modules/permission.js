@@ -63,6 +63,7 @@ const permission = {
           routersMap = [...routersMap, ...resolveMenuTree(permissions[key])]
         })
         // 将数组中的用户权限比对异步路由并动态添加匹配的动态路由
+        debugger
         let accessedRouters = filterAsyncRouter(asyncRouterMap, routersMap)
         commit(SET_ROUTERS, accessedRouters)
         resolve()

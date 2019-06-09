@@ -17,6 +17,7 @@ $--table-header-background: darken($primaryColor, 16%);
 $--table-text-color: lighten($contrastColor, 8%);
 $--color-text-secondary: $--color-primary;
 $--input-border: 1px solid darken($primaryColor, 20%);
+$--table-row-hover-background: darken($primaryColor, 16%);
 
 /* 树组件自定义样式*/
 $--tree-text-color: lighten($contrastColor, 10%);
