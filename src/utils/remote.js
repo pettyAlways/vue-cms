@@ -37,6 +37,9 @@ axios.interceptors.response.use(function (response) {
     goHome()
     return { flag: false }
   }
+  if (error.response.status === 504) {
+    timeout()
+  }
   // 出异常则关闭遮罩层
   Vue.prototype.$loadingHelper.stopLoading()
   // 日志记录
@@ -52,6 +55,13 @@ function goLogin() {
   }, 3 * 1000 + 1)
   Vue.prototype.$message({
     message: '请先登录',
+    type: 'error'
+  })
+}
+
+function timeout() {
+  Vue.prototype.$message({
+    message: '连接服务器超时',
     type: 'error'
   })
 }
