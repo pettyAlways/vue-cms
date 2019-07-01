@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import MainNav from '@/views/main'
+import Login from '@/views/login'
 import Workbench from '@/views/main/components/workbench'
 import WorkbenchCategory from '@/views/main/components/category'
 import WorkbenchKnowledge from '@/views/main/components/knowledge'
@@ -23,7 +24,12 @@ export const constantRouterMap = [
   {
     path: '/',
     // 使用redirect路由守卫最终监听到的是/login
-    redirect: '/index'
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    name: '登录',
+    component: Login
   },
   {
     path: '/index',

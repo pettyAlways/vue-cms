@@ -2,7 +2,7 @@ import remote from '../utils/remote'
 
 export function login(data) {
   return remote({
-    url: '/cms_web/login/login.do',
+    url: '/platform/login',
     method: 'post',
     data
   })
