@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sys-configure__sidebar">
     <common-sidebar></common-sidebar>
   </div>
 </template>

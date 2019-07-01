@@ -44,6 +44,7 @@ export default new Router({
  * 1、需要配置tagName,它是tab的显示名称
  * 2、路由中的name必须要和vue页面export default对象的name一致才能页面缓存生效
  * 3、子组件的路由路径需要和资源配置的路径相同才能动态加入路由中
+ * 4、tagName必须和左边栏的菜单名一致才能点击tab自动激活左边栏页面
  */
 export const asyncRouterMap = [
   {
@@ -56,14 +57,14 @@ export const asyncRouterMap = [
       { name: 'organizationManage', path: 'organization-manage', component: () => import('../views/authorization/organizationManage.vue'), meta: {tagName: '组织管理'} },
       { name: 'authorizationManage', path: 'authorization-manage', component: () => import('../views/authorization/authorizationManage.vue'), meta: {tagName: '授权管理'} },
       { name: 'configurationManage', path: 'conf-manage', component: () => import('../views/authorization/dic/confManagement.vue'), meta: {tagName: '配置管理'} },
-      { name: 'onLineUserManage', path: 'online-manage', component: () => import('../views/authorization/onLineUserManage.vue'), meta: {tagName: '在线管理'} }
+      { name: 'onLineUserManage', path: 'online-manage', component: () => import('../views/authorization/onLineUserManage.vue'), meta: {tagName: '在线用户'} }
     ]
   },
   {
-    path: '/service-config',
+    path: '/auth-function',
     component: Layout,
     children: [
-      { name: 'helloService', path: 'hello-service', component: () => import('../views/service/helloService.vue'), meta: {tagName: '简单例子'} }
+      { name: 'blogService', path: 'resource-manage', component: () => import('../views/blog-hope/auth/resourceManage.vue'), meta: {tagName: '资源管理'} }
     ]
   }
 ]

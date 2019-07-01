@@ -155,11 +155,8 @@
               </el-form-item>
             </el-col>
             <el-col v-if="['module'].indexOf(resourceForm.resourceType) != -1" :span="12">
-              <el-form-item label="模块归属"  prop="belongs">
-                <el-select v-model="resourceForm.belongs" :disabled="isView" @change="belongsChange">
-                  <el-option label="内部" value="internal"></el-option>
-                  <el-option label="外部" value="external"></el-option>
-                </el-select>
+              <el-form-item label="组件名" prop="alias">
+                <el-input v-model="resourceForm.alias" :disabled="isView"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -171,9 +168,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item label="组件名" prop="alias" v-if="aliasShow && ['module'].indexOf(resourceForm.resourceType) != -1">
-            <el-input v-model="resourceForm.alias" :disabled="isView"></el-input>
-          </el-form-item>
           <el-form-item label="排序" prop="resourceSort">
             <el-input v-model="resourceForm.resourceSort" :disabled="isView"></el-input>
           </el-form-item>
@@ -185,12 +179,11 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { getMenu, subPower, saveResource, editResource, deleteAll } from '../../api/permission'
+  import { getMenu, subPower, saveResource, editResource, deleteAll } from '@/api/permission'
   export default {
-    name: 'resourceManage',
+    name: 'blogService',
     data() {
       return {
-        aliasShow: true,
         clientHeight: '',
         loading: false,
         paging: {
@@ -213,7 +206,6 @@
           resourceIcon: '',
           resourcePath: '',
           resourceType: 'page',
-          belongs: '',
           defaultPage: 'N',
           alias: '',
           inUse: '1',
@@ -243,7 +235,6 @@
         resType: {
           root: 'tree',
           module: 'trunk',
-          exModule: 'folder',
           menu: 'branch',
           page: 'leaf',
           button: 'bug'
@@ -285,9 +276,6 @@
       this.loadPrepresentData()
     },
     methods: {
-      belongsChange(status) {
-        this.aliasShow = status === 'internal'
-      },
       view(item) {
         this.dialogType = 'view'
         this.resourceForm = {
@@ -297,7 +285,6 @@
           resourcePath: item.resourcePath,
           resourceType: item.resourceType + '',
           defaultPage: item.defaultPage,
-          belongs: item.belongs,
           alias: item.alias,
           inUse: item.inUse + '',
           resourceSort: item.resourceSort
@@ -320,7 +307,6 @@
           resourcePath: item.resourcePath,
           resourceType: item.resourceType,
           defaultPage: item.defaultPage,
-          belongs: item.belongs,
           alias: item.alias,
           inUse: item.inUse,
           resourceSort: item.resourceSort
@@ -413,7 +399,6 @@
           resourcePath: '',
           resourceType: 'page',
           defaultPage: 'N',
-          belongs: '',
           alias: '',
           inUse: '1',
           resourceSort: ''
@@ -434,7 +419,6 @@
         this.$refs['resourceForm'].validate((valid) => {
           if (valid) {
             this.resourceForm.parentId = this.curNode.id
-            this.resourceForm.belongs = this.resourceForm.belongs ? this.resourceForm.belongs : this.curNode.belongs
             if (this.$refs.iconPanel) {
               this.resourceForm.resourceIcon = this.$refs.iconPanel.getSelectVal()
             }

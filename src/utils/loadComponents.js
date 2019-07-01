@@ -23,6 +23,7 @@ let components = {}
 requireComponent.keys().forEach(filePath => {
   const componentConfig = requireComponent(filePath)
   const fileName = validateFileName(filePath)
+  // componentConfig.default能获取vue文件中的配置信息
   let componentName = fileName.toLowerCase() === 'index'
     ? capitalizeFirstLetter(componentConfig.default.name)
     : fileName
