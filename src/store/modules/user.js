@@ -4,9 +4,7 @@ import store from '../index'
 
 const SET_TOKEN = 'SET_TOKEN'
 const SET_USER = 'SET_USER'
-const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
-const SET_MODULELIST = 'SET_MODULELIST'
 const SAVE_SVG_ICONS = 'SAVE_SVG_ICONS'
 
 // 将该用户有权限的按钮放入列表并标记为true,方便后面页面控制按钮的隐藏和显示
@@ -29,6 +27,17 @@ function plainPageMenus(permissions) {
   return pageMenus
 }
 
+function partitionByMenu(tree) {
+  let partition = {}
+  if (tree.type === 'module') {
+    let menus = tree.children || []
+    menus.forEach(menu => {
+      partition[menu.alias] = menu.children
+    })
+  }
+  return partition
+}
+
 const user = {
   state: {
     token: getToken(),
@@ -45,19 +54,11 @@ const user = {
     [SET_USER](state, user) {
       state.currentUser = user
     },
-    [SET_PERMISSIONS](state, permissions) {
-      state.permissions = permissions
-    },
-    [SET_MODULELIST](state, modules) {
-      state.moduleList = modules
-    },
     [SET_PAGEMENUS](state, permissions) {
       if (permissions) {
-        for (let key in permissions) {
-          let menus = plainPageMenus(permissions[key])
-          state.pageMenus = Object.assign({}, state.pageMenus, {
-            [key]: menus
-          })
+        for (let permission in permissions) {
+          let menus = plainPageMenus(permission)
+          state.pageMenus = Object.assign({}, state.pageMenus, menus)
         }
       }
     },
@@ -71,9 +72,9 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(resp => {
           if (resp.flag) {
-            setToken(resp.token)
-            commit(SET_TOKEN, resp.token)
-            return resolve()
+            setToken(resp.authorization)
+            commit(SET_TOKEN, resp.authorization)
+            return resolve(resp)
           } else {
             reject(resp.message)
           }
@@ -87,22 +88,19 @@ const user = {
       return new Promise((resolve, reject) => {
         userInfo().then(resp => {
           let data = resp.data
-          // 更新中心信息缓存其实没什么必要
-          commit(SET_USER, resp.currentUser)
-          // 模块权限路由缓存
+          let permissions = data.resourceTree.children
           let partition = {}
-          data.resourceTree.children.forEach(item => {
-            partition[item.alias] = item.children
+          permissions.forEach(item => {
+            let pageStorage = partitionByMenu(item)
+            partition = { ...partition, ...pageStorage }
           })
-          let modules = data.resourceTree.children.map(item => {
-            return { index: item.alias, icon: item.icon, name: item.name }
-          })
-          // 模块列表用于显示导航栏
-          commit(SET_MODULELIST, modules)
-          // 整个系统当前用户的权限路径
-          commit(SET_PERMISSIONS, partition)
           // 缓存当前用户有权限的按钮
-          commit(SET_PAGEMENUS, partition)
+          let allMenus = []
+          Object.key(partition).forEach(key => {
+            allMenus = [ ...allMenus, ...partition[key] ]
+          })
+          commit(SET_PAGEMENUS, allMenus)
+
           return resolve(partition)
         })
       })

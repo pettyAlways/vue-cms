@@ -10,7 +10,7 @@ export function login(data) {
 
 export function userInfo() {
   return remote({
-    url: '/cms_web/user/userInfo.do',
+    url: '/platform/blog/user/userInfo.do',
     method: 'get'
   })
 }

@@ -20,15 +20,15 @@ function filterAsyncRouter(asyncRouterMap, roles, parentPath) {
 }
 
 // 将树结构数据变成平面化结构数据
-function resolveMenuTree(menuTree) {
-  if (_.isEmpty(menuTree)) {
+function resolveMenuTree(tree) {
+  if (_.isEmpty(tree)) {
     return []
   }
   let allLeaves = []
-  menuTree.forEach(item => {
+  tree.forEach(item => {
     if (item.type === 'menu') {
       let leaves = resolveMenuTree(item.children)
-      allLeaves = [...allLeaves, ...leaves]
+      allLeaves = [ ...allLeaves, ...leaves ]
     } else if (item.type === 'page') {
       allLeaves.push(item.path)
     }
@@ -54,14 +54,14 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({ commit }, routers) {
+    GenerateRoutes({ commit }, permissions) {
       return new Promise((resolve) => {
-        const { permissions } = routers
-        // 将该用户的所有权限都存放到数组中
-        let routersMap = []
+        // permissions 是menu的alias为key的一组对象，需要将这组对象转换成一个包含所有menu的数组
+        let menus = []
         Object.keys(permissions).forEach(key => {
-          routersMap = [...routersMap, ...resolveMenuTree(permissions[key])]
+          menus = [ ...menus, permissions[key] ]
         })
+        let routersMap = resolveMenuTree(menus)
         // 将数组中的用户权限比对异步路由并动态添加匹配的动态路由
         let accessedRouters = filterAsyncRouter(asyncRouterMap, routersMap)
         commit(SET_ROUTERS, accessedRouters)

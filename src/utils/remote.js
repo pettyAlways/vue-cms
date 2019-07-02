@@ -1,6 +1,6 @@
 import router from '../router'
 import axios from 'axios/index'
-import { removeToken } from '@/utils/auth'
+import { removeToken, getToken } from '@/utils/auth'
 import Vue from 'vue'
 function remote(params) {
   // catch当HttpStatus状态码不是200时会进入
@@ -9,6 +9,12 @@ function remote(params) {
 }
 
 axios.interceptors.request.use(function (config) {
+  // 每个请求携带Authorization请求头指定jwt类型的token值
+  if (getToken()) {
+    config.headers.common['Authorization'] = getToken()
+    let value = getToken()
+    console.info(config.url + '：' + value)
+  }
   return config
 }, function (error) {
   return Promise.reject(error)
@@ -29,7 +35,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // 重定向登录页面
   if (error.response.status === 401) {
-    goLogin()
+    goLogin(error.response.data.message)
     return { flag: false }
   }
   // 重定向主页
@@ -48,13 +54,13 @@ axios.interceptors.response.use(function (response) {
 })
 
 // 移除token则使用reload的时候在permission文件中跳转到login
-function goLogin() {
+function goLogin(message) {
   removeToken()
   setTimeout(() => {
     location.reload()
   }, 3 * 1000 + 1)
   Vue.prototype.$message({
-    message: '请先登录',
+    message: message,
     type: 'error'
   })
 }

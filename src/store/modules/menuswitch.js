@@ -31,9 +31,7 @@ function findDefaultPage(menus) {
 
 const menuswitch = {
   state: {
-    curConfigure: 'HomePage',
-    configureItem: [],
-    defaultPage: {},
+    defaultPage: '',
     isCollapse: false
   },
   mutations: {
@@ -41,9 +39,7 @@ const menuswitch = {
       state.curConfigure = curMenuName
     },
     [SET_DEFAULTPAGE](state, defaultPage) {
-      state.defaultPage = Object.assign({}, state.defaultPage, {
-        [defaultPage.configure]: defaultPage.sidebarPage
-      })
+      state.defaultPage = defaultPage
     },
     [SET_CONFIGUREITEM](state, configureItem) {
       state.configureItem = configureItem
@@ -59,11 +55,9 @@ const menuswitch = {
     },
     // F5刷新vuex状态丢失需要路由全局守卫调用该Action进行重新设置默认页面,也可以在切换导航菜单时调用
     // 在F5刷新或者第一次进入系统的时候缓存所有模块的默认页面
-    resolveDefaultPage({ commit }, { permissions }) {
-      Object.keys(permissions).forEach(item => {
-        let sidebarPage = item === 'HomePage' ? '/home' : (findDefaultPage(permissions[item]) || firtLeafNode)
-        commit(SET_DEFAULTPAGE, { configure: item, sidebarPage: sidebarPage })
-      })
+    resolveDefaultPage({ commit }, permissions) {
+      let sidebarPage = findDefaultPage(permissions) || firtLeafNode
+      commit(SET_DEFAULTPAGE, sidebarPage)
     },
     collapseMenu({ commit }, isCollapse) {
       commit(SET_COLLAPSE, isCollapse)

@@ -5,14 +5,14 @@
         <h2 class="login-title">{{$t('login.title')}}</h2>
       </div>
       <el-form :rules="rules" :model="loginForm" ref="loginForm" label-width="60px">
-        <el-form-item :label="$t('login.account')" prop="userAccount" style="position:relative">
-          <el-input type="text" v-model="loginForm.userAccount" @keyup.enter.native="goToPwdInput"></el-input>
+        <el-form-item :label="$t('login.account')" prop="username" style="position:relative">
+          <el-input type="text" v-model="loginForm.username" @keyup.enter.native="goToPwdInput"></el-input>
           <span class="svg-container svg-container_user">
             <icon-svg icon-class="user" />
           </span>
         </el-form-item>
-        <el-form-item :label="$t('login.password')" prop="userPassword">
-          <el-input type="password" v-model="loginForm.userPassword" @keyup.enter.native="onLogin" ref="pwd"></el-input>
+        <el-form-item :label="$t('login.password')" prop="password">
+          <el-input type="password" v-model="loginForm.password" @keyup.enter.native="onLogin" ref="pwd"></el-input>
           <span class="svg-container svg-container_password">
             <icon-svg icon-class="password" />
           </span>
@@ -47,16 +47,16 @@
       }
       return {
         loginForm: {
-          userAccount: '',
-          userPassword: ''
+          username: '',
+          password: ''
         },
         remember: false,
         loading: false,
         rules: {
-          userAccount: [
+          username: [
             { required: true, message: '请输入账号', trigger: 'blur' }
           ],
-          userPassword: [
+          password: [
             { required: true, trigger: 'blur', validator: validatePwd }
           ]
         }
@@ -66,12 +66,12 @@
       this.remember = loadFromLocal('rememberMe', false)
       // 初始化时读取localStorage用户信息,注意google有记住密码功能会覆盖当前获取到的密码
       if (this.remember) {
-        this.loginForm.userAccount = loadFromLocal('username', '')
-        this.loginForm.userPassword = loadFromLocal('password', '')
+        this.loginForm.username = loadFromLocal('username', '')
+        this.loginForm.password = loadFromLocal('password', '')
         console.error(this.loginForm.userPassword)
       } else {
-        this.loginForm.userAccount = ''
-        this.loginForm.userPassword = ''
+        this.loginForm.username = ''
+        this.loginForm.password = ''
       }
     },
     methods: {
@@ -94,13 +94,13 @@
             this.login(this.loginForm).then((res) => {
               // 保存账号
               if (this.remember) {
-                saveToLocal('username', this.loginForm.userAccount)
-                saveToLocal('password', this.loginForm.userPassword)
+                saveToLocal('username', this.loginForm.username)
+                saveToLocal('password', this.loginForm.password)
               } else {
                 saveToLocal('username', '')
                 saveToLocal('password', '')
               }
-              this.$router.push({ path: '/home/homePage' })
+              this.$router.push({ path: '/index' })
             }, () => {
               this.loading = false
             }).catch(() => {
