@@ -56,7 +56,7 @@ const menuswitch = {
     // F5刷新vuex状态丢失需要路由全局守卫调用该Action进行重新设置默认页面,也可以在切换导航菜单时调用
     // 在F5刷新或者第一次进入系统的时候缓存所有模块的默认页面
     resolveDefaultPage({ commit }, permissions) {
-      let sidebarPage = findDefaultPage(permissions) || firtLeafNode
+      let sidebarPage = findDefaultPage([permissions]) || firtLeafNode
       commit(SET_DEFAULTPAGE, sidebarPage)
     },
     collapseMenu({ commit }, isCollapse) {

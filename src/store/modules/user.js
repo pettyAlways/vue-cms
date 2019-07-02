@@ -5,6 +5,7 @@ import store from '../index'
 const SET_TOKEN = 'SET_TOKEN'
 const SET_USER = 'SET_USER'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
+const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SAVE_SVG_ICONS = 'SAVE_SVG_ICONS'
 
 // 将该用户有权限的按钮放入列表并标记为true,方便后面页面控制按钮的隐藏和显示
@@ -32,7 +33,7 @@ function partitionByMenu(tree) {
   if (tree.type === 'module') {
     let menus = tree.children || []
     menus.forEach(menu => {
-      partition[menu.alias] = menu.children
+      partition[menu.alias] = menu
     })
   }
   return partition
@@ -56,11 +57,12 @@ const user = {
     },
     [SET_PAGEMENUS](state, permissions) {
       if (permissions) {
-        for (let permission in permissions) {
-          let menus = plainPageMenus(permission)
-          state.pageMenus = Object.assign({}, state.pageMenus, menus)
-        }
+        let menus = plainPageMenus(permissions)
+        state.pageMenus = Object.assign({}, state.pageMenus, menus)
       }
+    },
+    [SET_PERMISSIONS](state, permission) {
+      state.permissions = permission
     },
     [SAVE_SVG_ICONS](state, svgList) {
       state.svgIconList = svgList
@@ -96,11 +98,13 @@ const user = {
           })
           // 缓存当前用户有权限的按钮
           let allMenus = []
-          Object.key(partition).forEach(key => {
-            allMenus = [ ...allMenus, ...partition[key] ]
+          Object.keys(partition).forEach(key => {
+            let temp = partition[key]
+            console.log(temp)
+            allMenus = [ ...allMenus, partition[key] ]
           })
           commit(SET_PAGEMENUS, allMenus)
-
+          commit(SET_PERMISSIONS, partition)
           return resolve(partition)
         })
       })
