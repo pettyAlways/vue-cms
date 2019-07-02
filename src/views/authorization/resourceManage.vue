@@ -171,7 +171,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item label="组件名" prop="alias" v-if="aliasShow && ['module'].indexOf(resourceForm.resourceType) != -1">
+          <el-form-item label="唯一编码" prop="alias" v-if="aliasShow && ['module', 'menu'].indexOf(resourceForm.resourceType) != -1">
             <el-input v-model="resourceForm.alias" :disabled="isView"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="resourceSort">
