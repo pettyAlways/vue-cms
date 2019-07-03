@@ -48,12 +48,11 @@
     },
     mounted() {
       if (this.datas) {
-        this.expands.push(this.datas[0].id)
+        this.expands.push(this.datas[0].id + '')
       }
     },
     methods: {
       getRowKey(row) {
-        console.log(row.id)
         return row.id
       },
       acquireResource() {
