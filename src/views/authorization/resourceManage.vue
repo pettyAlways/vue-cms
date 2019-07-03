@@ -307,7 +307,7 @@
       add() {
         this.dialogType = 'save'
         this.resourceForm.parentResourceName = this.curNode.name
-        this.resourceForm.resourceSort = this.curNode.children.length + 1
+        this.resourceForm.resourceSort = this.generateMaxId(this.curNode)
         this.visible = true
       },
       edit(item) {
@@ -398,7 +398,7 @@
           getMenu().then(res => {
             if (res.flag) {
               this.resourceTree = [res.data]
-              this.curNode = this.curNode || res.data
+              this.curNode = this.updateCurNode(res.data) || res.data
               this.expandKey.push(this.curNode.id)
               resolve(this.curNode.id)
             }
@@ -488,6 +488,30 @@
       handleCurrentChange(val) {
         let params = { parentId: this.curNode.id, ...{ page: val, size: this.paging.size }, ...this.resourceSearchForm }
         this.loadTableDatas(params)
+      },
+      generateMaxId(curNode) {
+        let child = curNode.children || []
+        let maxId = 0
+        child.forEach(item => {
+          if (item.sort > maxId) {
+            maxId = item.sort
+          }
+        })
+        return maxId + 1
+      },
+      updateCurNode(node) {
+        let back
+        if (node.id === this.curNode.id) {
+          return node
+        }
+        let child = node.children || []
+        for (let item of child) {
+          back = this.updateCurNode(item)
+          if (back) {
+            break
+          }
+        }
+        return back
       }
     }
   }
