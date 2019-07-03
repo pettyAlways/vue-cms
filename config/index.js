@@ -31,6 +31,7 @@ module.exports = {
     // in the browser.
     showEslintErrorsInOverlay: false,
 
+
     /**
      * Source Maps
      */

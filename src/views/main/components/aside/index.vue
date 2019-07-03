@@ -1,37 +1,28 @@
 <template>
   <div class="aside-panel">
     <ul>
-      <li>
-        <i class="el-icon-s-home"></i>
-        <router-link :to="{ path: '/index/workbench' }">工作台</router-link>
-      </li>
-      <li>
-        <i class="el-icon-postcard"></i>
-        <router-link :to="{ path: '/index/category' }">分类</router-link>
-      </li>
-      <li>
-        <i class="el-icon-reading"></i>
-        <router-link :to="{ path: '/index/knowledge' }">知识库</router-link>
-      </li>
-      <li>
-        <i class="el-icon-document"></i>
-        <a>文档</a>
-      </li>
-      <li>
-        <i class="el-icon-s-data"></i>
-        <a>审核</a>
-      </li>
-      <li>
-        <i class="el-icon-message"></i>
-        <a>消息</a>
+      <li v-for="(item, index) in navResource" :key="index">
+        <icon-svg :iconClass="language"></icon-svg>
+        <router-link :to="{ path: item.path }">{{item.name}}</router-link>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
-    name: 'asideNav'
+    name: 'asideNav',
+    computed: {
+      ...mapGetters([
+        'permissions'
+      ]),
+      navResource() {
+        debugger
+        let navResource = this.permissions['navigation'].children || []
+        return navResource
+      }
+    }
   }
 </script>
 

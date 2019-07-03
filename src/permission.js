@@ -19,7 +19,6 @@ router.beforeEach((to, from, next) => {
       next('/index')
       NProgress.done()
     } else {
-      debugger
       // 刷新操作token存在但是vuex内容被清空执行下面代码
       if (store.getters.permissions.length === 0) {
         store.dispatch('pullUserInfo').then(permissions => {
