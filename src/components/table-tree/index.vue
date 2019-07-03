@@ -1,24 +1,25 @@
 <template>
   <div class="resource-tree-panel">
-    <el-table :row-style="showTr" :data="resources" border style="width: 100%">
+    <el-table :data="datas" border style="width: 100%" :row-key="getRowKey" :expand-row-keys="expands"
+              :tree-props="{children: 'children'}">
       <el-table-column v-for="(column, index) in columns" v-if="index == 0" width="200" align="left" :label="column.text" :key="column.name">
         <template slot-scope="scope" >
-          <span v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
-          <span v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)" style="border:0;background:transparent;outline:none;" class="button is-outlined is-primary is-small">
-            <i v-if="!scope.row._expanded" class="el-icon-caret-right"  aria-hidden="true"></i>
-            <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
+          <span v-if="scope.row.type==='page'">
+            <el-checkbox @change="checked => selectDeal(checked, scope.row)" v-model="scope.row.isSelect"></el-checkbox>
           </span>
-          <span v-else-if="index===0 && scope.row._level==0" class="ms-tree-space"></span>
-          <!-- change方法传入自定义的变量的写法 -->
-          <span v-else><el-checkbox @change="checked => selectDeal(checked, scope.row)" v-model="scope.row.isSelect"></el-checkbox></span>
+          <span class="ms-tree-space"></span>
           {{scope.row[column.name]}}
         </template>
       </el-table-column>
       <el-table-column v-else :label="column.text">
         <template slot-scope="scope">
           <div class="btn-box">
-            <span class="btn-list" v-if="scope.row.children" ><el-checkbox @change="checked => selectDeal(checked, scope.row)" v-model="scope.row.isSelect"></el-checkbox></span>
-            <span class="btn-list" v-if="scope.row.buttonList" v-for="item in scope.row.buttonList"><el-checkbox @change="checked => selectDeal(checked, item)" v-model="item.isSelect">{{item.name}}</el-checkbox></span>
+            <span class="btn-list" v-if="scope.row.children" >
+              <el-checkbox @change="checked => selectDeal(checked, scope.row)" v-model="scope.row.isSelect"></el-checkbox>
+            </span>
+            <span class="btn-list" v-if="scope.row.buttonList" v-for="item in scope.row.buttonList">
+              <el-checkbox @change="checked => selectDeal(checked, item)" v-model="item.isSelect">{{item.name}}</el-checkbox>
+            </span>
           </div>
         </template>
       </el-table-column>
@@ -33,7 +34,7 @@
     },
     data() {
       return {
-        temp: [],
+        expands: [],
         columns: [
           {
             text: '菜单列表',
@@ -42,17 +43,19 @@
             text: '功能权限',
             name: 'buttons'
           }
-        ],
-        defaultExpandAll: false
+        ]
       }
     },
-    computed: {
-      resources() {
-        let data = this.treeToArray(this.datas, null, null, this.defaultExpandAll)
-        return data
+    mounted() {
+      if (this.datas) {
+        this.expands.push(this.datas[0].id)
       }
     },
     methods: {
+      getRowKey(row) {
+        console.log(row.id)
+        return row.id
+      },
       acquireResource() {
         return this.selectedResource(this.datas[0].children)
       },
@@ -72,61 +75,6 @@
           }
         })
         return plain
-      },
-      treeToArray(data, parent, level, expandedAll) {
-        let tmp = []
-        data.forEach(record => {
-          if (record._expanded === undefined) {
-            let expanded = parent ? expandedAll : true
-            this.$set(record, '_expanded', expanded)
-          }
-          if (parent) {
-            this.$set(record, '_parent', parent)
-          }
-          let _level = 0
-          if (level !== undefined && level !== null) {
-            _level = level + 1
-          }
-          this.$set(record, '_level', _level)
-          tmp.push(record)
-          if (record.children && record.children.length > 0) {
-            let children = this.treeToArray(record.children, record, _level, expandedAll)
-            tmp = tmp.concat(children)
-          }
-        })
-        return tmp
-      },
-      showTr(item) {
-        let show = (item.row._parent ? (item.row._parent._expanded && item.row._parent._show) : true)
-        item.row._show = show
-        return show ? '' : 'display:none;'
-      },
-      toggleIconShow(index, record) {
-        if (index === 0 && record.children && record.children.length > 0) {
-          return true
-        }
-        return false
-      },
-      spaceIconShow(index) {
-        if (index === 0) {
-          return true
-        }
-        return false
-      },
-      toggle(trIndex) {
-        let record = this.resources[trIndex]
-        record._expanded = !record._expanded
-      },
-      singleSelect(checked, row) {
-        if (checked) {
-          this.$set(row, 'isSelect', checked)
-        }
-        if (row._parent && checked) {
-          this.$set(row._parent, 'isSelect', checked)
-        }
-        if (row._parent._parent) {
-          this.singleSelect(checked, row._parent)
-        }
       },
       selectDeal(checked, row) {
         // 本级设置选中状态
@@ -167,29 +115,6 @@
             this.$set(item, 'isSelect', checked)
           })
         }
-      },
-      allEmpty(parentPowerCode) {
-        let data = this.data
-        let parent = null
-        data.forEach(item => {
-          if (item.powerCode === parentPowerCode) parent = item
-        })
-        if (!parent) return
-        if (parent.buttonList != null && parent.buttonList.length > 0) {
-          let isSelect = false
-          parent.buttonList.forEach(res => {
-            if (res.isSelect) isSelect = true
-          })
-          this.$set(parent, 'isSelect', isSelect)
-        }
-        if (parent.powerList != null && parent.powerList.length > 0) {
-          let isSelect = false
-          parent.powerList.forEach(res => {
-            if (res.isSelect) isSelect = true
-          })
-          this.$set(parent, 'isSelect', isSelect)
-        }
-        if (!parent.isSelect) this.allEmpty(parent.parentPowerCode)
       }
     }
   }
@@ -210,7 +135,7 @@
       font-style: normal;
       font-weight: 400;
       line-height: 1;
-      width: 18px;
+      width: 10px;
       height: 14px;
     }
   }

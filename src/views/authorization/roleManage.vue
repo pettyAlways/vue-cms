@@ -169,6 +169,11 @@
             if (chooseResource.indexOf(item.id) !== -1) {
               item.isSelect = true
             }
+            if (item.children) {
+              item.children.forEach(child => {
+                child._parent = item
+              })
+            }
             if (item.type === 'page') {
               item.buttonList = item.children || []
 
@@ -176,7 +181,6 @@
                 if (chooseResource.indexOf(btn.id) !== -1) {
                   btn.isSelect = true
                 }
-                btn._parent = item
               })
               delete item.children
             }
