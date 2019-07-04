@@ -3,7 +3,6 @@ import Router from 'vue-router'
 
 import MainNav from '@/views/main'
 import Login from '@/views/login'
-import NewKnowledge from '@/views/new-knowledge'
 import KnowledgeDetail from '@/views/knowledge-detail'
 import ArticleEditor from '@/views/article-editor'
 import ArticleShow from '@/views/article-show'
@@ -37,10 +36,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/newKnowledge',
-    component: NewKnowledge
-  },
-  {
     path: '/knowledge/detail',
     component: KnowledgeDetail
   },
@@ -70,10 +65,14 @@ export const asyncRouterMap = [
     path: '/platform/blog',
     component: MainNav,
     children: [
-      { path: '', component: () => import('@/views/main/components/workbench') },
       { path: 'workbench', component: () => import('@/views/main/components/workbench') },
       { path: 'category', component: () => import('@/views/main/components/category') },
-      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') }
+      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') },
+      { path: 'new-knowledge', component: () => import('@/views/new-knowledge') }
     ]
+  },
+  {
+    path: '/knowledge/new',
+    component: () => import('@/views/new-knowledge')
   }
 ]

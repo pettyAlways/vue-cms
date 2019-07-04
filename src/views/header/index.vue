@@ -19,7 +19,7 @@
       <div class="header-panel__btn">
         <ul>
           <li>
-            <router-link :to="{ path: '/newKnowledge' }"><i class="el-icon-circle-plus-outline"></i></router-link>
+            <router-link :to="{ path: '/knowledge/new' }"><i class="el-icon-circle-plus-outline"></i></router-link>
           </li>
           <li>
             <a><i class="el-icon-message"></i></a>
