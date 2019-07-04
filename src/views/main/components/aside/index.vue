@@ -2,7 +2,7 @@
   <div class="aside-panel">
     <ul>
       <li v-for="(item, index) in navResource" :key="index">
-        <icon-svg :iconClass="language"></icon-svg>
+        <icon-svg :iconClass="item.icon"></icon-svg>
         <router-link :to="{ path: item.path }">{{item.name}}</router-link>
       </li>
     </ul>
@@ -18,7 +18,6 @@
         'permissions'
       ]),
       navResource() {
-        debugger
         let navResource = this.permissions['navigation'].children || []
         return navResource
       }

@@ -3,9 +3,6 @@ import Router from 'vue-router'
 
 import MainNav from '@/views/main'
 import Login from '@/views/login'
-import Workbench from '@/views/main/components/workbench'
-import WorkbenchCategory from '@/views/main/components/category'
-import WorkbenchKnowledge from '@/views/main/components/knowledge'
 import NewKnowledge from '@/views/new-knowledge'
 import KnowledgeDetail from '@/views/knowledge-detail'
 import ArticleEditor from '@/views/article-editor'
@@ -36,22 +33,7 @@ export const constantRouterMap = [
     name: '首页',
     component: MainNav,
     children: [
-      {
-        path: '',
-        component: Workbench
-      },
-      {
-        path: 'workbench',
-        component: Workbench
-      },
-      {
-        path: 'category',
-        component: WorkbenchCategory
-      },
-      {
-        path: 'knowledge',
-        component: WorkbenchKnowledge
-      }
+      { path: '', component: () => import('@/views/main/components/workbench') }
     ]
   },
   {
@@ -83,4 +65,15 @@ export default new Router({
  * 2、路由中的name必须要和vue页面export default对象的name一致才能页面缓存生效
  * 3、子组件的路由路径需要和资源配置的路径相同才能动态加入路由中
  */
-export const asyncRouterMap = []
+export const asyncRouterMap = [
+  {
+    path: '/platform/blog',
+    component: MainNav,
+    children: [
+      { path: '', component: () => import('@/views/main/components/workbench') },
+      { path: 'workbench', component: () => import('@/views/main/components/workbench') },
+      { path: 'category', component: () => import('@/views/main/components/category') },
+      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') }
+    ]
+  }
+]

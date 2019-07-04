@@ -33,6 +33,7 @@ axios.interceptors.response.use(function (response) {
   }
   return response.data
 }, function (error) {
+  debugger
   // 重定向登录页面
   if (error.response.status === 401) {
     goLogin(error.response.data.message)
