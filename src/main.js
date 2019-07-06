@@ -18,6 +18,10 @@ import log from './utils/logger'
 
 import loading from './utils/loading'
 
+// 图片剪裁工具
+import VueCropper from 'vue-cropper'
+Vue.use(VueCropper)
+
 var _ = require('lodash')
 Vue.prototype._ = _
 

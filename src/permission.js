@@ -2,7 +2,7 @@
  * 全局权限检测
  * 包括1、路由的全局守卫
  */
-
+import Vue from 'vue'
 import router from './router'
 import store from './store'
 import NProgress from 'nprogress'
@@ -31,6 +31,9 @@ router.beforeEach((to, from, next) => {
             // addRouters可能还没完成就执行next导致出错，这里使用next(to) 终端当前路由并重定向指定地址（这里重新再来一遍~），replace：true 重定向地址代替当前中断的路由的历史记录
             next({ ...to, replace: true })
           })
+        }).catch(reason => {
+          // promise需要处理异常
+          Vue.prototype.$message.error(reason.response.data)
         })
       } else {
         next()

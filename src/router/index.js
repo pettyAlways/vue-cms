@@ -56,9 +56,8 @@ export default new Router({
 
 /**
  * 注意点
- * 1、需要配置tagName,它是tab的显示名称
- * 2、路由中的name必须要和vue页面export default对象的name一致才能页面缓存生效
- * 3、子组件的路由路径需要和资源配置的路径相同才能动态加入路由中
+ * 1.默认路由不需要配置，在Action:GenerateRoutes中根据默认页面或者授权页面第一张页面的组件默认路由组件（存在子路由情况）
+ * 2.子路由路径如果开头带有/，则在Action:GenerateRoutes中会单独将子路由路径与用户授权的页面路径匹配，不会和父路由路径拼接
  */
 export const asyncRouterMap = [
   {

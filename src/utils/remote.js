@@ -1,7 +1,7 @@
-import router from '../router'
 import axios from 'axios/index'
 import { removeToken, getToken } from '@/utils/auth'
 import Vue from 'vue'
+
 function remote(params) {
   // catch当HttpStatus状态码不是200时会进入
   let instance = axios(params)
@@ -33,15 +33,14 @@ axios.interceptors.response.use(function (response) {
   }
   return response.data
 }, function (error) {
-  debugger
   // 重定向登录页面
   if (error.response.status === 401) {
     goLogin(error.response.data.message)
     return { flag: false }
   }
-  // 重定向主页
+  // 重定登录页面
   if (error.response.status === 403) {
-    goHome()
+    goLogin(error.response.data.message)
     return { flag: false }
   }
   if (error.response.status === 504) {
@@ -69,17 +68,6 @@ function goLogin(message) {
 function timeout() {
   Vue.prototype.$message({
     message: '连接服务器超时',
-    type: 'error'
-  })
-}
-
-// 403返回主页面
-function goHome() {
-  setTimeout(() => {
-    router.replace('/home/homePage')
-  }, 3 * 1000 + 1)
-  Vue.prototype.$message({
-    message: '没有权限访问,返回主页',
     type: 'error'
   })
 }

@@ -106,6 +106,8 @@ const user = {
           commit(SET_PAGEMENUS, allMenus)
           commit(SET_PERMISSIONS, partition)
           return resolve(partition)
+        }).catch((reason) => {
+          reject(reason)
         })
       })
     },

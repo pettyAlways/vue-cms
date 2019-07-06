@@ -101,6 +101,7 @@
                 saveToLocal('password', '')
               }
               this.$router.push({ path: '/index' })
+              this.loading = false
             }, () => {
               this.loading = false
             }).catch(() => {
@@ -248,6 +249,7 @@
     right: 0;
     bottom: 0;
     background: mix(#494166, #424b50);
+    overflow:hidden;
     .el-card {
       position: absolute;
       top: 50%;

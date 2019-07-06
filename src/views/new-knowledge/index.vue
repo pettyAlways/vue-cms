@@ -15,17 +15,26 @@
                 v-model="textarea">
               </el-input>
             </el-form-item>
-            <el-form-item label="所属分类">
-              <el-select v-model="value" placeholder="请选择">
-              </el-select>
+            <el-form-item label="封面">
+              <cover-upload type="knowledge_cover"></cover-upload>
             </el-form-item>
-            <el-form-item label="可见范围">
-              <el-select v-model="value" placeholder="请选择">
-                <el-option value="仅自己可见"></el-option>
-                <el-option value="公开"></el-option>
-                <el-option value="加密"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="所属分类">
+                  <el-select v-model="value" placeholder="请选择">
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="可见范围" style="margin-left: 10px;">
+                  <el-select v-model="value" placeholder="请选择">
+                    <el-option value="仅自己可见"></el-option>
+                    <el-option value="公开"></el-option>
+                    <el-option value="加密"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-button type="primary" style="width: 100%">新建</el-button>
           </el-form>
         </div>
@@ -39,7 +48,11 @@
 
 <script>
   export default {
-    name: 'index'
+    name: 'newKnowledge',
+    components: {
+      coverUpload: () => import('@/components/cover-upload'),
+      coverUpload1: () => import('@/components/cover-upload1')
+    }
   }
 </script>
 
