@@ -25,7 +25,7 @@
           prop="categoryDesc"
           label="描述"
           min-width="180"
-          show-overflow-tooltip="true">
+          :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
           fixed="right"

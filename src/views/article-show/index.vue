@@ -3,31 +3,35 @@
     <div class="top-panel">
       <site-nav>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/index/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">vue文档</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/knowledge/detail', query: { knowledgeId: knowledgeId } }">vue文档</el-breadcrumb-item>
           <el-breadcrumb-item>买酒官网搭建</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
-        <el-button class="btn" type="primary" size="small" @click="showCover=false">编辑</el-button>
+        <el-button class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
       </div>
     </div>
     <div class="article-show__container">
       <div class="article-list">
         <ul>
-          <li v-for="index in 12" :key="index">
-            <a>CSS3使用</a>
+          <li v-for="(item, index) in articleList" :key="index">
+            <a @click="goArticle(item.articleId)" :class="{ 'article-active': item.articleId == articleId }">{{item.articleTitle}}</a >
           </li>
         </ul>
       </div>
       <div class="article-content">
         <el-card>
-          <h1 class="title">卖酒官网搭建</h1>
+          <h1 class="title">{{article.articleTitle}}</h1>
           <ul class="extra-info">
-            <li>鹰嘴豆发布于JavaWeb</li>
-            <li>发布时间：2019-5-17</li>
-            <li>所属分类：Java</li>
+            <li>{{article.createName}}发布于 {{article.knowledgeName}}</li>
+            <li>发布时间：{{article.postTime}}</li>
+            <li>所属分类：{{article.categoryName}}</li>
           </ul>
+        </el-card>
+        <el-card>
+          <div :style="{ 'min-height': visiableHeight + 'px' }" v-html="article.content">
+          </div>
         </el-card>
       </div>
     </div>
@@ -35,10 +39,60 @@
 </template>
 
 <script>
+  import { getArticle, listArticle } from '@/api/article'
+  import { clientVisiable } from '@/utils/compatibility'
   export default {
     name: 'articleShow',
+    data() {
+      return {
+        knowledgeId: '',
+        article: '',
+        articleId: '',
+        articleList: [],
+        visiableHeight: ''
+      }
+    },
     components: {
       siteNav: () => import('@/components/site-nav')
+    },
+    mounted() {
+      this.visiableHeight = clientVisiable().height - 300
+      this.init()
+    },
+    methods: {
+      init() {
+        this.knowledgeId = this.$route.query.knowledgeId
+        this.articleId = this.$route.query.articleId
+        this.getArticle(this.articleId)
+        this.listArticle(this.knowledgeId)
+      },
+      editArticle() {
+        this.$router.push({ path: '/article/editor', query: { articleId: this.articleId, knowledgeId: this.knowledgeId } })
+      },
+      goArticle(articleId) {
+        this.$router.push({ path: '/article/show', query: { articleId: articleId, knowledgeId: this.knowledgeId } })
+      },
+      listArticle(knowledgeId) {
+        listArticle({ knowledgeId: knowledgeId }).then(res => {
+          if (res.flag) {
+            this.articleList = res.data.map(item => {
+              return { articleTitle: item.articleTitle, articleId: item.id }
+            })
+          }
+        })
+      },
+      getArticle(articleId) {
+        getArticle({ articleId: articleId }).then(res => {
+          if (res.flag) {
+            this.article = res.data
+          }
+        })
+      }
+    },
+    watch: {
+      '$route' (to, from) {
+        this.init()
+      }
     }
   }
 </script>
@@ -71,6 +125,13 @@
               height: 37px;
               line-height: 37px;
               font-size: 13px;
+              cursor: pointer;
+              &hover {
+                color: #8c8c8c;
+              }
+            }
+            .article-active {
+              color: #25b864;
             }
           }
         }
@@ -78,7 +139,7 @@
       .article-content {
         flex-grow: 1;
         .title {
-          font-size: 18px;
+          font-size: 30px;
           font-weight: 700;
           height: 40px;
           line-height: 40px;

@@ -2,22 +2,27 @@
   <div class="article-editor w1200">
     <div class="article-editor__header">
       <span class="title">标题</span>
-      <el-input v-model="input" placeholder="请输入内容"></el-input>
+      <el-input v-model="title" placeholder="请输入内容"></el-input>
     </div>
     <div class="article-editor__body" :style="{ height: visiableHeight + 'px' }">
-      <my-tinymce style="height: 100%"></my-tinymce>
+      <my-tinymce ref="myTinymce" style="height: 100%"></my-tinymce>
     </div>
+    <el-button type="primary" style="width: 100%" @click="postArticle">发布</el-button>
   </div>
 
 </template>
 
 <script>
   import { clientVisiable } from '@/utils/compatibility'
+  import { addArticle, getArticle, editArticle } from '@/api/article'
   export default {
     name: 'articleEditor',
     data() {
       return {
-        visiableHeight: ''
+        visiableHeight: '',
+        knowledgeId: '',
+        articleId: '',
+        title: ''
       }
     },
     components: {
@@ -25,6 +30,44 @@
     },
     mounted() {
       this.visiableHeight = clientVisiable().height - 245
+      this.knowledgeId = this.$route.query.knowledgeId
+      this.articleId = this.$route.query.articleId
+      if (this.articleId) {
+        this.getArticle(this.articleId)
+      }
+    },
+    methods: {
+      getArticle(articleId) {
+        getArticle({ articleId: articleId }).then(res => {
+          if (res.flag) {
+            this.article = res.data
+            this.title = this.article.articleTitle
+            this.$refs.myTinymce.setContent(this.article.content)
+          }
+        })
+      },
+      postArticle() {
+        let params = {}
+        params.content = this.$refs.myTinymce.getContent()
+        params.knowledge = {}
+        params.id = this.articleId || ''
+        params.knowledge.id = this.knowledgeId
+        params.articleTitle = this.title
+        let method = this.articleId ? editArticle : addArticle
+        method(params).then(res => {
+          if (res.flag) {
+            let articleId = res.articleId
+            let knowledgeId = res.knowledgeId
+            this.$message({
+              message: '文章发布成功',
+              type: 'success'
+            })
+            setTimeout(() => {
+              this.$router.push({ path: '/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+            }, 3 * 1000)
+          }
+        })
+      }
     }
   }
 </script>

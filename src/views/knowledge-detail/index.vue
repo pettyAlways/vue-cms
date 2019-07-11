@@ -3,7 +3,7 @@
     <div class="top-panel">
       <site-nav>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/index/knowledge' }">知识库</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">vue文档</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
@@ -30,10 +30,14 @@
       </div>
       <div class="knowledge-detail__body">
         <ul>
-          <li v-for="index in 12" :key="index">
-            <span class="name"><router-link :to="{ path: '/article/show' }">实战卖酒官网搭建</router-link></span>
+          <li v-for="(item, index) in tableData" :key="index">
+            <span class="name">
+              <router-link :to="{ path: '/article/show', query: { articleId: item.id, knowledgeId: knowledgeId } }">
+                {{item.articleTitle}}
+              </router-link>
+            </span>
             <span class="line"></span>
-            <span class="author">鹰嘴豆</span>
+            <span class="author">{{item.createName}}</span>
           </li>
         </ul>
       </div>
@@ -65,8 +69,8 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="name"
-            label="所有文档"
+            prop="articleName"
+            label="文章标题"
             width="120">
           </el-table-column>
           <el-table-column
@@ -75,13 +79,13 @@
             width="120">
           </el-table-column>
           <el-table-column
-            prop="creator"
+            prop="createName"
             label="创建者"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="updateTime"
-            label="更新时间"
+            prop="postTime"
+            label="发布时间"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -98,6 +102,7 @@
                   <el-dropdown-item>编辑</el-dropdown-item>
                   <el-dropdown-item>删除</el-dropdown-item>
                   <el-dropdown-item>复制</el-dropdown-item>
+                  <el-dropdown-item>审核</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -109,27 +114,31 @@
 </template>
 
 <script>
+  import { listArticle } from '@/api/article'
   export default {
     name: 'knowledgeDetail',
     data() {
       return {
+        knowledgeId: '',
         showCover: true,
-        tableData: [{
-          name: '卖酒官网搭建',
-          status: '未发布',
-          creator: '鹰嘴豆',
-          updateTime: '2019-05-16'
-        }, {
-          name: '卖酒官网搭建',
-          status: '未发布',
-          creator: '鹰嘴豆',
-          updateTime: '2019-05-16'
-        }]
+        tableData: []
       }
+    },
+    mounted() {
+      this.knowledgeId = this.$route.query.knowledgeId
+      this.listArticle(this.knowledgeId)
     },
     methods: {
       createArticle() {
-        this.$router.push({ path: '/article/editor' })
+        this.$router.push({ path: '/article/editor', query: { knowledgeId: this.knowledgeId } })
+      },
+      listArticle(knowledgeId) {
+        debugger
+        listArticle({ knowledgeId: knowledgeId }).then(res => {
+          if (res.flag) {
+            this.tableData = res.data
+          }
+        })
       }
     },
     components: {

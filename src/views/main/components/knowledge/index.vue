@@ -2,47 +2,50 @@
   <el-card class="knowledge">
     <custom-card02 title="参与的知识库">
       <template slot="more">
-        <a @click="isList=!isList" style="font-size: 18px;"><i :class="{'el-icon-s-unfold': isList, 'el-icon-s-fold': !isList}"></i></a>
+        <a @click="switchList" style="font-size: 18px;"><i :class="{'el-icon-s-unfold': isList, 'el-icon-s-fold': !isList}"></i></a>
       </template>
       <div v-if="isList" class="knowledge__list">
         <el-table
           :data="tableData"
           style="width: 100%">
           <el-table-column
-            prop="name"
-            label="分类名称"
-            width="180">
+            prop="kName"
+            label="知识库名字">
           </el-table-column>
           <el-table-column
-            prop="owner"
-            label="所属"
-            width="180">
+            prop="createName"
+            label="创建人">
           </el-table-column>
           <el-table-column
-            prop="description"
+            prop="participantName"
+            label="参与者">
+          </el-table-column>
+          <el-table-column
+            prop="kDesc"
             label="描述">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            width="200">
             <template slot-scope="scope">
-              <el-button type="text" size="small">置顶</el-button>
+              <el-button type="text" size="small">删除</el-button>
               <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="removeParticipant(scope.row)">移除参与者</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div v-else class="knowledge__block">
         <ul>
-          <li v-for="index in 6" :key="index">
+          <li v-for="(item, index) in tableData" :key="index">
             <el-card :body-style="{ padding: '0px' }">
               <div class="knowledge__block__item">
                 <div class="item__header">
-                  <img :src="require('./assets/book-cover.jpg')">
+                  <img :src="item.kUrl">
                   <div class="item_right">
-                    <span><router-link :to="{ path: '/knowledge/detail' }">Vue文档</router-link></span>
-                    <span>vue开发技能</span>
+                    <span><router-link :to="{ path: '/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kName}}</router-link></span>
+                    <span>{{item.kDesc}}</span>
                   </div>
                 </div>
                 <div class="item__body">
@@ -59,42 +62,87 @@
         </ul>
       </div>
     </custom-card02>
+    <el-dialog
+      title="移除参与者"
+      :visible.sync="participantVisible"
+      width="30%">
+      <el-tag
+        :key="index"
+        v-for="(item, index) in participantList"
+        closable
+        :disable-transitions="false"
+        @close="handleRemoveParticipant(item)">
+        {{item.userName}}
+      </el-tag>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="participantVisible = false">关 闭</el-button>
+      </span>
+    </el-dialog>
 
   </el-card>
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
+  import { listKnowledge, removeParticipant } from '@/api/knowledge'
   export default {
     name: 'knowledge',
     data() {
       return {
+        curKnowledge: '',
+        participantList: [],
+        participantVisible: false,
         isList: false,
         activeName: 'block',
-        tableData: [{
-          name: 'Web应用',
-          owner: '王小虎',
-          description: '构建Web服务应用'
-        }, {
-          name: '高并发',
-          owner: '鹰嘴豆',
-          description: '高并发的基础理论'
-        }, {
-          name: '分布式',
-          owner: '鹰嘴豆',
-          description: '分布式在Web的应用'
-        }, {
-          name: '架构',
-          owner: '王小虎',
-          description: '架构师实战之路'
-        }]
+        tableData: []
       }
     },
     components: {
       customCard02: () => import('@/components/custom-card-02')
     },
+    mounted() {
+      let showWay = this.isList ? 'list' : 'card'
+      this.retrieveList(showWay)
+    },
     methods: {
-      handleClick() {
-
+      ...mapActions([
+        'setCurNav'
+      ]),
+      handleRemoveParticipant(item) {
+        let _this = this
+        this.$confirm('请确认移除当前参与者', '确认删除', {
+          callback(action) {
+            if (action === 'confirm') {
+              removeParticipant({ participantId: item.id, knowledgeId: this.curKnowledge }).then(res => {
+                if (res.flag) {
+                  _this.$message({
+                    type: 'success',
+                    message: '移除成功'
+                  })
+                }
+              })
+            }
+          }
+        })
+      },
+      removeParticipant(item) {
+        this.curKnowledge = item.id
+        this.participantVisible = true
+      },
+      switchList() {
+        this.isList = !this.isList
+        let showWay = this.isList ? 'list' : 'card'
+        this.retrieveList(showWay)
+      },
+      retrieveList(showWay) {
+        listKnowledge({ showWay: showWay }).then(res => {
+          if (res.flag) {
+            this.tableData = res.data
+            this.tableData.map(item => {
+              item.participantName = item.kParticipant.map(temp => temp.userName).join(',')
+            })
+          }
+        })
       }
     }
   }
@@ -105,12 +153,12 @@
     &__block {
       ul {
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
         list-style: none;
         padding: 0px;
         li {
           margin-bottom: 15px;
+          margin-right: 15px;
         }
       }
       &__item {

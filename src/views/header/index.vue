@@ -10,10 +10,9 @@
       </div>
       <div class="header-panel__nav">
         <ul>
-          <li><router-link class="active" :to="{ path: '/index/workbench' }">工作台</router-link></li>
-          <li><a>知识库</a></li>
-          <li><a>分类</a></li>
-          <li><a>审核</a></li>
+          <li v-for="(item, index) in navResource" :key="index" >
+            <router-link :class="{ active: item.path == curNav }" :to="{ path: item.path }">{{item.name}}</router-link>
+          </li>
         </ul>
       </div>
       <div class="header-panel__btn">
@@ -34,6 +33,7 @@
 </template>
 
 <script>
+  import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'headerNav',
     data() {
@@ -44,7 +44,23 @@
     mounted() {
       window.addEventListener('scroll', this.navHandler)
     },
+    computed: {
+      ...mapGetters([
+        'permissions',
+        'curNav'
+      ]),
+      navResource() {
+        let navResource
+        if (this.permissions['navigation']) {
+          navResource = this.permissions['navigation'].children || []
+        }
+        return navResource
+      }
+    },
     methods: {
+      ...mapActions([
+        'switchMenu'
+      ]),
       navHandler() {
         let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (scrollTop > 60) {

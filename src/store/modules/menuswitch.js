@@ -4,6 +4,7 @@ const SET_CURCONFIGURE = 'SET_CURCONFIGURE'
 const SET_DEFAULTPAGE = 'SET_DEFAULTPAGE'
 const SET_CONFIGUREITEM = 'SET_CONFIGUREITEM'
 const SET_COLLAPSE = 'SET_COLLAPSE'
+const SET_CURNAV = 'SET_CURNAV'
 
 let firstIn = true
 let firtLeafNode = ''
@@ -32,7 +33,8 @@ function findDefaultPage(menus) {
 const menuswitch = {
   state: {
     defaultPage: '',
-    isCollapse: false
+    isCollapse: false,
+    curNav: ''
   },
   mutations: {
     [SET_CURCONFIGURE](state, curMenuName) {
@@ -46,9 +48,15 @@ const menuswitch = {
     },
     [SET_COLLAPSE](state, isCollapse) {
       state.isCollapse = isCollapse
+    },
+    [SET_CURNAV](state, curNav) {
+      state.curNav = curNav
     }
   },
   actions: {
+    switchMenu({ commit }, curNav) {
+      commit(SET_CURNAV, curNav)
+    },
     // 切换新的模块时将新模块名字赋予vuex变量
     switchConfigureMenu({ commit }, curMenuName) {
       commit(SET_CURCONFIGURE, curMenuName)
@@ -57,6 +65,7 @@ const menuswitch = {
     // 在F5刷新或者第一次进入系统的时候缓存所有模块的默认页面
     resolveDefaultPage({ commit }, permissions) {
       let sidebarPage = findDefaultPage([permissions]) || firtLeafNode
+      commit(SET_CURNAV, sidebarPage)
       commit(SET_DEFAULTPAGE, sidebarPage)
     },
     collapseMenu({ commit }, isCollapse) {
@@ -66,7 +75,8 @@ const menuswitch = {
   getters: {
     curConfigure: state => state.curConfigure,
     defaultPage: state => state.defaultPage,
-    isCollapse: state => state.isCollapse
+    isCollapse: state => state.isCollapse,
+    curNav: state => state.curNav
   }
 }
 

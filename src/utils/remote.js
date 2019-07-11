@@ -12,8 +12,6 @@ axios.interceptors.request.use(function (config) {
   // 每个请求携带Authorization请求头指定jwt类型的token值
   if (getToken()) {
     config.headers.common['Authorization'] = getToken()
-    let value = getToken()
-    console.info(config.url + '：' + value)
   }
   return config
 }, function (error) {

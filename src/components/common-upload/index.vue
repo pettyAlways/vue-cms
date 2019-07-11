@@ -36,10 +36,11 @@
 <script>
   import { fileUpload } from '@/api/upload'
   export default {
-    name: 'Avatar',
+    name: 'commonUpload',
 
     data () {
       return {
+        remoteUrl: '', // 图片在服务器的访问地址
         fileName: '',
         imageUrl: '',
         option: {
@@ -112,9 +113,12 @@
         formData.append('fileName', this.fileName)
         fileUpload(formData).then(res => {
           if (res.flag) {
-            alert('上传成功:' + res.data)
+            this.remoteUrl = res.data
           }
         })
+      },
+      retriveImgUrl() {
+        return this.remoteUrl
       },
       // base64转成bolb对象
       dataURItoBlob(base64Data) {

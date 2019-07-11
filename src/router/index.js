@@ -3,9 +3,6 @@ import Router from 'vue-router'
 
 import MainNav from '@/views/main'
 import Login from '@/views/login'
-import KnowledgeDetail from '@/views/knowledge-detail'
-import ArticleEditor from '@/views/article-editor'
-import ArticleShow from '@/views/article-show'
 Vue.use(Router)
 
 /**
@@ -29,23 +26,10 @@ export const constantRouterMap = [
   },
   {
     path: '/index',
-    name: '首页',
     component: MainNav,
     children: [
       { path: '', component: () => import('@/views/main/components/workbench') }
     ]
-  },
-  {
-    path: '/knowledge/detail',
-    component: KnowledgeDetail
-  },
-  {
-    path: '/article/editor',
-    component: ArticleEditor
-  },
-  {
-    path: '/article/show',
-    component: ArticleShow
   }
 
 ]
