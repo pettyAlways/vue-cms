@@ -50,10 +50,12 @@ export const asyncRouterMap = [
     children: [
       { path: 'workbench', component: () => import('@/views/main/components/workbench') },
       { path: 'category', component: () => import('@/views/main/components/category') },
-      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') },
-      { path: 'new-knowledge', component: () => import('@/views/new-knowledge') }
+      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') }
     ]
   },
+  { path: '/platform/blog/knowledge/detail', component: () => import('@/views/knowledge-detail') },
+  { path: '/platform/blog/knowledge/article/editor', component: () => import('@/views/article-editor') },
+  { path: '/platform/blog/knowledge/article/show', component: () => import('@/views/article-show') },
   {
     path: '/knowledge/new',
     component: () => import('@/views/new-knowledge')

@@ -6,12 +6,12 @@ let _ = require('lodash')
 function filterAsyncRouter(asyncRouterMap, roles, defaultPage, parentPath) {
   const accessedRouters = asyncRouterMap.filter(route => {
     if (!_.isEmpty(route.children)) {
-      route.children = filterAsyncRouter(route.children, roles, defaultPage, route.path)
-      if (route.children) {
+      route.children = filterAsyncRouter(route.children, roles, defaultPage, resolve(route.path, parentPath))
+      if (route.children && route.children.length) {
         // 授权的页面是否存在默认页面
         let result = route.children.filter(item => resolve(item.path, route.path) === defaultPage)
         // 新增默认路由
-        if (result) {
+        if (result && result.length) {
           route.children.push({ path: '', component: result[0].component })
         } else {
           route.children.push({ path: '', component: route.children[0].component })

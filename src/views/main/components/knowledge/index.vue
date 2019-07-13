@@ -44,15 +44,15 @@
                 <div class="item__header">
                   <img :src="item.kUrl">
                   <div class="item_right">
-                    <span><router-link :to="{ path: '/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kName}}</router-link></span>
+                    <span><router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kName}}</router-link></span>
                     <span>{{item.kDesc}}</span>
                   </div>
                 </div>
                 <div class="item__body">
                   <ul>
-                    <li v-for="index in 6" :key="index">
-                      <span>实战卖酒网站搭建</span>
-                      <span>2019-05-15</span>
+                    <li v-for="(tItem, index) in item.articleEntities" :key="index" @click="goArticle(tItem.id, item.id)">
+                      <span>{{tItem.articleTitle}}</span>
+                      <span>{{tItem.postTime}}</span>
                     </li>
                   </ul>
                 </div>
@@ -108,6 +108,9 @@
       ...mapActions([
         'setCurNav'
       ]),
+      goArticle(articleId, knowledgeId) {
+        this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+      },
       handleRemoveParticipant(item) {
         let _this = this
         this.$confirm('请确认移除当前参与者', '确认删除', {
@@ -158,7 +161,7 @@
         padding: 0px;
         li {
           margin-bottom: 15px;
-          margin-right: 15px;
+          margin-right: 6px;
         }
       }
       &__item {
@@ -212,6 +215,10 @@
               justify-content: space-between;
               line-height: 21px;
               color: #8c8c8c;
+              &:hover {
+                background-color: gainsboro;
+                cursor: pointer;
+              }
               &:before {
                 content: "";
                 width: 4px;

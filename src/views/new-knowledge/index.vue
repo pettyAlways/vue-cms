@@ -103,8 +103,15 @@
         this.$refs['knowledgeForm'].validate((valid) => {
           if (valid) {
             let operMethod = this.operateType === 'save' ? saveKnowledge : editKnowledge
-            this.formData.kUrl = this.$refs.commonUpload.retriveImgUrl()
-            operMethod(this.formData).then(res => {
+            let params = {}
+            params.kName = this.formData.kName
+            params.kDesc = this.formData.kDesc
+            params.kUrl = this.$refs.commonUpload.retriveImgUrl()
+            params.kAccess = this.formData.kAccess
+            params.kType = {}
+            params.kType.id = this.formData.kType
+            params.kReserveO = this.formData.kReserveO
+            operMethod(params).then(res => {
               if (res.flag) {
                 this.$message({
                   message: `${this.operateType === 'save' ? '创建' : '修改'}知识库成功`,

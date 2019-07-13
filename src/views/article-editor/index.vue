@@ -63,7 +63,7 @@
               type: 'success'
             })
             setTimeout(() => {
-              this.$router.push({ path: '/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+              this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
             }, 3 * 1000)
           }
         })

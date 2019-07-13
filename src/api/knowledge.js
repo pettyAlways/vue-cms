@@ -7,6 +7,7 @@ export function listKnowledge(params) {
     params
   })
 }
+
 export function removeParticipant(params) {
   return remote({
     url: '/platform/blog/knowledge/removeParticipant',

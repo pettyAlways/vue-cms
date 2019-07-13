@@ -4,7 +4,7 @@
       <site-nav>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">vue文档</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail' }">vue文档</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
@@ -32,7 +32,7 @@
         <ul>
           <li v-for="(item, index) in tableData" :key="index">
             <span class="name">
-              <router-link :to="{ path: '/article/show', query: { articleId: item.id, knowledgeId: knowledgeId } }">
+              <router-link :to="{ path: '/platform/blog/knowledge/article/show', query: { articleId: item.id, knowledgeId: knowledgeId } }">
                 {{item.articleTitle}}
               </router-link>
             </span>
@@ -130,10 +130,9 @@
     },
     methods: {
       createArticle() {
-        this.$router.push({ path: '/article/editor', query: { knowledgeId: this.knowledgeId } })
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { knowledgeId: this.knowledgeId } })
       },
       listArticle(knowledgeId) {
-        debugger
         listArticle({ knowledgeId: knowledgeId }).then(res => {
           if (res.flag) {
             this.tableData = res.data

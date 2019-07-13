@@ -31,10 +31,10 @@ export function editArticle(data) {
   })
 }
 
-export function saveKnowledge(data) {
+export function editArticle(data) {
   return remote({
-    url: '/platform/blog/knowledge/add',
-    method: 'post',
+    url: '/platform/blog/article/share/edit',
+    method: 'put',
     data
   })
 }

@@ -6,9 +6,6 @@
     <el-container>
       <router-view/>
     </el-container>
-    <el-footer>
-      <footer-nav></footer-nav>
-    </el-footer>
   </el-container>
 </template>
 <script>
@@ -19,8 +16,7 @@
       }
     },
     components: {
-      'headerNav': () => import('./views/header'),
-      'footerNav': () => import('./views/footer')
+      'headerNav': () => import('./views/header')
     }
   }
 </script>

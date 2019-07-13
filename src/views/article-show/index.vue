@@ -4,7 +4,7 @@
       <site-nav>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/knowledge/detail', query: { knowledgeId: knowledgeId } }">vue文档</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">vue文档</el-breadcrumb-item>
           <el-breadcrumb-item>买酒官网搭建</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
@@ -67,10 +67,10 @@
         this.listArticle(this.knowledgeId)
       },
       editArticle() {
-        this.$router.push({ path: '/article/editor', query: { articleId: this.articleId, knowledgeId: this.knowledgeId } })
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: this.articleId, knowledgeId: this.knowledgeId } })
       },
       goArticle(articleId) {
-        this.$router.push({ path: '/article/show', query: { articleId: articleId, knowledgeId: this.knowledgeId } })
+        this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: this.knowledgeId } })
       },
       listArticle(knowledgeId) {
         listArticle({ knowledgeId: knowledgeId }).then(res => {
