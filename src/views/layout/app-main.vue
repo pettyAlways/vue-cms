@@ -38,7 +38,7 @@
   .main-container {
     position: relative;
     top: 40px;
-    height: calc(100% - 40px);
+    min-height: calc(100% - 40px);
     width: 100%;
     padding: 15px;
   }
