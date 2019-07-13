@@ -14,7 +14,8 @@
 
 <script>
   import { clientVisiable } from '@/utils/compatibility'
-  import { addArticle, getArticle, editArticle } from '@/api/article'
+  import { addArticle, getArticle, editArticle, editShareArticle } from '@/api/article'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'articleEditor',
     data() {
@@ -22,11 +23,29 @@
         visiableHeight: '',
         knowledgeId: '',
         articleId: '',
-        title: ''
+        title: '',
+        power: []
       }
     },
     components: {
       myTinymce: () => import('@/components/my-tinymce')
+    },
+    computed: {
+      ...mapGetters([
+        'pageMenus'
+      ])
+    },
+    watch: {
+      pageMenus: {
+        handler(newMenus) {
+          if (newMenus) {
+            this.power = newMenus['/platform/blog/knowledge/article/show']
+          }
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
+      }
     },
     mounted() {
       this.visiableHeight = clientVisiable().height - 245
@@ -53,7 +72,8 @@
         params.id = this.articleId || ''
         params.knowledge.id = this.knowledgeId
         params.articleTitle = this.title
-        let method = this.articleId ? editArticle : addArticle
+        let edit = this.power['文章共享修改'] ? editShareArticle : editArticle
+        let method = this.articleId ? edit : addArticle
         method(params).then(res => {
           if (res.flag) {
             let articleId = res.articleId

@@ -1,7 +1,5 @@
 import { login, userInfo, logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import store from '../index'
-
 const SET_TOKEN = 'SET_TOKEN'
 const SET_USER = 'SET_USER'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
@@ -90,6 +88,11 @@ const user = {
       return new Promise((resolve, reject) => {
         userInfo().then(resp => {
           let data = resp.data
+          // 系统参数
+          commit('SET_SYS_PARAM', resp.sysConst)
+          // 当前用户
+          commit(SET_USER, resp.curUser)
+          // 系统权限
           let permissions = data.resourceTree.children
           let partition = {}
           permissions.forEach(item => {
@@ -124,11 +127,8 @@ const user = {
   },
   getters: {
     token: state => state.token,
-    name: state => state.name,
-    age: state => state.age,
-    avatar: state => state.avatar,
     permissions: state => state.permissions,
-    pageMenus: state => state.pageMenus[store.getters.curConfigure],
+    pageMenus: state => state.pageMenus,
     moduleList: state => state.moduleList,
     svgIconList: state => state.svgIconList,
     currentUser: state => state.currentUser

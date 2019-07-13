@@ -9,7 +9,8 @@
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
-        <el-button class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
+        <el-button v-if="noAuthShowBtn || (power['文章删除'] && shareAuth('文章共享删除'))" class="btn" type="primary" size="small" @click="delArticle">删除</el-button>
+        <el-button v-if="noAuthShowBtn || (power['文章修改'] && shareAuth('文章共享修改'))" class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
       </div>
     </div>
     <div class="article-show__container">
@@ -39,14 +40,16 @@
 </template>
 
 <script>
-  import { getArticle, listArticle } from '@/api/article'
+  import { getArticle, listArticle, deleteShareArticle, deleteArticle } from '@/api/article'
   import { clientVisiable } from '@/utils/compatibility'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'articleShow',
     data() {
       return {
         knowledgeId: '',
         article: '',
+        power: [],
         articleId: '',
         articleList: [],
         visiableHeight: ''
@@ -59,12 +62,72 @@
       this.visiableHeight = clientVisiable().height - 300
       this.init()
     },
+    computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam',
+        'currentUser'
+      ]),
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
+      },
+      shareAuth() {
+        return (auth) => {
+          return this.currentUser.id === this.article.creator || this.power[auth]
+        }
+      }
+    },
+    watch: {
+      '$route' (to, from) {
+        this.init()
+      },
+      pageMenus: {
+        handler(newMenus) {
+          if (newMenus) {
+            this.power = newMenus[this.$route.path]
+          }
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
+      }
+    },
     methods: {
       init() {
         this.knowledgeId = this.$route.query.knowledgeId
         this.articleId = this.$route.query.articleId
         this.getArticle(this.articleId)
         this.listArticle(this.knowledgeId)
+      },
+      delArticle() {
+        let _this = this
+        this.$confirm('请确认删除当前文章', '确认删除', {
+          callback(action) {
+            if (action === 'confirm') {
+              // 判断是否有共享删除权限，有就执行共享删除请求
+              let del = _this.power['文章共享删除'] ? deleteShareArticle : deleteArticle
+              del({ articleId: _this.articleId }).then(res => {
+                if (res.flag) {
+                  _this.$message({
+                    type: 'success',
+                    message: '删除文章成功'
+                  })
+                  let nextArticle = res.data
+                  if (nextArticle.id) {
+                    setTimeout(() => {
+                      _this.articleList = _this.articleList.filter(item => item.id === _this.articleId)
+                      _this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: nextArticle.id, knowledgeId: _this.knowledgeId } })
+                    }, 1 * 1000)
+                    return
+                  }
+                  setTimeout(() => {
+                    _this.$router.push({ path: '/platform/blog/knowledge/detail', query: { knowledgeId: _this.knowledgeId } })
+                  }, 1 * 1000)
+                }
+              })
+            }
+          }
+        })
       },
       editArticle() {
         this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: this.articleId, knowledgeId: this.knowledgeId } })
@@ -87,11 +150,6 @@
             this.article = res.data
           }
         })
-      }
-    },
-    watch: {
-      '$route' (to, from) {
-        this.init()
       }
     }
   }
@@ -146,6 +204,7 @@
         }
         .extra-info {
           display: flex;
+          margin-top: 15px;
           align-items: center;
           list-style: none;
           padding: 0px;

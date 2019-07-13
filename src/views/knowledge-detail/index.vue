@@ -199,6 +199,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 400px;
       border-radius: 5px;
       border: 1px solid #e8e8e8;
       padding: 88px 0 64px;

@@ -38,3 +38,19 @@ export function editShareArticle(data) {
     data
   })
 }
+
+export function deleteShareArticle(params) {
+  return remote({
+    url: '/platform/blog/article/share/delete',
+    method: 'delete',
+    params
+  })
+}
+
+export function deleteArticle(params) {
+  return remote({
+    url: '/platform/blog/article/delete',
+    method: 'delete',
+    params
+  })
+}

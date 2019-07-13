@@ -15,7 +15,23 @@ export function deleteCategory(params) {
   })
 }
 
+export function deleteShareCategory(params) {
+  return remote({
+    url: '/platform/blog/category/share/delete',
+    method: 'delete',
+    params
+  })
+}
+
 export function editCategory(data) {
+  return remote({
+    url: '/platform/blog/category/update',
+    method: 'put',
+    data
+  })
+}
+
+export function editShareCategory(data) {
   return remote({
     url: '/platform/blog/category/update',
     method: 'put',

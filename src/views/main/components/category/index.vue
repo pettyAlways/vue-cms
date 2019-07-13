@@ -2,7 +2,7 @@
   <el-card class="category">
     <custom-card02 title="参与的分类">
       <template slot="more">
-        <i class="font-size-24 el-icon-circle-plus-outline" @click="add"></i>
+        <i v-if="noAuthShowBtn || power['分类新增']" class="font-size-24 el-icon-circle-plus-outline" @click="add"></i>
       </template>
       <div class="table-container">
         <el-table
@@ -33,8 +33,8 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <el-button v-if="noAuthShowBtn || power['组织新增']" class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
-              <el-button v-if="noAuthShowBtn || power['组织新增']" class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
+              <el-button v-if="noAuthShowBtn || (power['分类修改'] && shareAuth(scope.row, '共享修改'))" class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || (power['分类删除'] && shareAuth(scope.row, '共享删除'))" class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import { deleteCategory, saveCategory, editCategory, searchCategory } from '@/api/category'
+  import { deleteCategory, deleteShareCategory, saveCategory, editCategory, editShareCategory, searchCategory } from '@/api/category'
   import { mapGetters } from 'vuex'
   export default {
     name: 'category',
@@ -78,6 +78,7 @@
         visible: false,
         dialogType: '',
         dialogTitle: { save: '新增分类', edit: '修改分类' },
+        power: [],
         datas: [],
         formData: {
           id: '',
@@ -108,16 +109,24 @@
     computed: {
       ...mapGetters([
         'pageMenus',
-        'sysParam'
+        'sysParam',
+        'currentUser'
       ]),
       noAuthShowBtn() {
         return this.sysParam['no_auth_represent'] === 'represent'
+      },
+      shareAuth() {
+        return (category, auth) => {
+          return this.currentUser.id === category.creator || this.power[auth]
+        }
       }
     },
     watch: {
       pageMenus: {
         handler(newMenus) {
-          this.power = newMenus[this.$route.path]
+          if (newMenus) {
+            this.power = newMenus[this.$route.path]
+          }
         },
         // 不管有没有变化立即执行
         immediate: true,
@@ -130,7 +139,9 @@
         this.$confirm('请确认删除当前数据', '确认删除', {
           callback(action) {
             if (action === 'confirm') {
-              deleteCategory({ categoryId: id }).then(res => {
+              // 判断是否有共享删除权限，有就执行共享删除请求
+              let del = _this.power['共享删除'] ? deleteShareCategory : deleteCategory
+              del({ categoryId: id }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',
@@ -176,7 +187,8 @@
       confirm() {
         this.$refs['categoryForm'].validate((valid) => {
           if (valid) {
-            let operMethod = this.dialogType === 'save' ? saveCategory : editCategory
+            let edit = this.power['共享修改'] ? editShareCategory : editCategory
+            let operMethod = this.dialogType === 'save' ? saveCategory : edit
             operMethod(this.formData).then(res => {
               if (res.flag) {
                 this.$message({
