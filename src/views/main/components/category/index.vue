@@ -33,8 +33,8 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <el-button class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
-              <el-button class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
+              <el-button v-if="noAuthShowBtn || power['组织新增']" class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || power['组织新增']" class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -70,6 +70,7 @@
 
 <script>
   import { deleteCategory, saveCategory, editCategory, searchCategory } from '@/api/category'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'category',
     data() {
@@ -103,6 +104,25 @@
     },
     mounted() {
       this.searchDatas()
+    },
+    computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam'
+      ]),
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
+      }
+    },
+    watch: {
+      pageMenus: {
+        handler(newMenus) {
+          this.power = newMenus[this.$route.path]
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
+      }
     },
     methods: {
       deleteCategoy(id) {

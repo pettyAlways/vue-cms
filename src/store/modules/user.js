@@ -99,8 +99,6 @@ const user = {
           // 缓存当前用户有权限的按钮
           let allMenus = []
           Object.keys(partition).forEach(key => {
-            let temp = partition[key]
-            console.log(temp)
             allMenus = [ ...allMenus, partition[key] ]
           })
           commit(SET_PAGEMENUS, allMenus)
