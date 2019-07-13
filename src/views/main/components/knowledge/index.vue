@@ -154,6 +154,7 @@
 <style lang="scss" scoped>
   .knowledge {
     &__block {
+      min-height: 300px;
       ul {
         display: flex;
         flex-wrap: wrap;
@@ -246,7 +247,7 @@
       }
     }
     &__list {
-
+      min-height: 300px;
     }
   }
 </style>

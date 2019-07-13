@@ -4,39 +4,41 @@
       <template slot="more">
         <i class="font-size-24 el-icon-circle-plus-outline" @click="add"></i>
       </template>
-      <el-table
-        class="categoryTable"
-        :data="datas"
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="categoryName"
-          label="分类名称">
-        </el-table-column>
-        <el-table-column
-          prop="userName"
-          label="创建人">
-        </el-table-column>
-        <el-table-column
-          prop="inUseName"
-          label="启用">
-        </el-table-column>
-        <el-table-column
-          prop="categoryDesc"
-          label="描述"
-          min-width="180"
-          :show-overflow-tooltip="true">
-        </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="100">
-          <template slot-scope="scope">
-            <el-button class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
-            <el-button class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="table-container">
+        <el-table
+          class="categoryTable"
+          :data="datas"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="categoryName"
+            label="分类名称">
+          </el-table-column>
+          <el-table-column
+            prop="userName"
+            label="创建人">
+          </el-table-column>
+          <el-table-column
+            prop="inUseName"
+            label="启用">
+          </el-table-column>
+          <el-table-column
+            prop="categoryDesc"
+            label="描述"
+            min-width="180"
+            :show-overflow-tooltip="true">
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button class="ml10" type="text"  @click="edit(scope.row)">编辑</el-button>
+              <el-button class="ml10 del" type="text" @click="deleteCategoy(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </custom-card02>
     <common-dialog :title="dialogTitle[dialogType]" :visible="visible" :hasButton="true" @cancel="cancel" @confirm="confirm">
       <el-form :rules="rules" ref="categoryForm" :model="formData" label-width="80px">
@@ -204,6 +206,9 @@
   .category {
     .font-size-24 {
       font-size: 24px;
+    }
+    .table-container {
+      min-height: 350px;
     }
   }
 </style>

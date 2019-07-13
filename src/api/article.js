@@ -31,7 +31,7 @@ export function editArticle(data) {
   })
 }
 
-export function editArticle(data) {
+export function editShareArticle(data) {
   return remote({
     url: '/platform/blog/article/share/edit',
     method: 'put',
