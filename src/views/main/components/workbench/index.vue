@@ -85,8 +85,8 @@
     },
     mounted() {
       this.recentArticleList()
-      this.recentKnowledgeList()
-      this.recentPost()
+      // this.recentKnowledgeList()
+      // this.recentPost()
     },
     methods: {
       recentPost() {

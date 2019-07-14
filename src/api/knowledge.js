@@ -8,6 +8,14 @@ export function listKnowledge(params) {
   })
 }
 
+export function knowledgeItem(params) {
+  return remote({
+    url: '/platform/blog/knowledge/item',
+    method: 'get',
+    params
+  })
+}
+
 export function removeParticipant(params) {
   return remote({
     url: '/platform/blog/knowledge/removeParticipant',

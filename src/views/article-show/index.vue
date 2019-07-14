@@ -9,6 +9,7 @@
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
+        <el-button v-if="noAuthShowBtn || power['文章新增']" class="btn" type="primary" size="small" @click="createArticle">新建文档</el-button>
         <el-button v-if="noAuthShowBtn || (power['文章删除'] && shareAuth('文章共享删除'))" class="btn" type="primary" size="small" @click="delArticle">删除</el-button>
         <el-button v-if="noAuthShowBtn || (power['文章修改'] && shareAuth('文章共享修改'))" class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
       </div>
@@ -41,6 +42,7 @@
 
 <script>
   import { getArticle, listArticle, deleteShareArticle, deleteArticle } from '@/api/article'
+  import { knowledgeItem } from '@/api/knowledge'
   import { clientVisiable } from '@/utils/compatibility'
   import { mapGetters } from 'vuex'
   export default {
@@ -48,6 +50,7 @@
     data() {
       return {
         knowledgeId: '',
+        knowledge: {},
         article: '',
         power: [],
         articleId: '',
@@ -73,7 +76,7 @@
       },
       shareAuth() {
         return (auth) => {
-          return this.currentUser.id === this.article.creator || this.power[auth]
+          return this.currentUser.id === this.article.creator || this.knowledge.creator.id === this.currentUser.id || this.power[auth]
         }
       }
     },
@@ -96,8 +99,12 @@
       init() {
         this.knowledgeId = this.$route.query.knowledgeId
         this.articleId = this.$route.query.articleId
+        this.getKnowledge()
         this.getArticle(this.articleId)
         this.listArticle(this.knowledgeId)
+      },
+      createArticle() {
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { knowledgeId: this.knowledgeId } })
       },
       delArticle() {
         let _this = this
@@ -148,6 +155,13 @@
         getArticle({ articleId: articleId }).then(res => {
           if (res.flag) {
             this.article = res.data
+          }
+        })
+      },
+      getKnowledge(knowledgeId) {
+        knowledgeItem({ knowledgeId: knowledgeId }).then(res => {
+          if (res.flag) {
+            this.knowledge = res.data
           }
         })
       }
