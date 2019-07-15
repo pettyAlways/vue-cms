@@ -9,9 +9,9 @@
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
-        <el-button v-if="noAuthShowBtn || power['文章新增']" class="btn" type="primary" size="small" @click="createArticle">新建文档</el-button>
+        <el-button v-if="noAuthShowBtn || detailPower['文章新增']" class="btn" type="primary" size="small" @click="createArticle">新建文档</el-button>
         <el-button v-if="noAuthShowBtn || (power['文章删除'] && shareAuth('文章共享删除'))" class="btn" type="primary" size="small" @click="delArticle">删除</el-button>
-        <el-button v-if="noAuthShowBtn || (power['文章修改'] && shareAuth('文章共享修改'))" class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
+        <el-button v-if="noAuthShowBtn || (power['文章编辑'] && shareAuth('文章共享修改'))" class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
       </div>
     </div>
     <div class="article-show__container">
@@ -53,6 +53,7 @@
         knowledge: {},
         article: '',
         power: [],
+        detailPower: [],
         articleId: '',
         articleList: [],
         visiableHeight: ''
@@ -88,6 +89,8 @@
         handler(newMenus) {
           if (newMenus) {
             this.power = newMenus[this.$route.path]
+            // 需要用到知识库详情中的新增文章的按钮
+            this.detailPower = newMenus['/platform/blog/knowledge/detail']
           }
         },
         // 不管有没有变化立即执行
@@ -99,7 +102,7 @@
       init() {
         this.knowledgeId = this.$route.query.knowledgeId
         this.articleId = this.$route.query.articleId
-        this.getKnowledge()
+        this.getKnowledge(this.knowledgeId)
         this.getArticle(this.articleId)
         this.listArticle(this.knowledgeId)
       },

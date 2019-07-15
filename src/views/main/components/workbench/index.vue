@@ -85,8 +85,8 @@
     },
     mounted() {
       this.recentArticleList()
-      // this.recentKnowledgeList()
-      // this.recentPost()
+      this.recentKnowledgeList()
+      this.recentPost()
     },
     methods: {
       recentPost() {
@@ -103,14 +103,14 @@
         this.$router.push({ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } })
       },
       recentArticleList() {
-        recentArticle().then(res => {
+        recentArticle({ listNum: 6 }).then(res => {
           if (res.flag) {
             this.recentArticle = res.data
           }
         })
       },
       recentKnowledgeList() {
-        recentKnowledge().then(res => {
+        recentKnowledge({ listNum: 3 }).then(res => {
           if (res.flag) {
             this.recentKnowledge = res.data
           }

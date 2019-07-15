@@ -7,16 +7,18 @@ export function recentPost() {
   })
 }
 
-export function recentArticle() {
+export function recentArticle(params) {
   return remote({
     url: '/platform/blog/recent/article/edit',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
-export function recentKnowledge() {
+export function recentKnowledge(params) {
   return remote({
     url: '/platform/blog/recent/knowledge/edit',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
