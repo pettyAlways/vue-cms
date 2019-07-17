@@ -9,7 +9,7 @@
           :data="tableData"
           style="width: 100%">
           <el-table-column
-            prop="kName"
+            prop="kname"
             label="知识库名字">
           </el-table-column>
           <el-table-column
@@ -21,7 +21,7 @@
             label="参与者">
           </el-table-column>
           <el-table-column
-            prop="kDesc"
+            prop="kdesc"
             label="描述">
           </el-table-column>
           <el-table-column
@@ -29,9 +29,12 @@
             label="操作"
             width="200">
             <template slot-scope="scope">
-              <el-button type="text" size="small">删除</el-button>
-              <el-button type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="removeParticipant(scope.row)">移除参与者</el-button>
+              <el-button v-if="noAuthShowBtn || (power['更新知识库'] && shareAuth('共享更新'))"
+                         type="text" size="small" @click="editKnowledge(scope.row)">编辑</el-button>
+              <el-button v-if="noAuthShowBtn || (power['移除参与者'] && shareAuth('共享移除参与者'))"
+                         type="text" size="small" @click="removeParticipant(scope.row)">移除参与者</el-button>
+              <el-button v-if="noAuthShowBtn || (power['删除知识库'] && shareAuth('共享删除知识库', scope.row))"
+                         type="text" size="small" @click="removeKnowledge(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -42,10 +45,10 @@
             <el-card :body-style="{ padding: '0px' }">
               <div class="knowledge__block__item">
                 <div class="item__header">
-                  <img :src="item.kUrl">
+                  <img :src="item.kurl">
                   <div class="item_right">
-                    <span><router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kName}}</router-link></span>
-                    <span>{{item.kDesc}}</span>
+                    <span class="title"><router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kname}}</router-link></span>
+                    <span>{{item.kdesc}}</span>
                   </div>
                 </div>
                 <div class="item__body">
@@ -74,21 +77,20 @@
         @close="handleRemoveParticipant(item)">
         {{item.userName}}
       </el-tag>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="participantVisible = false">关 闭</el-button>
-      </span>
     </el-dialog>
 
   </el-card>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  import { listKnowledge, removeParticipant } from '@/api/knowledge'
+  import { mapActions, mapGetters } from 'vuex'
+  import { listKnowledge, removeKnowledge, removeShareKnowledge, removeParticipant, removeShareParticipant } from '@/api/knowledge'
   export default {
     name: 'knowledge',
     data() {
       return {
+        power: [],
+        showWay: '',
         curKnowledge: '',
         participantList: [],
         participantVisible: false,
@@ -100,14 +102,66 @@
     components: {
       customCard02: () => import('@/components/custom-card-02')
     },
+    computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam',
+        'currentUser'
+      ]),
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
+      },
+      shareAuth() {
+        return (auth, knowledge) => {
+          return this.currentUser.id === knowledge.creator.id || this.power[auth]
+        }
+      }
+    },
+    watch: {
+      pageMenus: {
+        handler(newMenus) {
+          if (newMenus) {
+            this.power = newMenus[this.$route.path]
+          }
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
+      }
+    },
     mounted() {
-      let showWay = this.isList ? 'list' : 'card'
-      this.retrieveList(showWay)
+      this.showWay = this.isList ? 'list' : 'card'
+      this.retrieveList(this.showWay)
     },
     methods: {
       ...mapActions([
         'setCurNav'
       ]),
+      editKnowledge(knowledge) {
+        this.$router.push({ path: '/knowledge/new', query: { knowledgeId: knowledge.id } })
+      },
+      removeKnowledge(knowledge) {
+        let _this = this
+        this.$confirm('请确认删除当前知识库', '确认删除', {
+          callback(action) {
+            if (action === 'confirm') {
+              if (_this.$loadingHelper.startLoading('.article-editor', '正在删除中，请稍后')) {
+                let remove = _this.power['共享删除知识库'] ? removeShareKnowledge : removeKnowledge
+                remove({ knowledgeId: knowledge.id }).then(res => {
+                  _this.$loadingHelper.stopLoading()
+                  if (res.flag) {
+                    _this.$message({
+                      type: 'success',
+                      message: '删除知识库成功'
+                    })
+                    _this.retrieveList(_this.showWay)
+                  }
+                })
+              }
+            }
+          }
+        })
+      },
       goArticle(articleId, knowledgeId) {
         this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
       },
@@ -116,12 +170,15 @@
         this.$confirm('请确认移除当前参与者', '确认删除', {
           callback(action) {
             if (action === 'confirm') {
-              removeParticipant({ participantId: item.id, knowledgeId: this.curKnowledge }).then(res => {
+              let remove = _this.power['共享移除参与者'] ? removeShareParticipant : removeParticipant
+              remove({ participantId: item.id, knowledgeId: _this.curKnowledge }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',
                     message: '移除成功'
                   })
+                  _this.participantList = _this.participantList.filter(participant => participant.id !== item.id)
+                  _this.retrieveList('list')
                 }
               })
             }
@@ -130,6 +187,7 @@
       },
       removeParticipant(item) {
         this.curKnowledge = item.id
+        this.participantList = item.kparticipant
         this.participantVisible = true
       },
       switchList() {
@@ -142,7 +200,7 @@
           if (res.flag) {
             this.tableData = res.data
             this.tableData.map(item => {
-              item.participantName = item.kParticipant.map(temp => temp.userName).join(',')
+              item.participantName = item.kparticipant.map(temp => temp.userName).join(',')
             })
           }
         })
@@ -186,11 +244,18 @@
             flex-direction: column;
             margin-left: 15px;
             width: 230px;
+            height: 45px;
             span {
               display: block;
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
+            }
+            .title {
+              font-weight: 700;
+              font-size: 16px;
+              color: #262626;
+              margin-bottom: 5px;
             }
             span:nth-of-type(1) {
               font-size: 13px;
@@ -204,7 +269,7 @@
           }
         }
         .item__body {
-          margin-top: 15px;
+          margin-top: 10px;
           ul {
             display: flex;
             flex-direction: column;
@@ -216,9 +281,11 @@
               justify-content: space-between;
               line-height: 21px;
               color: #8c8c8c;
+              margin-bottom: 3px;
               &:hover {
                 background-color: gainsboro;
                 cursor: pointer;
+                color: #595959;
               }
               &:before {
                 content: "";

@@ -10,8 +10,8 @@
       </site-nav>
       <div class="btn-panel">
         <el-button v-if="noAuthShowBtn || detailPower['文章新增']" class="btn" type="primary" size="small" @click="createArticle">新建文档</el-button>
-        <el-button v-if="noAuthShowBtn || (power['文章删除'] && shareAuth('文章共享删除'))" class="btn" type="primary" size="small" @click="delArticle">删除</el-button>
         <el-button v-if="noAuthShowBtn || (power['文章编辑'] && shareAuth('文章共享修改'))" class="btn" type="primary" size="small" @click="editArticle">编辑</el-button>
+        <el-button v-if="noAuthShowBtn || (power['文章删除'] && shareAuth('文章共享删除'))" class="btn" type="primary" size="small" @click="delArticle">删除</el-button>
       </div>
     </div>
     <div class="article-show__container">
@@ -29,6 +29,10 @@
             <li>{{article.createName}}发布于 {{article.knowledgeName}}</li>
             <li>发布时间：{{article.postTime}}</li>
             <li>所属分类：{{article.categoryName}}</li>
+            <li v-if="article.participantList && article.participantList.length">
+              协作人：
+              <a v-for="(item, index) in article.participantList" :key="index">{{item.userName}}</a>
+            </li>
           </ul>
         </el-card>
         <el-card>
@@ -77,7 +81,7 @@
       },
       shareAuth() {
         return (auth) => {
-          return this.currentUser.id === this.article.creator || this.knowledge.creator.id === this.currentUser.id || this.power[auth]
+          return this.currentUser.id === this.article.creatorId || this.knowledge.creator.id === this.currentUser.id || this.power[auth]
         }
       }
     },

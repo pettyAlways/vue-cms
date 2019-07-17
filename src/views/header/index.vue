@@ -18,10 +18,13 @@
       <div class="header-panel__btn">
         <ul>
           <li>
-            <router-link :to="{ path: '/knowledge/new' }"><i class="el-icon-circle-plus-outline"></i></router-link>
+            <router-link :to="{ path: '/platform/blog/knowledge/new' }"><i class="el-icon-circle-plus-outline"></i></router-link>
           </li>
           <li>
-            <a><i class="el-icon-message"></i></a>
+            <el-badge :value="messageNum" class="item" v-if="messageNum">
+              <a><i class="el-icon-message"></i></a>
+            </el-badge>
+            <a v-else><i class="el-icon-message"></i></a>
           </li>
           <li class="author">
             <img :src="require('./assets/author01.jpg')"/>
@@ -33,7 +36,8 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
+  import { messageCount } from '@/api/login'
   export default {
     name: 'headerNav',
     data() {
@@ -43,11 +47,13 @@
     },
     mounted() {
       window.addEventListener('scroll', this.navHandler)
+      this.messageCount()
     },
     computed: {
       ...mapGetters([
         'permissions',
-        'curNav'
+        'curNav',
+        'messageNum'
       ]),
       navResource() {
         let navResource
@@ -61,6 +67,16 @@
       ...mapActions([
         'switchMenu'
       ]),
+      ...mapMutations({
+        setMessage: 'SET_MESSAGE'
+      }),
+      messageCount() {
+        messageCount().then(res => {
+          if (res.flag) {
+            this.setMessage(res.data)
+          }
+        })
+      },
       navHandler() {
         let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (scrollTop > 60) {

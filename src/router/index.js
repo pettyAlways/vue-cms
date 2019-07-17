@@ -23,13 +23,6 @@ export const constantRouterMap = [
     path: '/login',
     name: '登录',
     component: Login
-  },
-  {
-    path: '/index',
-    component: MainNav,
-    children: [
-      { path: '', component: () => import('@/views/main/components/workbench') }
-    ]
   }
 
 ]
@@ -48,16 +41,19 @@ export const asyncRouterMap = [
     path: '/platform/blog',
     component: MainNav,
     children: [
-      { path: 'workbench', component: () => import('@/views/main/components/workbench') },
-      { path: 'category', component: () => import('@/views/main/components/category') },
-      { path: 'knowledge', component: () => import('@/views/main/components/knowledge') }
+      {
+        path: 'center',
+        component: () => import('@/views/center-panel'),
+        children: [
+          { path: 'workbench', component: () => import('@/views/main/components/workbench') },
+          { path: 'category', component: () => import('@/views/main/components/category') },
+          { path: 'knowledge', component: () => import('@/views/main/components/knowledge') }
+        ]
+      },
+      { path: 'knowledge/detail', component: () => import('@/views/knowledge-detail') },
+      { path: 'knowledge/article/editor', component: () => import('@/views/article-editor') },
+      { path: 'knowledge/article/show', component: () => import('@/views/article-show') },
+      { path: 'knowledge/new', component: () => import('@/views/new-knowledge') }
     ]
-  },
-  { path: '/platform/blog/knowledge/detail', component: () => import('@/views/knowledge-detail') },
-  { path: '/platform/blog/knowledge/article/editor', component: () => import('@/views/article-editor') },
-  { path: '/platform/blog/knowledge/article/show', component: () => import('@/views/article-show') },
-  {
-    path: '/knowledge/new',
-    component: () => import('@/views/new-knowledge')
   }
 ]

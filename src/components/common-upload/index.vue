@@ -37,7 +37,22 @@
   import { fileUpload } from '@/api/upload'
   export default {
     name: 'commonUpload',
-
+    props: {
+      // 特殊配置
+      cropperOption: {
+        type: Object,
+        default: () => {
+          return null
+        }
+      },
+      // 图片展示高度
+      imageHeight: {
+        type: String,
+        default: '100px'
+      },
+      type: String,
+      iurl: String
+    },
     data () {
       return {
         remoteUrl: '', // 图片在服务器的访问地址
@@ -58,21 +73,11 @@
         isShowCropper: false // 是否显示截图框
       }
     },
-
-    props: {
-      // 特殊配置
-      cropperOption: {
-        type: Object,
-        default: () => {
-          return null
-        }
-      },
-      // 图片展示高度
-      imageHeight: {
-        type: String,
-        default: '100px'
-      },
-      type: String
+    watch: {
+      iurl (url) {
+        this.imageUrl = url
+        this.remoteUrl = url
+      }
     },
     methods: {
       getFile (file) {

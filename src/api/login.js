@@ -21,3 +21,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function messageCount() {
+  return remote({
+    url: '/platform/blog/user/message',
+    method: 'get'
+  })
+}

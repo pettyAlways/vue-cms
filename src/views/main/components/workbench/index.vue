@@ -10,7 +10,7 @@
             <div class="article-body">
               <div class="article-body--top">
                 <a @click="goArticle(item.articleId, item.knowledgeId)">{{item.articleTitle}}</a>
-                <i class="el-icon-edit-outline"></i>
+                <i @click="editArticle(item.articleId, item.knowledgeId)" class="el-icon-edit-outline article-edit"></i>
               </div>
               <div class="article-body--center">
                 <ul>
@@ -41,7 +41,7 @@
             <div class="article-body">
               <div class="article-body--top">
                 <a @click="goKnowledge(item.knowledgeId)">{{item.knowledgeName}}</a>
-                <i class="el-icon-edit-outline"></i>
+                <i @click="goKnowledge(item.knowledgeId)" class="el-icon-reading"></i>
               </div>
               <div class="article-body--center">
                 <a>{{item.categoryName}}</a>
@@ -54,14 +54,16 @@
     <div class="workbench__post">
       <custom-card02 title="最近动态">
         <div class="post_body">
-          <el-tag type="warning" v-for="(item, index) in operRecord" :key="index" style="margin-right: 10px; margin-bottom: 10px;">
-            {{index+1}}.<a>{{item.operUserName}}</a>{{item.operTime}}
-            <span v-if="item.operType === '审核' ">{{item.operType}}了{{item.objType}}[<a>{{item.objName}}</a>]的修改</span>
-            <span v-else-if="item.operType === '申请' ">{{item.operType}}了{{item.objType}}[<a>{{item.objName}}</a>]的加入</span>
-            <span v-else-if="item.operType === '移除' ">{{item.operType}}了<a>{{item.targetName}}</a>的参与{{item.objType}}[<a>{{item.objName}}</a>]</span>
-            <span v-else-if="item.objType === '文章' ">在<a>{{item.targetName}}</a>下{{item.operType}}了{{item.objType}}[<a>{{item.objName}}</a>]</span>
-            <span v-else-if="item.objType in ['分类','知识库'] && item.operType === '修改' ">将{{item.objType}}{{item.reserve}}{{item.operType}}成了[<a>{{item.objName}}</a>]</span>
-            <span v-else>{{item.operType}}了{{item.objType}}[<a>{{item.objName}}</a>]</span>
+          <el-tag type="warning" v-for="(item, index) in operRecord" :key="index" style="margin-right: 10px; margin-bottom: 5px;">
+            {{index+1}}.<i>{{item.operUserName}}</i>
+            <span v-if="item.operType === '审核'">{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]的修改</span>
+            <span v-else-if="item.operType === '申请' ">{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]的加入</span>
+            <span v-else-if="item.operType === '移除' ">{{item.operType}}了<i>{{item.targetName}}</i>的参与{{item.objType}}[<i>{{item.objName}}</i>]</span>
+            <span v-else-if="item.objType === '文章' && item.operType !== '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}《<i>{{item.objName}}</i>》</span>
+            <span v-else-if="item.objType === '文章' && item.operType === '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}<i>《{{item.reserve}}》</i></span>
+            <span v-else-if="item.objType in ['分类','知识库'] && item.operType === '修改' ">将{{item.objType}}{{item.reserve}}{{item.operType}}成了[<i>{{item.objName}}</i>]</span>
+            <span v-else-if="item.operType === '删除'">{{item.operType}}了{{item.objType}}[<i>{{item.reserve}}</i>]</span>
+            <span v-else>{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]</span>
           </el-tag>
         </div>
       </custom-card02>
@@ -95,6 +97,9 @@
             this.operRecord = res.data
           }
         })
+      },
+      editArticle(articleId, knowledgeId) {
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: articleId, knowledgeId: knowledgeId } })
       },
       goArticle(articleId, knowledgeId) {
         this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
@@ -170,6 +175,9 @@
                 width: 15px;
                 font-size: 14px;
               }
+              .article-edit {
+                cursor: pointer;
+              }
             }
             &--center {
               display: flex;
@@ -211,8 +219,8 @@
     }
     &__post {
       .post_body {
-        min-height: 90px;
-        a {
+        min-height: 80px;
+        i {
           color: #7e7eee
         }
       }

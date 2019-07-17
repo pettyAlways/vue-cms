@@ -13,7 +13,7 @@
         <slot name="more"><el-image :src="require('../../assets/more2.jpg')" style="height: 40px"></el-image></slot>
       </div>
     </div>
-    <div class="custom-panel__body">
+    <div class="custom-panel__body" :style="{'margin-top': '10px'}">
       <slot></slot>
     </div>
   </div>
@@ -57,7 +57,6 @@
       }
     }
     &__body {
-      padding: 10px 15px;
       overflow: hidden;
     }
 

@@ -7,7 +7,7 @@
     <div class="article-editor__body" :style="{ height: visiableHeight + 'px' }">
       <my-tinymce ref="myTinymce" style="height: 100%"></my-tinymce>
     </div>
-    <el-button type="primary" style="width: 100%" @click="postArticle">发布</el-button>
+    <el-button type="primary" style="width: 100%" @click="postArticle" :disabled="disable">发布</el-button>
   </div>
 
 </template>
@@ -20,6 +20,7 @@
     name: 'articleEditor',
     data() {
       return {
+        disable: false,
         visiableHeight: '',
         knowledgeId: '',
         articleId: '',
@@ -74,19 +75,26 @@
         params.articleTitle = this.title
         let edit = this.power['文章共享修改'] ? editShareArticle : editArticle
         let method = this.articleId ? edit : addArticle
-        method(params).then(res => {
-          if (res.flag) {
-            let articleId = res.articleId
-            let knowledgeId = res.knowledgeId
-            this.$message({
-              message: '文章发布成功',
-              type: 'success'
-            })
-            setTimeout(() => {
-              this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
-            }, 3 * 1000)
-          }
-        })
+        if (this.$loadingHelper.startLoading('.article-editor', '正在发布中，请稍后')) {
+          this.disable = true
+          method(params).then(res => {
+            this.$loadingHelper.stopLoading()
+            if (res.flag) {
+              let articleId = res.articleId
+              let knowledgeId = res.knowledgeId
+              this.$message({
+                message: '文章发布成功',
+                type: 'success'
+              })
+              setTimeout(() => {
+                this.disable = true
+                this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+              }, 3 * 1000)
+            }
+          }).catch(() => {
+            this.disable = false
+          })
+        }
       }
     }
   }

@@ -100,7 +100,7 @@
                 saveToLocal('username', '')
                 saveToLocal('password', '')
               }
-              this.$router.push({ path: '/index' })
+              this.$router.push({ path: '/platform/blog' })
               this.loading = false
             }, () => {
               this.loading = false

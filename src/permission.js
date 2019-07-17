@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
   if (getToken()) {
     // 有token访问login页面，就跳到首页
     if (to.path === '/login') {
-      next('/index')
+      next('/platform/blog')
       NProgress.done()
     } else {
       // 刷新操作token存在但是vuex内容被清空执行下面代码

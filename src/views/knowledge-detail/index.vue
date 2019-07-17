@@ -32,9 +32,9 @@
         <ul>
           <li v-for="(item, index) in tableData" :key="index">
             <span class="name">
-              <router-link :to="{ path: '/platform/blog/knowledge/article/show', query: { articleId: item.id, knowledgeId: knowledgeId } }">
+              <a @click="goArticle(item.id, knowledgeId)">
                 {{item.articleTitle}}
-              </router-link>
+              </a>
             </span>
             <span class="line"></span>
             <span class="author">{{item.createName}}</span>
@@ -46,7 +46,7 @@
       <div class="manager-header">
         <div class="info">
           <h2><span>管理</span></h2>
-          <span class="extra">共10个文档</span>
+          <span class="extra">共{{tableData.length}}个文档</span>
         </div>
         <div class="search">
           <el-input
@@ -69,14 +69,11 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="articleName"
             label="文章标题"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="status"
-            label="状态"
-            width="120">
+            min-width="200">
+            <template slot-scope="scope">
+              <a @click="goArticle(scope.row.id, knowledgeId)">{{scope.row.articleTitle}}</a>
+            </template>
           </el-table-column>
           <el-table-column
             prop="createName"
@@ -91,44 +88,139 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="120">
+            min-width="100">
             <template slot-scope="scope">
-              <i class="el-icon-edit-outline"></i>
-              <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                  <i class="more el-icon-more"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>编辑</el-dropdown-item>
-                  <el-dropdown-item>删除</el-dropdown-item>
-                  <el-dropdown-item>复制</el-dropdown-item>
-                  <el-dropdown-item>审核</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-button v-if="noAuthShowBtn || (otherPower['文章编辑'] && shareAuth('文章共享修改', scope.row))"
+                         type="text" @click="editArticle(scope.row)"><i class="el-icon-edit-outline"></i>编辑</el-button>
+              <el-button v-if="noAuthShowBtn || (otherPower['文章删除'] && shareAuth('文章共享删除', scope.row))"
+                         type="text" @click="delArticle(scope.row)"><i class="el-icon-delete"></i>删除</el-button>
+              <el-button type="text" @click="copyArticle(scope.row)"><i class="el-icon-share"></i>复制</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
+    <el-dialog
+      title="复制到其它知识库"
+      :visible.sync="copyVisible"
+      width="30%">
+      <p>可复制到您所参与编辑的知识库</p>
+      <el-select v-model="copyKnowledgeId" placeholder="请选择">
+        <el-option
+          v-for="(item, index) in participantKnowledge"
+          :key="index"
+          :label="item.kname"
+          :value="item.id">
+        </el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmCopy()">确 定</el-button>
+        <el-button @click="copyVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { listArticle } from '@/api/article'
+  import { mapGetters } from 'vuex'
+  import { listArticle, deleteShareArticle, deleteArticle, copyArticle } from '@/api/article'
+  import { retrieveKnowledge } from '@/api/knowledge'
   export default {
     name: 'knowledgeDetail',
     data() {
       return {
+        copyVisible: false,
         knowledgeId: '',
         showCover: true,
-        tableData: []
+        tableData: [],
+        power: [],
+        otherPower: [],
+        knowledge: '',
+        participantKnowledge: [],
+        copyKnowledgeId: '',
+        copyArticleId: ''
       }
     },
     mounted() {
       this.knowledgeId = this.$route.query.knowledgeId
       this.listArticle(this.knowledgeId)
     },
+    computed: {
+      ...mapGetters([
+        'pageMenus',
+        'sysParam',
+        'currentUser'
+      ]),
+      noAuthShowBtn() {
+        return this.sysParam['no_auth_represent'] === 'represent'
+      },
+      shareAuth() {
+        return (auth, article) => {
+          return this.currentUser.id === article.creatorId || article.knowledgeCreator === this.currentUser.id || this.otherPower[auth]
+        }
+      }
+    },
+    watch: {
+      pageMenus: {
+        handler(newMenus) {
+          if (newMenus) {
+            this.power = newMenus[this.$route.path]
+            // 需要用到文章显示页面的按钮权限
+            this.otherPower = newMenus['/platform/blog/knowledge/article/show']
+          }
+        },
+        // 不管有没有变化立即执行
+        immediate: true,
+        deep: true
+      }
+    },
     methods: {
+      goArticle(articleId, knowledgeId) {
+        this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+      },
+      confirmCopy() {
+        copyArticle({ knowledgeId: this.copyKnowledgeId, articleId: this.copyArticleId }).then(res => {
+          if (res.flag) {
+            this.$message({
+              type: 'success',
+              message: '复制文章成功'
+            })
+            this.copyVisible = false
+          }
+        })
+      },
+      copyArticle(article) {
+        retrieveKnowledge().then(res => {
+          if (res.flag) {
+            this.participantKnowledge = res.data
+          }
+        })
+        this.copyArticleId = article.id
+        this.copyVisible = true
+      },
+      editArticle(article) {
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: article.id, knowledgeId: this.knowledgeId } })
+      },
+      delArticle(article) {
+        let _this = this
+        this.$confirm('请确认删除当前文章', '确认删除', {
+          callback(action) {
+            if (action === 'confirm') {
+              // 判断是否有共享删除权限，有就执行共享删除请求
+              let del = _this.otherPower['文章共享删除'] ? deleteShareArticle : deleteArticle
+              del({ articleId: article.id }).then(res => {
+                if (res.flag) {
+                  _this.$message({
+                    type: 'success',
+                    message: '删除文章成功'
+                  })
+                }
+                _this.listArticle(_this.knowledgeId)
+              })
+            }
+          }
+        })
+      },
       createArticle() {
         this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { knowledgeId: this.knowledgeId } })
       },

@@ -54,3 +54,11 @@ export function deleteArticle(params) {
     params
   })
 }
+
+export function copyArticle(params) {
+  return remote({
+    url: '/platform/blog/article/copy',
+    method: 'post',
+    params
+  })
+}

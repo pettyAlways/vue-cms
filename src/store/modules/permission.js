@@ -9,12 +9,14 @@ function filterAsyncRouter(asyncRouterMap, roles, defaultPage, parentPath) {
       route.children = filterAsyncRouter(route.children, roles, defaultPage, resolve(route.path, parentPath))
       if (route.children && route.children.length) {
         // 授权的页面是否存在默认页面
-        let result = route.children.filter(item => resolve(item.path, route.path) === defaultPage)
+        let result = route.children.filter(item => resolve(item.path, resolve(route.path, parentPath)) === defaultPage)
         // 新增默认路由
         if (result && result.length) {
-          route.children.push({ path: '', component: result[0].component })
+          let dRoute = getDefaultRoute(result[0])
+          route.children.push(dRoute)
         } else {
-          route.children.push({ path: '', component: route.children[0].component })
+          let dRoute = getDefaultRoute(route.children[0])
+          route.children.push(dRoute)
         }
         return true
       }
@@ -27,7 +29,16 @@ function filterAsyncRouter(asyncRouterMap, roles, defaultPage, parentPath) {
   })
   return accessedRouters
 }
-
+function getDefaultRoute(route) {
+  let dRoute = { path: '', component: route.component }
+  if (!_.isEmpty(route.children)) {
+    let temp = route.children.filter(item => item.path === '')
+    if (temp) {
+      dRoute['children'] = temp
+    }
+  }
+  return dRoute
+}
 // 如果子路由路径开头带有/斜杆则直接返回（参考vue-router根路径规则），否则需要组装父路由路径
 function resolve(path, parentPath) {
   if (/^\//.exec(path)) {
