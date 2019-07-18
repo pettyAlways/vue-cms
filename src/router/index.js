@@ -53,7 +53,10 @@ export const asyncRouterMap = [
       { path: 'knowledge/detail', component: () => import('@/views/knowledge-detail') },
       { path: 'knowledge/article/editor', component: () => import('@/views/article-editor') },
       { path: 'knowledge/article/show', component: () => import('@/views/article-show') },
-      { path: 'knowledge/new', component: () => import('@/views/new-knowledge') }
+      { path: 'knowledge/new', component: () => import('@/views/new-knowledge') },
+      { path: 'message', component: () => import('@/views/message') },
+      { path: 'audit', component: () => import('@/views/audit') }
+
     ]
   }
 ]

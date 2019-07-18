@@ -28,3 +28,10 @@ export function messageCount() {
     method: 'get'
   })
 }
+
+export function retrieveMessages() {
+  return remote({
+    url: '/platform/blog/user/messages',
+    method: 'get'
+  })
+}
