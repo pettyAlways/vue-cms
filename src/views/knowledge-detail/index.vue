@@ -3,8 +3,8 @@
     <div class="top-panel">
       <site-nav>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail' }">vue文档</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/center/knowledge' }">知识库</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{ knowledge.kname }}</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
@@ -15,15 +15,16 @@
     <div class="knowledge-detail__container" v-if="showCover">
       <div class="knowledge-detail__header">
         <h1 class="cover-title">
-          <span>Vue文档</span>
+          <span>{{ knowledge.kname }}</span>
         </h1>
         <div class="cover-descr">
-          <span>vue开发技能</span>
+          <span>{{ knowledge.kdesc }}</span>
         </div>
         <div class="cover-author">
           <ul>
-            <li>
-              <img :src="require('./assets/author01.jpg')">
+            <li>{{knowledge.creator.userName}}</li>
+            <li v-for="(item, index) in knowledge.kparticipant" :key="index">
+              {{item.userName}}
             </li>
           </ul>
         </div>
@@ -124,7 +125,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { listArticle, deleteShareArticle, deleteArticle, copyArticle } from '@/api/article'
-  import { retrieveKnowledge } from '@/api/knowledge'
+  import { retrieveKnowledge, knowledgeItem } from '@/api/knowledge'
   export default {
     name: 'knowledgeDetail',
     data() {
@@ -143,6 +144,7 @@
     },
     mounted() {
       this.knowledgeId = this.$route.query.knowledgeId
+      this.getKnowledge()
       this.listArticle(this.knowledgeId)
     },
     computed: {
@@ -175,6 +177,13 @@
       }
     },
     methods: {
+      getKnowledge() {
+        knowledgeItem({ knowledgeId: this.knowledgeId }).then(res => {
+          if (res.flag) {
+            this.knowledge = res.data
+          }
+        })
+      },
       goArticle(articleId, knowledgeId) {
         this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
       },
@@ -332,6 +341,7 @@
     }
     &__body {
       width: 700px;
+      margin-top: 15px;
       ul {
         list-style: none;
         padding: 0px;

@@ -61,7 +61,7 @@
             <span v-else-if="item.operType === '移除' ">{{item.operType}}了<i>{{item.targetName}}</i>的参与{{item.objType}}[<i>{{item.objName}}</i>]</span>
             <span v-else-if="item.objType === '文章' && item.operType !== '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}《<i>{{item.objName}}</i>》</span>
             <span v-else-if="item.objType === '文章' && item.operType === '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}<i>《{{item.reserve}}》</i></span>
-            <span v-else-if="item.objType in ['分类','知识库'] && item.operType === '修改' ">将{{item.objType}}{{item.reserve}}{{item.operType}}成了[<i>{{item.objName}}</i>]</span>
+            <span v-else-if="['分类','知识库'].includes(item.objType) && item.operType === '修改' ">将{{item.objType}}{{item.reserve}}{{item.operType}}成了[<i>{{item.objName}}</i>]</span>
             <span v-else-if="item.operType === '删除'">{{item.operType}}了{{item.objType}}[<i>{{item.reserve}}</i>]</span>
             <span v-else>{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]</span>
           </el-tag>

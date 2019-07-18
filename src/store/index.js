@@ -5,6 +5,7 @@ import menuswitch from './modules/menuswitch'
 import tabsview from './modules/tabsview'
 import language from './modules/language'
 import permission from './modules/permission'
+import message from './modules/message'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     menuswitch,
     tabsview,
     language,
-    permission
+    permission,
+    message
   }
 })

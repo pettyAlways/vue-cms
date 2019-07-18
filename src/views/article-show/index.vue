@@ -3,9 +3,9 @@
     <div class="top-panel">
       <site-nav>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">vue文档</el-breadcrumb-item>
-          <el-breadcrumb-item>买酒官网搭建</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/center/knowledge' }">知识库</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{knowledge.kname}}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{article.articleTitle}}</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">

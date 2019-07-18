@@ -5,7 +5,6 @@ const SET_USER = 'SET_USER'
 const SET_PAGEMENUS = 'SET_PAGEMENUS'
 const SET_PERMISSIONS = 'SET_PERMISSIONS'
 const SAVE_SVG_ICONS = 'SAVE_SVG_ICONS'
-const SET_MESSAGE = 'SET_MESSAGE'
 
 // 将该用户有权限的按钮放入列表并标记为true,方便后面页面控制按钮的隐藏和显示
 function plainPageMenus(permissions) {
@@ -45,8 +44,7 @@ const user = {
     permissions: '',
     pageMenus: {},
     moduleList: [],
-    svgIconList: [],
-    messageNum: 0
+    svgIconList: []
   },
   mutations: {
     [SET_TOKEN](state, token) {
@@ -66,9 +64,6 @@ const user = {
     },
     [SAVE_SVG_ICONS](state, svgList) {
       state.svgIconList = svgList
-    },
-    [SET_MESSAGE](state, messageNum) {
-      state.messageNum = messageNum
     }
   },
   actions: {
@@ -136,8 +131,7 @@ const user = {
     pageMenus: state => state.pageMenus,
     moduleList: state => state.moduleList,
     svgIconList: state => state.svgIconList,
-    currentUser: state => state.currentUser,
-    messageNum: state => state.messageNum
+    currentUser: state => state.currentUser
   }
 }
 

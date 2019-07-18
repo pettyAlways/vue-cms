@@ -1,49 +1,49 @@
 <template>
   <el-card class="message-panel">
     <div slot="header" class="message-header">
-      <div class="message-header__content"><span class="title">未读消息</span>
-        <span class="tip">您有{{unReadMessages.length}}条消息未读</span></div>
-      <el-button style="font-size: 14px;" type="text" @click="allRead" :disabled="!unReadMessages.length">全部可读</el-button>
+      <div class="message-header__content"><span class="title">已读消息</span>
+        <span class="tip">您有{{readMessages.length}}条消息已读</span></div>
+      <el-button style="font-size: 14px;" type="text" @click="deleteAll" :disabled="!readMessages.length">全部删除</el-button>
     </div>
-    <div v-for="(item, index) in unReadMessages" :key="index" class="message-body">
+    <div v-for="(item, index) in readMessages" :key="index" class="message-body">
         <div v-if="item.mtype === '1'">
-          <p><a @click="confirmRead(item.id, { path: '/platform/blog/knowledge/article/show', query: { knowledgeId: item.knowledgeId, articleId: item. articleId } })">
+          <p><a @click="confirmRead({ path: '/platform/blog/knowledge/article/show', query: { knowledgeId: item.knowledgeId, articleId: item. articleId } })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '2'">
-          <p><a @click="confirmRead(item.id, { path: '/platform/blog/knowledge/detail', query: {knowledgeId: item.knowledgeId} })">
+          <p><a @click="confirmRead({ path: '/platform/blog/knowledge/detail', query: {knowledgeId: item.knowledgeId} })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="['3', '4'].includes(item.mtype)">
-          <p><a @click="confirmRead(item.id, { path: '/platform/blog/center/knowledge' })">
+          <p><a @click="confirmRead({ path: '/platform/blog/center/knowledge' })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="[5, 6].includes(item.mtype)">
-          <p><a @click="confirmRead(item.id, { path: '/platform/blog/center/category' })" >
+          <p><a @click="confirmRead({ path: '/platform/blog/center/category' })" >
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '7'">
-          <p><a @click="confirmRead(item.id, { path: '' })">
+          <p><a @click="confirmRead({ path: '' })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '8'">
-          <p><a @click="confirmRead(item.id, { path: '' })">
+          <p><a @click="confirmRead({ path: '' })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '9'">
-          <p><a @click="confirmRead(item.id, { path: '/platform/blog/center/knowledge' })">
+          <p><a @click="confirmRead({ path: '/platform/blog/center/knowledge' })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
@@ -54,13 +54,13 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  import { retrieveMessages } from '@/api/message'
+  import { mapGetters, mapMutations } from 'vuex'
+  import { retrieveMessages, deleteAllReadMessage } from '@/api/message'
   export default {
-    name: 'unRead',
+    name: 'read',
     data() {
       return {
-        unReadMessages: []
+        readMessages: []
       }
     },
     computed: {
@@ -70,22 +70,21 @@
     },
     watch: {
       messageNum () {
-        this.retrieveMessages({ isRead: 'N' })
+        this.retrieveMessages({ isRead: 'Y' })
       }
     },
     mounted () {
-      this.retrieveMessages({ isRead: 'N' })
+      this.retrieveMessages({ isRead: 'Y' })
     },
     methods: {
-      ...mapActions([
-        'confirmMessageRead',
-        'allMessageRead'
-      ]),
+      ...mapMutations({
+        setMessage: 'SET_MESSAGE'
+      }),
       retrieveMessages(params) {
         retrieveMessages(params).then(res => {
           if (res.flag) {
-            this.unReadMessages = res.unReadMessages
-            this.unReadMessages.forEach(item => {
+            this.readMessages = res.readMessages
+            this.readMessages.forEach(item => {
               let reserve = JSON.parse(item.reserve)
               for (let key in reserve) {
                 this.$set(item, key, reserve[key])
@@ -94,12 +93,15 @@
           }
         })
       },
-      confirmRead(messageId, route) {
+      confirmRead(route) {
         this.$router.push(route)
-        this.confirmMessageRead({ id: messageId })
       },
-      allRead() {
-        this.allMessageRead()
+      deleteAll() {
+        deleteAllReadMessage().then(res => {
+          if (res.flag) {
+            this.retrieveMessages({ isRead: 'Y' })
+          }
+        })
       }
     }
   }

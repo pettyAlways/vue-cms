@@ -22,9 +22,9 @@
           </li>
           <li>
             <el-badge :value="messageNum" class="item" v-if="messageNum">
-              <a><i class="el-icon-message"></i></a>
+              <router-link :to="{ path: '/platform/blog/message' }"><i class="el-icon-message"></i></router-link>
             </el-badge>
-            <a v-else><i class="el-icon-message"></i></a>
+            <router-link :to="{ path: '/platform/blog/message' }" v-else><i class="el-icon-message"></i></router-link>
           </li>
           <li class="author">
             <img :src="require('./assets/author01.jpg')"/>
@@ -37,7 +37,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
-  import { messageCount } from '@/api/login'
+  import { messageCount } from '@/api/message'
   export default {
     name: 'headerNav',
     data() {

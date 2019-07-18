@@ -29,9 +29,25 @@ export function messageCount() {
   })
 }
 
-export function retrieveMessages() {
+export function retrieveMessages(params) {
   return remote({
     url: '/platform/blog/user/messages',
-    method: 'get'
+    method: 'get',
+    params
+  })
+}
+
+export function comfirmRead(params) {
+  return remote({
+    url: '/platform/blog/user/confirm/read',
+    method: 'post',
+    params
+  })
+}
+
+export function allRead() {
+  return remote({
+    url: '/platform/blog/user/confirm/all',
+    method: 'post'
   })
 }
