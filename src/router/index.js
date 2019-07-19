@@ -83,11 +83,3 @@ export const constantRouterMap = [
 export default new Router({
   routes: constantRouterMap
 })
-
-/**
- * 注意点
- * 1、需要配置tagName,它是tab的显示名称
- * 2、路由中的name必须要和vue页面export default对象的name一致才能页面缓存生效
- * 3、子组件的路由路径需要和资源配置的路径相同才能动态加入路由中
- */
-export const asyncRouterMap = []

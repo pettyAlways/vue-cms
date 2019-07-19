@@ -13,7 +13,7 @@
 
 <script>
   import { listAll } from '../../api/role'
-  import { acquireRoles } from '../../api/user'
+  import { acquireRoles } from '../../api/knowledge'
   export default {
     name: 'my-transfer',
     props: {

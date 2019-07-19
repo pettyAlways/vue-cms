@@ -4,23 +4,23 @@
       <custom-card01 title="推荐知识库" note="RECOMMEND">
         <template>
           <el-carousel indicator-position="none" arrow="never">
-            <el-carousel-item v-for="item in 4" :key="item" indicator-position="none" arrow="never">
+            <el-carousel-item v-for="item in recommendKnowledge" :key="item" indicator-position="none" arrow="never">
               <div class="knowledge__recommend__item">
                 <div class="knowledge__recommend__item__header">
                   <div class="knowledge__recommend__item__header--left">
-                    <el-image :src="require('../../asserts/knowledge01.jpg')" fit="cover" style="height: 130px; height: 130px"></el-image>
+                    <el-image :src="item.knowledgeCover" fit="cover" style="height: 130px; height: 130px"></el-image>
                   </div>
                   <div class="knowledge__recommend__item__header--right">
-                    <div class="title"><router-link :to="{path: '/knowledge/detail'}">架构互联网应用</router-link></div>
-                    <span class="content">互联网应用避免不免面临大量用户涌入导致应用服务器的资源瓶颈，如何做到应用的高可用易扩展和安全就是考验架构师的能力水平...</span>
+                    <div class="title"><router-link :to="{path: '/knowledge/detail'}">{{item.knowledgeName}}</router-link></div>
+                    <span class="content">{{item.knowledgeDesc}}</span>
                     <a>[详情]</a>
                   </div>
                 </div>
                 <div class="knowledge__recommend__item__body">
                   <ul>
-                    <li v-for="(item, index) in 5" :key="index">
-                      <a>分布式事务的理解({{item}})</a>
-                      <span>2019-05-10</span>
+                    <li v-for="(tItem, index) in item.articleList" :key="index">
+                      <a>{{tItem.articleTitle}}</a>
+                      <span>{{tItem.postTime}}</span>
                     </li>
                   </ul>
                 </div>
@@ -55,8 +55,29 @@
 </template>
 
 <script>
+  import { retrieveRecommend } from '@/api/knowledge'
   export default {
     name: 'knowledgeRecommend',
+    data() {
+      return {
+        recommendKnowledge: []
+      }
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      init() {
+        this.recommendKnowledgeList()
+      },
+      recommendKnowledgeList() {
+        retrieveRecommend().then(res => {
+          if (res.flag) {
+            this.recommendKnowledge = res.data
+          }
+        })
+      }
+    },
     components: {
       'customCard01': () => import('@/components/custom-card-01')
     }

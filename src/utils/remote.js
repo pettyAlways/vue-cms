@@ -37,10 +37,6 @@ axios.interceptors.response.use(function (response) {
     goHome()
     return { flag: false }
   }
-  // 出异常则关闭遮罩层
-  Vue.prototype.$loadingHelper.stopLoading()
-  // 日志记录
-  Vue.prototype.$logHelper.error(error, 'dev')
   return Promise.reject(error)
 })
 
