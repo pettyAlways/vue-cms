@@ -65,7 +65,7 @@
                   <ul>
                     <li v-for="(tItem, index) in item.articleEntities" :key="index" @click="goArticle(tItem.articleId, item.knowledgeId)">
                       <span>{{tItem.articleTitle}}</span>
-                      <span>{{tItem.postTime}}</span>
+                      <span>{{tItem.postTime | transformDate}}</span>
                     </li>
                   </ul>
                 </div>
@@ -148,7 +148,7 @@
         'setCurNav'
       ]),
       init() {
-        let executeMethod = this.isList ? this.retrieveListKnowledge : this.retrieveCardKnowledge()
+        let executeMethod = this.isList ? this.retrieveListKnowledge : this.retrieveCardKnowledge
         executeMethod()
       },
       editKnowledge(knowledge) {
@@ -327,6 +327,7 @@
               span:nth-of-type(2) {
                 color: #bfbfbf;
                 font-size: 12px;
+                text-align: right;
                 min-width: 100px;
               }
             }

@@ -15,8 +15,8 @@ import './permission'
 import './icons'
 // 全局日志
 import log from './utils/logger'
-
 import loading from './utils/loading'
+import * as filters from './utils/filters'
 
 // 图片剪裁工具
 import VueCropper from 'vue-cropper'
@@ -27,6 +27,11 @@ Vue.prototype._ = _
 
 // 项目上线后不再提示警告
 Vue.config.productionTip = false
+
+// 全局管道
+Object.keys(filters).forEach(function(key) {
+  Vue.filter(key, filters[key])
+})
 
 Vue.use(ElementUI)
 // 引入log工具
