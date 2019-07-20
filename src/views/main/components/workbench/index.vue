@@ -55,13 +55,13 @@
       <custom-card02 title="最近动态">
         <div class="post_body">
           <el-tag type="warning" v-for="(item, index) in operRecord" :key="index" style="margin-right: 10px; margin-bottom: 5px;">
-            {{index+1}}.<i>{{item.operUserName}}</i>
+            <i style="color: #E6A23C">{{index+1}}.</i><i>{{item.operUserName}}</i>
             <span v-if="item.operType === '审核'">{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]的修改</span>
             <span v-else-if="item.operType === '申请' ">{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]的加入</span>
-            <span v-else-if="item.operType === '移除' ">{{item.operType}}了<i>{{item.targetName}}</i>的参与{{item.objType}}[<i>{{item.objName}}</i>]</span>
-            <span v-else-if="item.objType === '文章' && item.operType !== '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}《<i>{{item.objName}}</i>》</span>
-            <span v-else-if="item.objType === '文章' && item.operType === '删除'">在<i>{{item.targetName}}</i>下{{item.operType}}了{{item.objType}}<i>《{{item.reserve}}》</i></span>
-            <span v-else-if="['分类','知识库'].includes(item.objType) && item.operType === '修改' ">将{{item.objType}}{{item.reserve}}{{item.operType}}成了[<i>{{item.objName}}</i>]</span>
+            <span v-else-if="item.operType === '移除' ">{{item.operType}}了<i>{{item.rootName}}</i>的参与{{item.objType}}[<i>{{item.objName}}</i>]</span>
+            <span v-else-if="item.objType === '文章' && item.operType !== '删除'">在<i>{{item.rootName}}</i>下{{item.operType}}了{{item.objType}}《<i>{{item.objName}}</i>》</span>
+            <span v-else-if="item.objType === '文章' && item.operType === '删除'">在<i>{{item.rootName}}</i>下{{item.operType}}了{{item.objType}}<i>《{{item.reserve}}》</i></span>
+            <span v-else-if="['分类','知识库'].includes(item.objType) && item.operType === '修改' ">{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]的信息</span>
             <span v-else-if="item.operType === '删除'">{{item.operType}}了{{item.objType}}[<i>{{item.reserve}}</i>]</span>
             <span v-else>{{item.operType}}了{{item.objType}}[<i>{{item.objName}}</i>]</span>
           </el-tag>
@@ -136,7 +136,7 @@
         .article-item {
           display: flex;
           align-items: center;
-          width: 260px;
+          width: 300px;
           margin-top: 15px;
           margin-bottom: 15px;
           margin-right: 15px;
@@ -188,19 +188,19 @@
                 padding: 0px;
                 li {
                   margin-right: 3px;
-                  font-size: 12px;
+                  font-size: 11px;
                   color: #595959;
                   .category {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                    max-width: 55px;
+                    max-width: 80px;
                   }
                   .knowledge {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                    max-width: 65px;
+                    max-width: 80px;
                   }
                   a {
                     display: block;

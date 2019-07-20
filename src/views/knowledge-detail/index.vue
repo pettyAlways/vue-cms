@@ -4,27 +4,27 @@
       <site-nav>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/platform/blog/center/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{ knowledge.kname }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{ knowledge.knowledgeName }}</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
       <div class="btn-panel">
-        <el-button class="btn" type="primary" size="small" @click="showCover=false">管理</el-button>
+        <el-button class="btn" type="primary" size="small" @click="showCover=false" v-if="!_.isEmpty(tableData)">管理</el-button>
         <el-button class="btn" type="primary" size="small" @click="createArticle">新建文档</el-button>
       </div>
     </div>
     <div class="knowledge-detail__container" v-if="showCover">
       <div class="knowledge-detail__header">
         <h1 class="cover-title">
-          <span>{{ knowledge.kname }}</span>
+          <span>{{ knowledge.knowledgeName }}</span>
         </h1>
         <div class="cover-descr">
-          <span>{{ knowledge.kdesc }}</span>
+          <span>{{ knowledge.knowledgeDesc }}</span>
         </div>
         <div class="cover-author">
           <ul>
-            <li>{{knowledge.creator.userName}}</li>
-            <li v-for="(item, index) in knowledge.kparticipant" :key="index">
-              {{item.userName}}
+            <li>{{knowledge.createName}}</li>
+            <li v-for="(item, index) in knowledge.participantEntities" :key="index">
+              {{item.participantName}}
             </li>
           </ul>
         </div>
@@ -33,7 +33,7 @@
         <ul>
           <li v-for="(item, index) in tableData" :key="index">
             <span class="name">
-              <a @click="goArticle(item.id, knowledgeId)">
+              <a @click="goArticle(item.articleId, knowledgeId)">
                 {{item.articleTitle}}
               </a>
             </span>
@@ -73,7 +73,7 @@
             label="文章标题"
             min-width="200">
             <template slot-scope="scope">
-              <a @click="goArticle(scope.row.id, knowledgeId)">{{scope.row.articleTitle}}</a>
+              <a @click="goArticle(scope.row.articleId, knowledgeId)">{{scope.row.articleTitle}}</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -110,8 +110,8 @@
         <el-option
           v-for="(item, index) in participantKnowledge"
           :key="index"
-          :label="item.kname"
-          :value="item.id">
+          :label="item.knowledgeName"
+          :value="item.knowledgeId">
         </el-option>
       </el-select>
       <span slot="footer" class="dialog-footer">
@@ -158,7 +158,7 @@
       },
       shareAuth() {
         return (auth, article) => {
-          return this.currentUser.id === article.creatorId || article.knowledgeCreator === this.currentUser.id || this.otherPower[auth]
+          return this.currentUser.id === article.creatorId || this.knowledge.creator === this.currentUser.id || this.otherPower[auth]
         }
       }
     },
@@ -199,12 +199,12 @@
         })
       },
       copyArticle(article) {
-        retrieveKnowledge().then(res => {
+        retrieveKnowledge({ knowledgeId: this.knowledgeId }).then(res => {
           if (res.flag) {
             this.participantKnowledge = res.data
           }
         })
-        this.copyArticleId = article.id
+        this.copyArticleId = article.articleId
         this.copyVisible = true
       },
       editArticle(article) {
@@ -317,7 +317,7 @@
       }
       .cover-descr {
         margin-top: 10px;
-        font-size: 14px;
+        font-size: 13px;
         color: #595959;
         line-height: 24px;
       }
@@ -341,7 +341,7 @@
     }
     &__body {
       width: 700px;
-      margin-top: 15px;
+      margin-top: 50px;
       ul {
         list-style: none;
         padding: 0px;

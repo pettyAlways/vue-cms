@@ -44,7 +44,7 @@
             <el-form-item label="密码" prop="kreserveO" v-if="formData.kaccess==='3'">
               <el-input placeholder="输入密码" v-model="formData.kreserveO"></el-input>
             </el-form-item>
-            <el-button type="primary" style="width: 100%" @click="confirm">新建</el-button>
+            <el-button type="primary" style="width: 100%" @click="confirm">保存</el-button>
           </el-form>
         </div>
         <div class="knowledge-panel__cover">
@@ -76,15 +76,20 @@
           kreserveO: ''
         },
         rules: {
-          kName: [
+          kname: [
             // 同一个校验字段里面trigger必须保持相同
             { required: true, message: '知识库名字不能为空', trigger: ['blur', 'change'] },
             { min: 0, max: 20, message: '知识库名字不能超过20个字符', trigger: ['blur', 'change'] }
           ],
-          kType: [
+          kdesc: [
+            // 同一个校验字段里面trigger必须保持相同
+            { required: true, message: '知识库描述不能为空', trigger: ['blur', 'change'] },
+            { min: 0, max: 300, message: '知识库名字不能超过300个字符', trigger: ['blur', 'change'] }
+          ],
+          ktype: [
             { required: true, message: '类型不能为空', trigger: ['blur', 'change'] }
           ],
-          kReserveO: [
+          kreserveO: [
             { required: true, message: '密码不能为空', trigger: ['blur', 'change'] },
             { min: 0, max: 20, message: '密码不能超过20个字符', trigger: ['blur', 'change'] }
           ]
@@ -103,7 +108,7 @@
       pageMenus: {
         handler(newMenus) {
           if (newMenus) {
-            this.power = newMenus['/platform/blog/knowledge']
+            this.power = newMenus['/platform/blog/center/knowledge']
           }
         },
         // 不管有没有变化立即执行
@@ -122,12 +127,12 @@
       searchKnowledge(knowledgeId) {
         knowledgeItem({ knowledgeId: knowledgeId }).then(res => {
           if (res.flag) {
-            this.formData.kname = res.data.kname
-            this.formData.kdesc = res.data.kdesc
-            this.formData.kurl = res.data.kurl
-            this.formData.kaccess = res.data.kaccess
-            this.formData.ktype = res.data.ktype.id
-            this.formData.kreserveO = res.data.kreserveO
+            this.formData.kname = res.data.knowledgeName
+            this.formData.kdesc = res.data.knowledgeDesc
+            this.formData.kurl = res.data.knowledgeCover
+            this.formData.kaccess = res.data.knowledgeAccess
+            this.formData.ktype = res.data.categoryType
+            this.formData.kreserveO = res.data.reserveO
           }
         })
       },
@@ -146,8 +151,7 @@
             params.kdesc = this.formData.kdesc
             params.kurl = this.$refs.commonUpload.retriveImgUrl()
             params.kaccess = this.formData.kaccess
-            params.ktype = {}
-            params.ktype.id = this.formData.ktype
+            params.ktype = this.formData.ktype
             params.kreserveO = this.formData.kreserveO
             params.id = this.knowledgeId
             let operMethod = this.knowledgeId ? this.power['共享更新'] ? editShareKnowledge : editKnowledge : saveKnowledge
@@ -160,7 +164,7 @@
                 this.visible = false
                 this.initForm()
                 setTimeout(() => {
-                  this.$router.push({ path: '/platform/blog/knowledge' })
+                  this.$router.push({ path: '/platform/blog/center/knowledge' })
                 }, 3 * 1000 + 1)
               }
             })

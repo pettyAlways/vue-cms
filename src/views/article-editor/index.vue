@@ -69,9 +69,8 @@
       postArticle() {
         let params = {}
         params.content = this.$refs.myTinymce.getContent()
-        params.knowledge = {}
         params.id = this.articleId || ''
-        params.knowledge.id = this.knowledgeId
+        params.knowledgeId = this.knowledgeId
         params.articleTitle = this.title
         let edit = this.power['文章共享修改'] ? editShareArticle : editArticle
         let method = this.articleId ? edit : addArticle

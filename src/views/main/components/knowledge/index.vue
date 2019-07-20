@@ -2,15 +2,20 @@
   <el-card class="knowledge">
     <custom-card02 title="参与的知识库">
       <template slot="more">
-        <a @click="switchList" style="font-size: 18px;"><i :class="{'el-icon-s-unfold': isList, 'el-icon-s-fold': !isList}"></i></a>
+        <a @click="switchList" style="font-size: 18px;" v-if="!_.isEmpty(cardKnowledge) || !_.isEmpty(listKnowledge)">
+          <i :class="{'el-icon-s-unfold': isList, 'el-icon-s-fold': !isList}"></i>
+        </a>
       </template>
       <div v-if="isList" class="knowledge__list">
         <el-table
-          :data="tableData"
+          :data="listKnowledge"
           style="width: 100%">
-          <el-table-column
-            prop="kname"
-            label="知识库名字">
+          <el-table-column label="知识库名字">
+            <template slot-scope="scope">
+              <router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: scope.row.knowledgeId } }">
+                {{scope.row.knowledgeName}}
+              </router-link>
+            </template>
           </el-table-column>
           <el-table-column
             prop="createName"
@@ -21,17 +26,18 @@
             label="参与者">
           </el-table-column>
           <el-table-column
-            prop="kdesc"
-            label="描述">
+            prop="knowledgeDesc"
+            label="描述"
+            min-width="200">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="200">
             <template slot-scope="scope">
-              <el-button v-if="noAuthShowBtn || (power['更新知识库'] && shareAuth('共享更新'))"
+              <el-button v-if="noAuthShowBtn || (power['更新知识库'] && shareAuth('共享更新', scope.row))"
                          type="text" size="small" @click="editKnowledge(scope.row)">编辑</el-button>
-              <el-button v-if="noAuthShowBtn || (power['移除参与者'] && shareAuth('共享移除参与者'))"
+              <el-button v-if="noAuthShowBtn || (power['移除参与者'] && shareAuth('共享移除参与者', scope.row))"
                          type="text" size="small" @click="removeParticipant(scope.row)">移除参与者</el-button>
               <el-button v-if="noAuthShowBtn || (power['删除知识库'] && shareAuth('共享删除知识库', scope.row))"
                          type="text" size="small" @click="removeKnowledge(scope.row)">删除</el-button>
@@ -41,19 +47,23 @@
       </div>
       <div v-else class="knowledge__block">
         <ul>
-          <li v-for="(item, index) in tableData" :key="index">
-            <el-card :body-style="{ padding: '0px' }">
+          <li v-for="(item, index) in cardKnowledge" :key="index">
+            <el-card :body-style="{ 'padding': '0px', 'padding-bottom': '10px' }">
               <div class="knowledge__block__item">
                 <div class="item__header">
-                  <img :src="item.kurl">
+                  <img :src="item.knowledgeCover">
                   <div class="item_right">
-                    <span class="title"><router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: item.id } }">{{item.kname}}</router-link></span>
-                    <span>{{item.kdesc}}</span>
+                    <span class="title">
+                      <router-link :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: item.knowledgeId } }">
+                        {{item.knowledgeName}}
+                      </router-link>
+                    </span>
+                    <span>{{item.knowledgeDesc}}</span>
                   </div>
                 </div>
                 <div class="item__body">
                   <ul>
-                    <li v-for="(tItem, index) in item.articleEntities" :key="index" @click="goArticle(tItem.id, item.id)">
+                    <li v-for="(tItem, index) in item.articleEntities" :key="index" @click="goArticle(tItem.articleId, item.knowledgeId)">
                       <span>{{tItem.articleTitle}}</span>
                       <span>{{tItem.postTime}}</span>
                     </li>
@@ -75,7 +85,7 @@
         closable
         :disable-transitions="false"
         @close="handleRemoveParticipant(item)">
-        {{item.userName}}
+        {{item.participantName}}
       </el-tag>
     </el-dialog>
 
@@ -84,7 +94,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import { listKnowledge, removeKnowledge, removeShareKnowledge, removeParticipant, removeShareParticipant } from '@/api/knowledge'
+  import { listKnowledge, cardKnowledge, removeKnowledge, removeShareKnowledge, removeParticipant, removeShareParticipant } from '@/api/knowledge'
   export default {
     name: 'knowledge',
     data() {
@@ -96,7 +106,8 @@
         participantVisible: false,
         isList: false,
         activeName: 'block',
-        tableData: []
+        cardKnowledge: [],
+        listKnowledge: []
       }
     },
     components: {
@@ -113,7 +124,7 @@
       },
       shareAuth() {
         return (auth, knowledge) => {
-          return this.currentUser.id === knowledge.creator.id || this.power[auth]
+          return this.currentUser.id === knowledge.creator || this.power[auth]
         }
       }
     },
@@ -130,15 +141,18 @@
       }
     },
     mounted() {
-      this.showWay = this.isList ? 'list' : 'card'
-      this.retrieveList(this.showWay)
+      this.init()
     },
     methods: {
       ...mapActions([
         'setCurNav'
       ]),
+      init() {
+        let executeMethod = this.isList ? this.retrieveListKnowledge : this.retrieveCardKnowledge()
+        executeMethod()
+      },
       editKnowledge(knowledge) {
-        this.$router.push({ path: '/knowledge/new', query: { knowledgeId: knowledge.id } })
+        this.$router.push({ path: '/platform/blog/knowledge/new', query: { knowledgeId: knowledge.knowledgeId } })
       },
       removeKnowledge(knowledge) {
         let _this = this
@@ -147,14 +161,14 @@
             if (action === 'confirm') {
               if (_this.$loadingHelper.startLoading('.article-editor', '正在删除中，请稍后')) {
                 let remove = _this.power['共享删除知识库'] ? removeShareKnowledge : removeKnowledge
-                remove({ knowledgeId: knowledge.id }).then(res => {
+                remove({ knowledgeId: knowledge.knowledgeId }).then(res => {
                   _this.$loadingHelper.stopLoading()
                   if (res.flag) {
                     _this.$message({
                       type: 'success',
                       message: '删除知识库成功'
                     })
-                    _this.retrieveList(_this.showWay)
+                    _this.init()
                   }
                 })
               }
@@ -171,14 +185,14 @@
           callback(action) {
             if (action === 'confirm') {
               let remove = _this.power['共享移除参与者'] ? removeShareParticipant : removeParticipant
-              remove({ participantId: item.id, knowledgeId: _this.curKnowledge }).then(res => {
+              remove({ participantId: item.participantId, knowledgeId: _this.curKnowledge }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',
                     message: '移除成功'
                   })
-                  _this.participantList = _this.participantList.filter(participant => participant.id !== item.id)
-                  _this.retrieveList('list')
+                  _this.participantList = _this.participantList.filter(participant => participant.participantId !== item.participantId)
+                  _this.init()
                 }
               })
             }
@@ -186,21 +200,27 @@
         })
       },
       removeParticipant(item) {
-        this.curKnowledge = item.id
-        this.participantList = item.kparticipant
+        this.curKnowledge = item.knowledgeId
+        this.participantList = item.participantEntities
         this.participantVisible = true
       },
       switchList() {
         this.isList = !this.isList
-        let showWay = this.isList ? 'list' : 'card'
-        this.retrieveList(showWay)
+        this.init()
       },
-      retrieveList(showWay) {
-        listKnowledge({ showWay: showWay }).then(res => {
+      retrieveCardKnowledge() {
+        cardKnowledge().then(res => {
           if (res.flag) {
-            this.tableData = res.data
-            this.tableData.map(item => {
-              item.participantName = item.kparticipant.map(temp => temp.userName).join(',')
+            this.cardKnowledge = res.data
+          }
+        })
+      },
+      retrieveListKnowledge() {
+        listKnowledge().then(res => {
+          if (res.flag) {
+            this.listKnowledge = res.data
+            this.listKnowledge.map(item => {
+              item.participantName = item.participantEntities.map(temp => temp.participantName).join(',')
             })
           }
         })
@@ -306,7 +326,8 @@
               }
               span:nth-of-type(2) {
                 color: #bfbfbf;
-                min-width: 80px;
+                font-size: 12px;
+                min-width: 100px;
               }
             }
           }

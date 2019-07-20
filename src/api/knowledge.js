@@ -1,10 +1,16 @@
 import remote from '../utils/remote'
 
-export function listKnowledge(params) {
+export function listKnowledge() {
   return remote({
     url: '/platform/blog/knowledge/list',
-    method: 'get',
-    params
+    method: 'get'
+  })
+}
+
+export function cardKnowledge() {
+  return remote({
+    url: '/platform/blog/knowledge/card',
+    method: 'get'
   })
 }
 
@@ -72,9 +78,10 @@ export function saveKnowledge(data) {
   })
 }
 
-export function retrieveKnowledge() {
+export function retrieveKnowledge(params) {
   return remote({
     url: '/platform/blog/knowledge/belongs/mine',
-    method: 'get'
+    method: 'get',
+    params
   })
 }

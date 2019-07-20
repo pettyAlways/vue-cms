@@ -15,7 +15,7 @@
     name: 'asideNav',
     mounted() {
       // 解决刷新时当前菜单显示
-      this.switchMenu(this.retriveRealCurNav(this.$route.path))
+      this.switchMenu(this.retrieveRealCurNav(this.$route.path))
     },
     computed: {
       ...mapGetters([
@@ -37,8 +37,8 @@
         this.switchMenu(curNav)
         this.$router.push({ path: curNav })
       },
-      retriveRealCurNav(path) {
-        if (path === '/index') {
+      retrieveRealCurNav(path) {
+        if (path === '/platform/blog') {
           path = this.defaultPage
         }
         return path
@@ -47,7 +47,7 @@
     watch: {
       // 解决按历史地址回退时的当前菜单显示
       $route (to, from) {
-        this.switchMenu(this.retriveRealCurNav(to.path))
+        this.switchMenu(this.retrieveRealCurNav(to.path))
       }
     }
   }

@@ -4,7 +4,7 @@
       <site-nav>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/platform/blog/center/knowledge' }">知识库</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{knowledge.kname}}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/platform/blog/knowledge/detail', query: { knowledgeId: knowledgeId } }">{{knowledge.knowledgeName}}</el-breadcrumb-item>
           <el-breadcrumb-item>{{article.articleTitle}}</el-breadcrumb-item>
         </el-breadcrumb>
       </site-nav>
@@ -26,7 +26,7 @@
         <el-card>
           <h1 class="title">{{article.articleTitle}}</h1>
           <ul class="extra-info">
-            <li>{{article.createName}}发布于 {{article.knowledgeName}}</li>
+            <li>{{article.createName}}&nbsp;发布于 {{article.knowledgeName}}</li>
             <li>发布时间：{{article.postTime}}</li>
             <li>所属分类：{{article.categoryName}}</li>
             <li v-if="article.participantList && article.participantList.length">
@@ -81,7 +81,7 @@
       },
       shareAuth() {
         return (auth) => {
-          return this.currentUser.id === this.article.creatorId || this.knowledge.creator.id === this.currentUser.id || this.power[auth]
+          return this.currentUser.id === this.article.creatorId || this.knowledge.creator === this.currentUser.id || this.power[auth]
         }
       }
     },
@@ -127,10 +127,10 @@
                     message: '删除文章成功'
                   })
                   let nextArticle = res.data
-                  if (nextArticle.id) {
+                  if (nextArticle) {
                     setTimeout(() => {
-                      _this.articleList = _this.articleList.filter(item => item.id === _this.articleId)
-                      _this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: nextArticle.id, knowledgeId: _this.knowledgeId } })
+                      _this.articleList = _this.articleList.filter(item => item.articleId !== _this.articleId)
+                      _this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: nextArticle, knowledgeId: _this.knowledgeId } })
                     }, 1 * 1000)
                     return
                   }
@@ -153,7 +153,7 @@
         listArticle({ knowledgeId: knowledgeId }).then(res => {
           if (res.flag) {
             this.articleList = res.data.map(item => {
-              return { articleTitle: item.articleTitle, articleId: item.id }
+              return { articleTitle: item.articleTitle, articleId: item.articleId }
             })
           }
         })
