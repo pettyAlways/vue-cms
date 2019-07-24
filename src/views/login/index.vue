@@ -1,37 +1,37 @@
 <template>
   <el-container class="login-container">
+    <div class="site-title">
+      <icon-svg iconClass="laoying" :vStyle="{width: '5em', height: '5em'}"></icon-svg>
+      <p class="title">欢迎来到知识库协作式网站</p>
+    </div>
     <el-card>
       <div slot="header">
-        <h2 class="login-title">{{$t('login.title')}}</h2>
+        <h2 class="login-title">登录</h2>
       </div>
       <el-form :rules="rules" :model="loginForm" ref="loginForm" label-width="60px">
-        <el-form-item :label="$t('login.account')" prop="userAccount" style="position:relative">
-          <el-input type="text" v-model="loginForm.userAccount" @keyup.enter.native="goToPwdInput"></el-input>
+        <el-form-item label="账号" prop="username" style="position:relative">
+          <el-input type="text" v-model="loginForm.username" @keyup.enter.native="goToPwdInput"></el-input>
           <span class="svg-container svg-container_user">
 
           </span>
         </el-form-item>
-        <el-form-item :label="$t('login.password')" prop="userPassword">
-          <el-input type="password" v-model="loginForm.userPassword" @keyup.enter.native="onLogin" ref="pwd"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="loginForm.password" @keyup.enter.native="onLogin" ref="pwd"></el-input>
           <span class="svg-container svg-container_password">
             <icon-svg icon-class="password" />
           </span>
         </el-form-item>
-        <el-form-item :label="$t('login.remember')" label-width="80px">
+        <el-form-item label="记住密码" label-width="80px">
           <el-switch v-model="remember" @change="rememberMe"></el-switch>
         </el-form-item>
-        <el-button type="primary" @click="onLogin('loginForm')" :loading="loading">{{$t('login.login')}}</el-button>
+        <el-button type="primary" @click="onLogin()" :loading="loading">登录</el-button>
       </el-form>
     </el-card>
-    <!-- particles.js container -->
-    <div id="particles"></div>
   </el-container>
 </template>
 <script>
   import { saveToLocal, loadFromLocal } from '@/utils/local-storage'
   import { mapActions } from 'vuex'
-  /* eslint-disable*/
-  import particles from 'particles.js'
   export default {
     data() {
       // pwd 验证
@@ -47,16 +47,16 @@
       }
       return {
         loginForm: {
-          userAccount: '',
-          userPassword: ''
+          username: '',
+          password: ''
         },
         remember: false,
         loading: false,
         rules: {
-          userAccount: [
+          username: [
             { required: true, message: '请输入账号', trigger: 'blur' }
           ],
-          userPassword: [
+          password: [
             { required: true, trigger: 'blur', validator: validatePwd }
           ]
         }
@@ -66,17 +66,16 @@
       this.remember = loadFromLocal('rememberMe', false)
       // 初始化时读取localStorage用户信息,注意google有记住密码功能会覆盖当前获取到的密码
       if (this.remember) {
-        this.loginForm.userAccount = loadFromLocal('username', '')
-        this.loginForm.userPassword = loadFromLocal('password', '')
-        console.error(this.loginForm.userPassword)
+        this.loginForm.username = loadFromLocal('username', '')
+        this.loginForm.password = loadFromLocal('password', '')
       } else {
-        this.loginForm.userAccount = ''
-        this.loginForm.userPassword = ''
+        this.loginForm.username = ''
+        this.loginForm.password = ''
       }
     },
     methods: {
       ...mapActions([
-        'login'
+        'userLogin'
       ]),
       rememberMe(val) {
         saveToLocal('rememberMe', val)
@@ -91,16 +90,16 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.login(this.loginForm).then((res) => {
+            this.userLogin(this.loginForm).then(() => {
               // 保存账号
               if (this.remember) {
-                saveToLocal('username', this.loginForm.userAccount)
-                saveToLocal('password', this.loginForm.userPassword)
+                saveToLocal('username', this.loginForm.username)
+                saveToLocal('password', this.loginForm.password)
               } else {
                 saveToLocal('username', '')
                 saveToLocal('password', '')
               }
-              this.$router.push({ path: '/home/homePage' })
+              this.$router.push({ path: '/index' })
             }, () => {
               this.loading = false
             }).catch(() => {
@@ -113,127 +112,6 @@
       }
     },
     mounted() {
-      particlesJS('particles', {
-        "particles": {
-          "number": {
-            "value": 15
-          },
-          "color": {
-            "value": "random"
-          },
-          "shape": {
-            "type": ["star", "image"],
-            "stroke": {
-              "width": 0,
-              "color": "yellow"
-            },
-            "polygon": {
-              "nb_sides": 5
-            },
-            "image": {
-              "src": "https://neveryu.github.io/avatar/avatar.png",
-              "width": 100,
-              "height": 100
-            }
-          },
-          "opacity": {
-            "value": 1,
-            "random": false,
-            "anim": {
-              "enable": true,
-              "speed": 1,
-              "opacity_min": 0.1,
-              "sync": false
-            }
-          },
-          "size": {
-            "value": 10,
-            "random": true,
-            "anim": {
-              "enable": true,
-              "speed": 10,
-              "size_min": 0.1,
-              "sync": false
-            }
-          },
-          "line_linked": {
-            "enable": false,
-            "distance": 150,
-            "color": "#ccc",
-            "opacity": 0.4,
-            "width": 1
-          },
-          "move": {
-            "enable": true,
-            "speed": 2,
-            "direction": "random",
-            "random": true,
-            "straight": false,
-            "out_mode": "out",
-            "attract": {
-              "enable": false,
-              "rotateX": 600,
-              "rotateY": 1200
-            }
-          }
-        },
-        "interactivity": {
-          // "detect_on": "canvas",
-          "detect_on": "window",
-          "events": {
-            "onhover": {
-              "enable": false,
-              // "mode": "repulse"
-              "mode": "grab"
-            },
-            "onclick": {
-              "enable": false,
-              "mode": "repulse"
-              // "mode": "push"
-            },
-            "resize": true
-          },
-          "modes": {
-            "grab": {
-              "distance": 400,
-              "line_linked": {
-                "opacity": 1
-              }
-            },
-            "bubble": {
-              "distance": 400,
-              "size": 40,
-              "duration": 2,
-              "opacity": 8,
-              "speed": 3
-            },
-            "repulse": {
-              "distance": 200
-            },
-            "push": {
-              "particles_nb": 4
-            },
-            "remove": {
-              "particles_nb": 2
-            }
-          }
-        }
-      })
-      this.$notify({
-        title: '账号：yangweixian',
-        dangerouslyUseHTMLString: true,
-        message: '<strong>密码：<i>123456</i></strong>',
-        type: 'success',
-        position: 'bottom-left'
-      })
-      this.$notify({
-        title: '账号：yingzuidou',
-        dangerouslyUseHTMLString: true,
-        message: '<strong>密码：<i>123456</i></strong>',
-        type: 'success',
-        position: 'bottom-left',
-        offset: 80
-      })
     }
   }
 </script>
@@ -247,7 +125,19 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: mix(#494166, #424b50);
+    background: #f3f3f3;
+    .site-title {
+      position: absolute;
+      top: 50px;
+      left: calc(50% - 150px);
+      display: flex;
+      height: 60px;
+      line-height: 80px;
+      .title {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
     .el-card {
       position: absolute;
       top: 50%;
@@ -255,7 +145,7 @@
       margin: -220px 0 0 -200px;
       width: 400px;
       height: 350px;
-      background: #d7ecf1;
+      background: #f9f9f9;
       .login-title {
         margin: 0;
         text-align: center;
@@ -280,17 +170,5 @@
         width: 100%;
       }
     }
-  }
-  #particles {
-    width: 100%;
-    height: 100%;
-    /*background-color: #b61924;*/
-    /*background-color: #23ae88;*/
-    background-color: #39c;
-    background-image: url('');
-    /*background-image: url('../img/bg_particles.png');*/
-    background-size: cover;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
   }
 </style>

@@ -10,7 +10,7 @@
         <slot name="more"><el-image :src="require('../../assets/more2.jpg')"></el-image></slot>
       </div>
     </div>
-    <div class="custom-panel__body">
+    <div class="custom-panel__body" :style="bodyStyle">
       <slot name="body"></slot>
     </div>
   </div>
@@ -20,7 +20,16 @@
   export default {
     name: 'commonPanelOne',
     props: {
-      title: String
+      title: String,
+      bStyle: {
+        type: Object,
+        default: () => ({padding: '10px 15px'})
+      }
+    },
+    data() {
+      return {
+        bodyStyle: this.bStyle
+      }
     }
   }
 </script>
@@ -33,7 +42,6 @@
       align-items: center;
       height: 40px;
       line-height: 40px;
-      border-bottom: 1px solid #e6e6e6;
       &__title {
         margin-right: 15px;
         font-size: 16px;
@@ -50,7 +58,7 @@
     }
     &__body {
       padding: 0px 10px;
-      border-bottom: 1px solid #e6e6e6;
+      border: 1px solid #e6e6e6;
       overflow: hidden;
     }
 

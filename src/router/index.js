@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import MainNav from '@/views/main'
+import Login from '@/views/login'
+import Index from '@/views/index'
 import Knowledge from '@/views/knowledge'
 import KnowledgeMain from '@/views/knowledge/components/main'
 import KnowledgeDetail from '@/views/knowledge/components/detail'
@@ -11,6 +13,7 @@ import Custom from '@/views/custom'
 import News from '@/views/news'
 import Relative from '@/views/relative'
 import Contact from '@/views/contact'
+import Profile from '@/views/profile'
 
 Vue.use(Router)
 
@@ -29,55 +32,72 @@ export const constantRouterMap = [
     redirect: '/index'
   },
   {
-    path: '/index',
-    name: '首页',
-    component: MainNav
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
-    path: '/knowledge',
-    name: 'categoryPage',
-    component: Knowledge,
+    path: '/index',
+    name: '首页',
+    component: Index,
     children: [
       {
         path: '',
-        component: KnowledgeMain
+        component: MainNav
       },
       {
-        path: 'detail',
-        component: KnowledgeDetail
+        path: '/knowledge',
+        name: 'categoryPage',
+        component: Knowledge,
+        children: [
+          {
+            path: '',
+            component: KnowledgeMain
+          },
+          {
+            path: 'detail/:knowledgeId',
+            name: 'knowledgeDetail',
+            component: KnowledgeDetail
+          },
+          {
+            path: '/article/:articleId',
+            name: 'articleShow',
+            component: KnowledgeArticle
+          }
+        ]
       },
       {
-        path: '/article',
-        component: KnowledgeArticle
+        path: '/brand',
+        name: 'brandPage',
+        component: Brand
+      },
+      {
+        path: '/custom',
+        name: 'customPage',
+        component: Custom
+      },
+      {
+        path: '/news',
+        name: 'newsPage',
+        component: News
+      },
+      {
+        path: '/relative',
+        name: 'relativePage',
+        component: Relative
+      },
+      {
+        path: '/contact',
+        name: 'contactPage',
+        component: Contact
+      },
+      {
+        path: '/profile/:userId',
+        name: 'profile',
+        component: Profile
       }
     ]
-  },
-  {
-    path: '/brand',
-    name: 'brandPage',
-    component: Brand
-  },
-  {
-    path: '/custom',
-    name: 'customPage',
-    component: Custom
-  },
-  {
-    path: '/news',
-    name: 'newsPage',
-    component: News
-  },
-  {
-    path: '/relative',
-    name: 'relativePage',
-    component: Relative
-  },
-  {
-    path: '/contact',
-    name: 'contactPage',
-    component: Contact
   }
-
 ]
 
 export default new Router({

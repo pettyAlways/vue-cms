@@ -2,31 +2,30 @@
   <div class="knowledge-content">
     <div class="knowledge-content__header">
       <ul>
-        <li>
-          <i class="el-icon-notebook-2"></i>
-          <span>文章列表</span>
+        <li :class="{ active: (type === 'catalogue') }">
+          <i class="el-icon-notebook-2" ></i>
+          <a @click="knowledgeCatalogue">文章列表</a>
         </li>
-        <li>
+        <li :class="{ active: (type === 'recentPost') }">
           <i class="el-icon-alarm-clock"></i>
-          <span>最近编辑</span>
+          <a @click="recentPost">最近发布</a>
         </li>
-        <li>
+        <li :class="{ active: (type === 'recentEdit') }">
           <i class="el-icon-star-off"></i>
-          <span>最热文章</span>
+          <a @click="recentEdit">最近编辑</a>
         </li>
-        <li>
+        <li :class="{ active: (type === 'concise') }">
           <i class="el-icon-tickets"></i>
-          <span>精简列表</span>
+          <a @click="articleConcise">精简列表</a>
         </li>
-
       </ul>
     </div>
-    <div class="knowledge-content__body">
+    <div v-if="type !== 'concise'" class="knowledge-content__body">
       <ul>
-        <li v-for="index in 10" :key="index">
-          <article-panel01 :content="content" :img="img">
+        <li v-for="(item, index) in articleList" :key="index">
+          <article-panel01 :content="item.content" :img="img">
             <template slot="title">
-              <a>{{title}}</a>
+              <a @click="goArticle(item.articleId)">{{ item.articleTitle }}</a>
             </template>
             <template slot="tipPanel">
               <ul class="tipPanel">
@@ -34,9 +33,9 @@
                   <img :src="require('./assets/author01.jpg')" />
                 </li>
                 <li class="author-info">
-                  <a>鹰嘴豆</a>
+                  <a>{{ item.authorName }}</a>
                   <span>发布于</span>
-                  <span>2019-5-13</span>
+                  <span>{{ item.postTime }}</span>
                 </li>
                 <li class="love">
                   <a><i class="el-icon-star-off"></i></a>
@@ -49,21 +48,87 @@
         </li>
       </ul>
     </div>
+    <div v-else class="knowledge-content__concise">
+      <ul>
+        <li v-for="(item, index) in articleList" :key="index" :class ="{ 'no-bottom': (index >= (rows-1)*3) }">
+          <a @click="goArticle(item.articleId)"><i class="el-icon-tickets icons"></i>{{ item.articleTitle }}</a>
+          <span>{{ item.postTime | toDate }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+  import { retrieveKnowledgeCatalogue, retrieveRecentPost, retrieveRecentEdit, retrieveArticleConcise } from '@/api/article'
   export default {
     name: 'knowledgeContent',
+    inject: ['kData'],
     data() {
       return {
-        title: '从 React Native 到 Flutter，移动跨平台方案的真相',
-        content: '2018 年 12 月，Google 发布了 Flutter 1.0 正式版，似乎再次点燃了人们对移动跨平台开发的热情。上一次出现类似的情况，是在 15 年年初，Facebook 发布 React Native 的时候。四年不到的时间里，有两家大公司相...',
-        img: require('./assets/knowledge01.jpg')
+        type: 'catalogue',
+        paging: {
+          page: 1,
+          total: 0,
+          size: 10
+        },
+        rows: '',
+        img: require('./assets/knowledge01.jpg'),
+        knowledgeId: '',
+        articleList: []
       }
     },
     components: {
       articlePanel01: () => import('@/components/article-panel-01')
+    },
+    mounted() {
+      this.knowledgeId = this.kData.knowledgeId
+      this.init()
+    },
+    methods: {
+      init() {
+        this.knowledgeCatalogue()
+      },
+      goArticle(articleId) {
+        this.$router.push({ name: 'articleShow', params: { articleId: articleId } })
+      },
+      knowledgeCatalogue() {
+        this.type = 'catalogue'
+        retrieveKnowledgeCatalogue({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+          .then(res => {
+            if (res.flag) {
+              this.articleList = res.data
+            }
+          })
+      },
+      recentPost() {
+        this.type = 'recentPost'
+        retrieveRecentPost({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+          .then(res => {
+            if (res.flag) {
+              this.articleList = res.data
+            }
+          })
+      },
+      recentEdit() {
+        this.type = 'recentEdit'
+        retrieveRecentEdit({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+          .then(res => {
+            if (res.flag) {
+              this.articleList = res.data
+            }
+          })
+      },
+      articleConcise() {
+        this.type = 'concise'
+        retrieveArticleConcise({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+          .then(res => {
+            if (res.flag) {
+              this.articleList = res.data
+              this.rows = Math.ceil(this.articleList.length / 3)
+            }
+          })
+      }
     }
   }
 </script>
@@ -84,7 +149,11 @@
           margin-right: 15px;
           line-height: 40px;
           font-size: 16px;
-          font-weight: 700
+          font-weight: 700;
+          cursor: pointer;
+          :hover {
+            color: #3f87ae;
+          }
         }
       }
     }
@@ -123,6 +192,45 @@
               margin-left: 10px;
 
             }
+          }
+        }
+      }
+    }
+    .active {
+      color: #3f87ae;
+    }
+    &__concise {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0px;
+        .no-bottom {
+          border-bottom: none;
+        }
+        li {
+          display: flex;
+          justify-content: space-between;
+          width: 290px;
+          height: 80px;
+          line-height: 80px;
+          padding-right: 30px;
+          border-bottom: 1px solid #ebebeb;
+          a {
+            font-size: 13px;
+            cursor: pointer;
+            color: #433f3f;
+            overflow: hidden;
+            max-width: 180px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            i {
+              margin-right: 5px;
+            }
+          }
+          span {
+            font-size: 11px;
+            color: #a9a9a9;
           }
         }
       }

@@ -10,10 +10,10 @@
         </div>
       </div>
       <div class="custom-panel__header--right">
-        <el-image :src="require('../../assets/more2.jpg')"></el-image>
+        <slot name="more"><el-image :src="require('../../assets/more2.jpg')"></el-image></slot>
       </div>
     </div>
-    <div class="custom-panel__body">
+    <div class="custom-panel__body" :style="bodyStyle">
       <slot></slot>
     </div>
   </div>
@@ -24,7 +24,16 @@
     name: 'customCard01',
     props: {
       title: '',
-      note: ''
+      note: '',
+      bStyle: {
+        type: Object,
+        default: () => ({padding: '10px 15px'})
+      }
+    },
+    data() {
+      return {
+        bodyStyle: this.bStyle
+      }
     }
   }
 </script>
@@ -35,6 +44,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      min-height: 40px;
       &--left {
         display: inline-flex;
         align-items: center;
@@ -52,7 +62,6 @@
       }
     }
     &__body {
-      padding: 10px 15px;
       border: 1px solid #e6e6e6;
       overflow: hidden;
     }

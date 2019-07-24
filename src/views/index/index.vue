@@ -1,5 +1,16 @@
 <template>
-  <router-view/>
+  <el-container id="app" class="site-main">
+    <el-header height="100%">
+      <header-nav></header-nav>
+      <navigation></navigation>
+    </el-header>
+    <el-main>
+      <router-view/>
+    </el-main>
+    <el-footer>
+      <footer-nav></footer-nav>
+    </el-footer>
+  </el-container>
 </template>
 <script>
   export default {
@@ -9,9 +20,9 @@
       }
     },
     components: {
-      'headerNav': () => import('./views/header'),
-      'navigation': () => import('./views/navigation'),
-      'footerNav': () => import('./views/footer-nav')
+      'headerNav': () => import('../../views/header'),
+      'navigation': () => import('../../views/navigation'),
+      'footerNav': () => import('../../views/footer-nav')
     },
     mounted() {
       window.addEventListener('scroll', this.navHandler)

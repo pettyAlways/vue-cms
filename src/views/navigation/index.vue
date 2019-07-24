@@ -94,6 +94,7 @@
     background: linear-gradient(to bottom, #e0e0e0, #fff 6px);
   }
   .nav {
+    position: relative;
     height: 45px;
     width: 100%;
     background-color: #7b0002;

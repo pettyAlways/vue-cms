@@ -3,9 +3,9 @@
     <div class="category-panel__body">
       <custom-card01 title="知识库分类" note="CATEGORY">
         <div class="category-panel__body__container">
-          <div class="category-panel__body__container__item" v-for="index in 16" :key="index">
+          <div class="category-panel__body__container__item" v-for="(item, index) in knowledgeList" :key="index">
             <div class="category-panel__body__container__item--left">
-              <el-image :src="require('./assets/blog01.jpg')" style="width: 60px; height: 60px;" fit="cover"></el-image>
+              <el-image :src="item.knowledgeCover" style="width: 60px; height: 60px;" fit="cover"></el-image>
               <div class="center">
                 <span class="icon">+</span>
                 <a class="join">加入</a>
@@ -13,10 +13,10 @@
             </div>
             <div class="category-panel__body__container__item--right">
               <div class="title">
-                <a>如何成为高效的程序员</a>
+                <a>{{ item.knowledgeName }}</a>
               </div>
               <div class="content">
-                <span>在日常的繁重工作中,如何才能解脱出来就能享受生活，因此高效率是人们生活在当下...</span>
+                <span>{{ item.knowledgeDesc }}</span>
                 <a>[详情]</a>
               </div>
             </div>
@@ -24,28 +24,10 @@
         </div>
       </custom-card01>
       <div class="category-panel__scroll-panel">
-        <ul>
-          <li><a>Java</a></li>
-          <li><a>JavaScript</a></li>
-          <li><a>CSS</a></li>
-          <li><a>Vue</a></li>
-          <li><a>Spring</a></li>
-          <li><a>Mysql</a></li>
-          <li><a>Oracle</a></li>
-          <li><a>JVM</a></li>
-          <li><a>高并发</a></li>
-          <li><a>分布式</a></li>
-          <li><a>C++</a></li>
-          <li><a>PHP</a></li>
-          <li><a>.Net</a></li>
-          <li><a>分布式</a></li>
-          <li><a>C++</a></li>
-          <li><a>PHP</a></li>
-          <li><a>.Net</a></li>
-          <li><a>分布式</a></li>
-          <li><a>C++</a></li>
-          <li><a>PHP</a></li>
-          <li><a>.Net</a></li>
+        <ul v-if="categoryList.length">
+          <li v-for="(item, index) in categoryList" :key="index">
+            <a @click="searchKnowledge(item.categoryId)">{{ item.categoryName }}</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -53,10 +35,47 @@
 </template>
 
 <script>
+  import { retrieveAllCategory } from '@/api/category'
+  import { retrieveKnowledgeList } from '@/api/knowledge'
   export default {
     name: 'knowledgeCategory',
+    data() {
+      return {
+        paging: {
+          page: 1,
+          total: 0,
+          size: 10
+        },
+        categoryList: [],
+        knowledgeList: [],
+        showCategory: ''
+      }
+    },
     components: {
       'customCard01': () => import('@/components/custom-card-01')
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      async init() {
+        let res = await retrieveAllCategory()
+        this.categoryList = res.data
+        if (this.categoryList) {
+          this.showCategory = this.categoryList[0].categoryId
+          res = await retrieveKnowledgeList({ categoryId: this.showCategory, page: this.paging.page, size: this.paging.size })
+          this.knowledgeList = res.data
+        }
+      },
+      searchKnowledge(categoryId) {
+        this.showCategory = categoryId
+        retrieveKnowledgeList({ categoryId: this.showCategory, page: this.paging.page, size: this.paging.size })
+          .then(res => {
+            if (res.flag) {
+              this.knowledgeList = res.data
+            }
+          })
+      }
     }
   }
 </script>
@@ -73,13 +92,13 @@
       &__container {
         display: flex;
         flex-wrap: wrap;
+        min-height: 300px;
         &__item {
           display: flex;
-          margin-top: 15px;
-          width: 290px;
+          width: 280px;
           height: 100px;
-          padding-left: 20px;
           border-bottom: 1px dotted #eee;
+          padding: 5px;
           &--left {
             display: flex;
             flex-direction: column;
@@ -127,7 +146,9 @@
               }
             }
           }
-
+          &:hover {
+            background-color: gainsboro;
+          }
         }
       }
 

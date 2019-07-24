@@ -3,14 +3,13 @@
     <site-nav class="w1200">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/knowledge' }">知识库</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">知识库详情</el-breadcrumb-item>
-        <el-breadcrumb-item>分布式应用</el-breadcrumb-item>
+        <el-breadcrumb-item >{{ knowledgeName }}</el-breadcrumb-item>
       </el-breadcrumb>
     </site-nav>
     <el-card class="w1200">
       <div class="knowledge-detail__content">
         <div class="knowledge-detail__content--left">
-          <konwledge-cover></konwledge-cover>
+          <konwledge-cover @getKnowledgeName="getKnowledgeName"></konwledge-cover>
           <konwledge-content></konwledge-content>
         </div>
         <div class="knowledge-detail__content--right">
@@ -26,7 +25,12 @@
   export default {
     name: 'knowledgeDetail',
     data() {
-      return {}
+      return {
+        knowledgeName: '',
+        knowledge: {
+          knowledgeId: ''
+        }
+      }
     },
     components: {
       siteNav: () => import('@/components/site-nav'),
@@ -34,6 +38,19 @@
       konwledgeContent: () => import('./components/knowledge-content'),
       authorList: () => import('./components/author-list'),
       knowledgeNews: () => import('./components/knowledge-news')
+    },
+    provide() {
+      return {
+        kData: this.knowledge
+      }
+    },
+    created() {
+      this.knowledge.knowledgeId = this.$route.params.knowledgeId
+    },
+    methods: {
+      getKnowledgeName(knowledgeName) {
+        this.knowledgeName = knowledgeName
+      }
     }
   }
 </script>
