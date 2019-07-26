@@ -19,11 +19,13 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // 刷新操作token存在但是vuex内容被清空执行下面代码
-      console.error(store.getters.userShow)
       if (!store.getters.userShow.userId) {
         store.dispatch('retrieveUserInfo').then(() => {
           next({ ...to, replace: true })
+        }, reason => {
+          Vue.prototype.$message.error(reason)
         }).catch(reason => {
+          debugger
           Vue.prototype.$message.error(reason)
         })
       } else {

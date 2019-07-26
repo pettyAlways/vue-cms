@@ -43,7 +43,6 @@
 </template>
 
 <script>
-  import { setToken } from '../../utils/auth'
   import { mapGetters, mapActions } from 'vuex'
   import { clientVisiable } from '../../utils/compatibility'
 
@@ -74,6 +73,7 @@
     methods: {
       ...mapActions([
         'retrieveUserInfo',
+        'userLogin',
         'loginOut'
       ]),
       login() {
@@ -83,13 +83,21 @@
         this.$router.push({ name: 'profile', params: { userId: userId } })
       },
       signOut() {
-        this.loginOut()
+        this.loginOut().then(() => {
+          this.$router.push({ path: '/index' })
+        })
       },
       thirdParty() {
-        window.open(this.gitHubUrl, `newwindow', 'height=300, width=300, top=${this.height / 2}, left=${this.width / 2}, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no`)
-        window.addEventListener('message', function (e) {
-          setToken(e.data)
-          this.retrieveUserInfo()
+        window.open(this.gitHubUrl, 'newwindow', `height=300, width=300, top=${this.height / 2 - 150}, left=${this.width / 2 - 150}, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no`)
+        window.addEventListener('message', e => {
+          console.error('接收到的第三方登录token:' + e.data)
+          if (/^ThirdPartyLogin-(\w*)-(\w*)/.test(e.data)) {
+            let username = RegExp.$1
+            let password = RegExp.$2
+            this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
+              this.retrieveUserInfo()
+            })
+          }
         }, false)
       }
     }
@@ -201,7 +209,7 @@
               }
               .user-panel {
                 position: absolute;
-                right: 140px;
+                right: 148px;
                 top: 98px;
                 z-index: 10;
                 width: 120px;

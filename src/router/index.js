@@ -14,6 +14,7 @@ import News from '@/views/news'
 import Relative from '@/views/relative'
 import Contact from '@/views/contact'
 import Profile from '@/views/profile'
+import editProfile from '@/views/profile/components/edit-profile'
 
 Vue.use(Router)
 
@@ -94,7 +95,10 @@ export const constantRouterMap = [
       {
         path: '/profile/:userId',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        children: [
+          { path: '/profile-edit/:userId', name: 'editProfile', component: editProfile }
+        ]
       }
     ]
   }

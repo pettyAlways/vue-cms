@@ -4,7 +4,8 @@
       <el-image :src="require('./assets/profile.jpg')" class="profile-bg"></el-image>
       <div class="profile-panel__header__space">
         <div class="nickname">{{ profileInfo.userName }}</div>
-        <div class="edit-btn">编辑个人资料</div>
+        <div class="edit-btn" @click="editUserProfile" v-if="!editProfile">编辑个人资料</div>
+        <div class="edit-btn" @click="backProfile" v-else>返回个人主页</div>
       </div>
       <div class="user-img" @mouseenter="mask = true" @mouseleave="mask = false">
         <el-image :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')"></el-image>
@@ -17,52 +18,87 @@
         <i class="el-icon-camera"></i>
         <span>修改封面图片</span>
       </div>
+      <router-view class="profile--extra" v-if="editProfile" />
     </div>
-    <div class="profile-panel__body">
+    <div class="profile-panel__body" v-if="!editProfile">
       <div class="content-panel">
         <div class="content-panel__header">
           <ul>
-            <li :class="{ active: (type === 'catalogue') }">
-              <i class="el-icon-notebook-2" ></i>
-              <a>最近文章</a>
+            <li :class="{ active: (type === 'newPost') }" @click="goNewPost">
+              <icon-svg iconClass="article" :vStyle="{ width: '14px', height: '14px' }"></icon-svg>
+              <a>TA的文章</a>
             </li>
-            <li :class="{ active: (type === 'recentPost') }">
-              <i class="el-icon-alarm-clock"></i>
+            <li :class="{ active: (type === 'hisKnowledge') }" @click="goKnowledgeList">
+              <icon-svg iconClass="knowledge" :vStyle="{ width: '16px', height: '16px' }"></icon-svg>
               <a>TA的知识库</a>
             </li>
-            <li :class="{ active: (type === '参与的知识库') }">
-              <i class="el-icon-star-off"></i>
-              <a>最近编辑</a>
+            <li :class="{ active: (type === 'participantKnowledge') }" @click="goParticipant">
+              <icon-svg iconClass="participant" :vStyle="{ width: '18px', height: '18px' }"></icon-svg>
+              <a>TA的参与</a>
             </li>
           </ul>
         </div>
         <div class="content-panel__body">
-          <ul>
-            <li v-for="(item, index) in recentArticleList" :key="index">
-              <article-panel01 :content="item.content" :img="img">
-                <template slot="title">
-                  <a @click="goArticle(item.articleId)">{{ item.articleTitle }}</a>
-                </template>
-                <template slot="tipPanel">
-                  <ul class="tipPanel">
-                    <li class="author-img">
-                      <img :src="require('./assets/author01.jpg')" />
-                    </li>
-                    <li class="author-info">
-                      <a>{{ item.authorName }}</a>
-                      <span>发布于</span>
-                      <span>{{ item.postTime }}</span>
-                    </li>
-                    <li class="love">
-                      <a><i class="el-icon-star-off"></i></a>
-                      <span>2</span>
-                      <span>点赞</span>
-                    </li>
-                  </ul>
-                </template>
-              </article-panel01>
-            </li>
-          </ul>
+          <div class="recent-post" v-if="type === 'newPost' && recentArticleList.length">
+            <ul>
+              <li v-for="(item, index) in recentArticleList" :key="index">
+                <article-panel01 :content="item.content" :img="item.coverUrl">
+                  <template slot="title">
+                    <a @click="goArticle(item.articleId)">{{ item.articleTitle }}</a>
+                  </template>
+                  <template slot="tipPanel">
+                    <ul class="tipPanel">
+                      <li class="author-info">
+                        <span>{{ item.authorName }}</span>
+                        <span>发布于</span>
+                        <a>{{ item.knowledgeName }}</a>
+                        <span>分类</span>
+                        <span>{{ item.categoryName}}</span>
+                        <span>发布时间</span>
+                        <span>{{ item.postTime }}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </article-panel01>
+              </li>
+            </ul>
+          </div>
+          <div v-if="type === 'hisKnowledge' && userKnowledgeList.length" class="his-knowledge">
+            <div class="knowledge-item" v-for="(item, index) in userKnowledgeList" :key="index">
+              <knowledge-card
+                :knowledgeId="item.knowledgeId"
+                :title="item.knowledgeName"
+                :desc="item.knowledgeDesc"
+                :createTime="item.createTime"
+                :knowledgeCover="item.knowledgeCover"
+                :creator="item.creator"
+                :creatorName="item.creatorName"
+                :categoryName="item.categoryName"
+                :articleNum="item.articleCounts"
+                :participantNum="item.participantCounts"
+              ></knowledge-card>
+            </div>
+          </div>
+          <div v-if="type === 'participantKnowledge' && userParticipantKnowledgeList.length" class="his-knowledge">
+            <div class="knowledge-item" v-for="(item, index) in userParticipantKnowledgeList" :key="index">
+              <knowledge-card
+                :knowledgeId="item.knowledgeId"
+                :title="item.knowledgeName"
+                :desc="item.knowledgeDesc"
+                :createTime="item.createTime"
+                :knowledgeCover="item.knowledgeCover"
+                :creator="item.creator"
+                :creatorName="item.creatorName"
+                :categoryName="item.categoryName"
+                :articleNum="item.articleCounts"
+                :participantNum="item.participantCounts"
+              ></knowledge-card>
+            </div>
+          </div>
+          <div v-if="!hasList" class="no-content">
+            <icon-svg iconClass="coffee" :vStyle="{ width: '60px', height: '60px' }"></icon-svg>
+            <p>暂无内容</p>
+          </div>
         </div>
       </div>
       <div class="other-panel">
@@ -86,20 +122,29 @@
           total: 0,
           size: 10
         },
+        editProfile: false,
         mask: false,
         userId: '',
-        type: 'catalogue',
+        type: 'newPost',
         recentArticleList: [],
         userKnowledgeList: [],
         userParticipantKnowledgeList: [],
-        profileInfo: ''
+        profileInfo: '',
+        showxx: '123'
+      }
+    },
+    computed: {
+      hasList() {
+        return this.recentArticleList.length || this.userKnowledgeList.length || this.userParticipantKnowledgeList.length
       }
     },
     components: {
-      articlePanel01: () => import('@/components/article-panel-01')
+      articlePanel01: () => import('@/components/article-panel-01'),
+      knowledgeCard: () => import('@/components/knowledge-card')
     },
     mounted() {
       this.userId = this.$route.params.userId
+      this.refreshEditProfile(this.$route.path)
       this.init()
     },
     methods: {
@@ -107,11 +152,33 @@
         this.userProfile()
         this.userRecentPost()
       },
+      refreshEditProfile(path) {
+        if (/^\/profile-edit\/\w*$/.test(path)) {
+          this.editProfile = true
+        }
+      },
+      editUserProfile() {
+        this.$router.push({ name: 'editProfile', params: { userId: this.userId } })
+      },
+      backProfile() {
+        this.$router.push({ name: 'profile', params: { userId: this.userId } })
+      },
+      goNewPost() {
+        this.type = 'newPost'
+        this.userRecentPost()
+      },
+      goKnowledgeList() {
+        this.type = 'hisKnowledge'
+        this.userKnowledge()
+      },
+      goParticipant() {
+        this.type = 'participantKnowledge'
+        this.userParticipant()
+      },
       userRecentPost() {
         retrieveUserRecentPost({ userId: this.userId, page: this.paging.page, size: this.paging.size }).then(res => {
           if (res.flag) {
             this.recentArticleList = res.data
-            console.error(this.recentArticleList)
           }
         })
       },
@@ -135,6 +202,16 @@
             this.profileInfo = res.data
           }
         })
+      }
+    },
+    watch: {
+      $route(to) {
+        if (/^\/profile-edit\/\w*$/.test(to.path)) {
+          this.editProfile = true
+        }
+        if (/^\/profile\/\w*$/.test(to.path)) {
+          this.editProfile = false
+        }
       }
     }
   }
@@ -179,7 +256,7 @@
       justify-content: center;
       align-items: center;
       position: absolute;
-      bottom: 20px;
+      top: 180px;
       left: 50px;
       width: 140px;
       height: 140px;
@@ -228,6 +305,9 @@
         color: hsla(0,0%,100%,.7);
       }
     }
+    .profile--extra {
+      padding-left: 200px;
+    }
   }
   &__body {
     display: flex;
@@ -235,23 +315,28 @@
     .content-panel {
       width: 900px;
       &__header {
-        height: 40px;
-        border-bottom: 1px solid #e6e6e6;
+        height: 60px;
+        border-bottom: 1px solid #ece6e6;
         background-color: #ffffff;
-        border-bottom: 1px solid gainsboro;
         padding-left: 10px;
         ul {
           display: flex;
           align-items: center;
           list-style: none;
           padding: 0px;
+          height: 100%;
           li {
+            display: flex;
+            align-items: center;
             height: 40px;
             margin-right: 15px;
             line-height: 40px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            a {
+              margin-left: 5px;
+            }
             :hover {
               color: #3f87ae;
             }
@@ -262,45 +347,58 @@
         }
       }
       &__body {
-        min-height: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 250px;
         background-color: #ffffff;
-        ul {
-          list-style: none;
-          padding: 0px;
-          li {
-            .tipPanel {
-              display: flex;
-              list-style: none;
-              padding: 0px;
-              .author-img {
-                img {
-                  width: 20px;
-                  height: 20px;
-                  object-fit: cover;
-                  border: 2px solid burlywood;
-                  border-radius: 50%;
-                }
-              }
-              .author-info {
-                margin-left: 10px;
-                a {
-                  color: #4c84be;
-                  &:hover {
-                    color:  #409EFF;
+        padding: 15px;
+        .recent-post {
+          width: 100%;
+          ul {
+            list-style: none;
+            padding: 0px;
+            li {
+              .tipPanel {
+                display: flex;
+                list-style: none;
+                padding: 0px;
+                font-size: 12px;
+                .author-info {
+                  margin-right: 10px;
+                  a {
+                    color: #4c84be;
+                    &:hover {
+                      color:  #409EFF;
+                    }
+                  }
+                  span{
+                    color: #999;
                   }
                 }
-                span{
-                  margin-left: 5px;
-                  color: #999;
-                }
-              }
-              .love {
-                margin-left: 10px;
+                .love {
+                  margin-left: 10px;
 
+                }
               }
             }
           }
         }
+        .his-knowledge {
+          display: flex;
+          flex-wrap: wrap;
+          width: 100%;
+          .knowledge-item {
+            width: 280px;
+            height: 300px;
+            margin-right: 10px;
+          }
+        }
+        .no-content {
+          width: 80px;
+          height: 80px;
+        }
+
       }
     }
     .other-panel {

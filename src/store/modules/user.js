@@ -20,6 +20,8 @@ const user = {
             resolve()
             commit(SET_USERINFO, res.data)
           }
+        }).catch(reason => {
+          reject(reason.response.data)
         })
       })
     },
@@ -36,8 +38,11 @@ const user = {
       })
     },
     loginOut({commit}) {
-      removeToken()
-      commit(SET_USERINFO, {})
+      return new Promise((resolve) => {
+        removeToken()
+        commit(SET_USERINFO, {})
+        resolve()
+      })
     }
   },
   getters: {
