@@ -62,4 +62,3 @@ export function addMonth(addMonth) {
 export function autoTransform(content) {
   return content || 'Ta很懒'
 }
-

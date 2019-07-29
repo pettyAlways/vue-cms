@@ -1,4 +1,4 @@
-import remote from '../utils/remote'
+import remote, { remoteWithToken } from '../utils/remote'
 
 export function retrieveRecommend() {
   return remote({
@@ -61,3 +61,20 @@ export function retrieveKnowledgeParticipant(params) {
     params
   })
 }
+
+export function alreadyJoin(params) {
+  return remoteWithToken({
+    url: '/platform/frontend/knowledge/search/already-join',
+    method: 'get',
+    params
+  })
+}
+
+export function joinKnowledge(params) {
+  return remoteWithToken({
+    url: '/platform/frontend/knowledge/join',
+    method: 'post',
+    params
+  })
+}
+

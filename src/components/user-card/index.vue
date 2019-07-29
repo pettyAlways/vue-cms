@@ -14,7 +14,7 @@
       </li>
       <li>
         <div class="key">擅长:</div>
-        <div class="tag" v-if="skill.length">
+        <div class="tag" v-if="skill && skill.length">
           <el-tag size="mini" v-for="(item, index) in skill" :key="index">{{item.skillName}}</el-tag>
         </div>
         <div v-else>暂无</div>

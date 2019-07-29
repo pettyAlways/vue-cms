@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="knowledge-cover__left">
-      <div class="knowledge-cover__left__join">
+      <div v-if="userShow.userId !== knowledgeItem.creator" class="knowledge-cover__left__join" @click="joinKnowledge(knowledgeId)">
         <span><i class="el-icon-circle-plus-outline"></i> 申请加入</span>
       </div>
       <div class="statistic">
@@ -53,7 +53,8 @@
 </template>
 
 <script>
-  import { retrieveKnowledgeDetail } from '@/api/knowledge'
+  import { retrieveKnowledgeDetail, joinKnowledge, alreadyJoin } from '@/api/knowledge'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'knowledgeCover',
     inject: ['kData'],
@@ -62,6 +63,11 @@
         knowledgeId: '',
         knowledgeItem: ''
       }
+    },
+    computed: {
+      ...mapGetters([
+        'userShow'
+      ])
     },
     mounted() {
       this.knowledgeId = this.kData.knowledgeId
@@ -78,6 +84,37 @@
             this.$emit('getKnowledgeName', this.knowledgeItem.knowledgeName)
           }
         })
+      },
+      joinKnowledge(knowledgeId) {
+        if (!this.userShow.userId || !this.userShow.isAuthor) {
+          this.$alert('需要登录并申请成为作者才能加入知识库哦', '提示', {
+            confirmButtonText: '确定'
+          })
+        } else {
+          alreadyJoin({ knowledgeId: this.knowledgeId }).then(res => {
+            if (res.flag) {
+              if (res.alreadyJoin) {
+                this.$alert('您已经是该知识库的参与者，不需要重复申请', '提示', {
+                  confirmButtonText: '确定'
+                })
+              } else {
+                this.$prompt('您加入的理由', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  inputValidator: this.checkReason
+                }).then(({ value }) => {
+                  joinKnowledge({ knowledgeId: knowledgeId, reason: value }).then(res => {
+                    if (res.flag) {
+                      this.$alert('已经提交审核请耐心等待', '提示', {
+                        confirmButtonText: '确定'
+                      })
+                    }
+                  })
+                })
+              }
+            }
+          })
+        }
       }
     }
   }
@@ -179,6 +216,9 @@
         cursor: pointer;
         span {
           font-size: 18px;
+        }
+        &:hover {
+          color: #009a61;
         }
       }
       .statistic {

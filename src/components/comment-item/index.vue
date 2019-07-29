@@ -63,7 +63,7 @@
     data () {
       return {
         showReplyPanel: false,
-        replyObj: '',
+        replyObj: Number,
         replyObjName: ''
       }
     },
@@ -78,16 +78,10 @@
     },
     methods: {
       handleClickAvatar (event) {
-        event.stopPropagation()
-        this.$emit('clickAvatar', this)
-      },
-      handleClickTool (event, tool) {
-        event.stopPropagation()
-        this.$emit('clickTool', this, tool)
+        this.$router.push({ name: 'profile', params: { userId: this.commentUserId } })
       },
       handleClickAuthor (event) {
-        event.stopPropagation()
-        this.$emit('clickAuthor', this)
+        this.$router.push({ name: 'profile', params: { userId: this.commentUserId } })
       },
       handleAddReply () {
         this.showReplyPanel = true

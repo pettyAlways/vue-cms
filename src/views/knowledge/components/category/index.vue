@@ -8,7 +8,7 @@
               <el-image :src="item.knowledgeCover" style="width: 60px; height: 60px;" fit="cover"></el-image>
               <div class="center">
                 <span class="icon">+</span>
-                <a class="join">加入</a>
+                <a @click="joinKnowledge(item.knowledgeId)" class="join">加入</a>
               </div>
             </div>
             <div class="category-panel__body__container__item--right">
@@ -36,7 +36,8 @@
 
 <script>
   import { retrieveAllCategory } from '@/api/category'
-  import { retrieveKnowledgeList } from '@/api/knowledge'
+  import { retrieveKnowledgeList, joinKnowledge } from '@/api/knowledge'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'knowledgeCategory',
     data() {
@@ -50,6 +51,11 @@
         knowledgeList: [],
         showCategory: ''
       }
+    },
+    computed: {
+      ...mapGetters([
+        'userShow'
+      ])
     },
     components: {
       'customCard01': () => import('@/components/custom-card-01')
@@ -75,6 +81,35 @@
               this.knowledgeList = res.data
             }
           })
+      },
+      checkReason(val) {
+        if (!val) {
+          return '内容不能为空'
+        }
+        if (val.length < 10 || val.length > 50) {
+          return '请输出 10 - 50 个字'
+        }
+      },
+      joinKnowledge(knowledgeId) {
+        if (!this.userShow.userId || !this.userShow.isAuthor) {
+          this.$alert('需要登录并申请成为作者才能加入知识库哦', '提示', {
+            confirmButtonText: '确定'
+          })
+        } else {
+          this.$prompt('您加入的理由', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputValidator: this.checkReason
+          }).then(({ value }) => {
+            joinKnowledge({ knowledgeId: knowledgeId, reason: value }).then(res => {
+              if (res.flag) {
+                this.$alert('已经提交审核请耐心等待', '提示', {
+                  confirmButtonText: '确定'
+                })
+              }
+            })
+          })
+        }
       }
     }
   }

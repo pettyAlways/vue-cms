@@ -2,16 +2,16 @@
   <div class="reply-item-panel">
     <div class="reply-content-block">
       <div class="reply-content">
-        <p><span v-if="replyObj">回复<a>{{replyObjName}}</a>:</span>&nbsp;{{content}}</p>
+        <p><span v-if="replyObj">回复<a @click="handleClickReply">{{replyObjName}}</a>:</span>&nbsp;{{content}}</p>
       </div>
       <div class="comment-func inline-block">
         <span class="comment-meta inline-block flex-show">
           <span> — </span>
-          <a target="_blank" href="javascript:void(0)" @click="handleClickAuthor($event)">{{author}}</a>
+          <a target="_blank" href="javascript:void(0)" @click="handleClickAuthor()">{{author}}</a>
           <span class="comments-date">  ·  {{time}}</span>
           <div class="tool-btn">
             <a @click="addReply(authorId, author)">回复</a>
-            <a @click="deleteReply">删除</a>
+            <a @click="deleteReply" v-if="userShow.userId === authorId">删除</a>
           </div>
         </span>
       </div>
@@ -21,7 +21,7 @@
 
 <script>
   import { deleteReply } from '../../api/comment'
-
+  import { mapGetters } from 'vuex'
   export default {
     name: 'commentReply',
     props: {
@@ -39,15 +39,16 @@
       }
     },
     computed: {
+      ...mapGetters([
+        'userShow'
+      ])
     },
     methods: {
-      handleClickTool (event, tool) {
-        event.stopPropagation()
-        this.$emit('clickTool', this, tool)
+      handleClickAuthor () {
+        this.$router.push({ name: 'profile', params: { userId: this.authorId } })
       },
-      handleClickAuthor (event) {
-        event.stopPropagation()
-        this.$emit('clickAuthor', this)
+      handleClickReply () {
+        this.$router.push({ name: 'profile', params: { userId: this.replyObj } })
       },
       addReply(replyUserId, replyUserName) {
         this.$emit('beginReply', replyUserId, replyUserName)

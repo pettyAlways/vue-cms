@@ -3,7 +3,7 @@
     <site-nav class="w1200">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/knowledge' }">知识库</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/knowledge/detail' }">{{ article.knowledgeName }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'knowledgeDetail', params: { knowledgeId: knowledgeId } }">{{ article.knowledgeName }}</el-breadcrumb-item>
         <el-breadcrumb-item>{{ article.articleTitle }}</el-breadcrumb-item>
       </el-breadcrumb>
     </site-nav>
@@ -74,7 +74,7 @@
             </custom-card01>
           </div>
           <div class="article__container__comment">
-            <common-panel-one title="1条评论">
+            <common-panel-one :title="(commentList && commentList.length) ? commentList.length +'条评论' : '评论'">
               <template slot="more">
                 <a>时间排序</a>
               </template>
@@ -163,7 +163,7 @@
         relateKnowledgeList: '',
         rows: '',
         relateArticleList: [],
-        commentList: [],
+        commentList: []
       }
     },
     components: {
@@ -184,6 +184,7 @@
         if (res.flag) {
           this.article = res.data
         }
+        this.knowledgeId = this.article.knowledgeId
         this.recentPost(this.article.knowledgeId)
         this.relateKnowledge(this.article.categoryId)
         this.articleConcise(this.article.knowledgeId)
@@ -329,6 +330,7 @@
         margin-top: 15px;
         .comment-box-container {
           height: 180px;
+          margin: -10px -15px;
         }
         .comment-list {
           margin-top: 10px;

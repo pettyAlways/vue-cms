@@ -29,8 +29,8 @@
               </el-image>
               <div class="user-panel" @mouseenter="upShow=true" @mouseleave="upShow=false" v-if="upShow">
                 <ul>
-                  <li><i class="el-icon-user"></i><a @click="goProfile(uInfo.userId)">我的主页</a></li>
-                  <li v-if="uInfo.isAuthor"><i class="el-icon-edit"></i><a>工作台</a></li>
+                  <li style="margin-top: 5px;"><i class="el-icon-user"></i><a @click="goProfile(uInfo.userId)">我的主页</a></li>
+                  <li v-if="uInfo.isAuthor" @click="goWorkbentch"><i class="el-icon-edit"></i><a>工作台</a></li>
                   <li v-else @click="beAuthor(uInfo.userId)"><i class="el-icon-edit"></i><a>成为作者</a></li>
                   <li><i class="el-icon-switch-button"></i><a @click="signOut">退出</a></li>
                 </ul>
@@ -86,6 +86,9 @@
       beAuthor(userId) {
         this.$router.push({ name: 'beAuthor', params: { userId: userId } })
       },
+      goWorkbentch() {
+        window.open('http://localhost:8082/#/platform/blog')
+      },
       signOut() {
         this.loginOut().then(() => {
           this.$router.push({ path: '/index' })
@@ -100,6 +103,7 @@
             let password = RegExp.$2
             this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
               this.retrieveUserInfo()
+              this.upShow = false
             })
           }
         }, false)
@@ -178,7 +182,7 @@
       }
       &--right {
         flex-shrink: 0;
-        width: 237px;
+        width: 280px;
         ul {
           display: flex;
           flex-direction: row;
@@ -203,8 +207,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 200px;
+            width: 300px;
             .user_image_panel {
+              width: 50px;
+              flex-shrink: 0;
               .user_img {
                 width: 30px;
                 height: 30px;
@@ -213,7 +219,7 @@
               }
               .user-panel {
                 position: absolute;
-                right: 148px;
+                right: 120px;
                 top: 98px;
                 z-index: 10;
                 width: 120px;
@@ -249,7 +255,14 @@
                 }
               }
             }
-
+            .nickname {
+              display: block;
+              width: 200px;
+              flex-grow: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
           }
         }
       }

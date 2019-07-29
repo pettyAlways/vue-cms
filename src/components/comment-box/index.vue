@@ -78,7 +78,11 @@
                 })
               }
               this.comment.content = ''
-              this.$refs.commentForm.clearValidate()
+              this.$nextTick(() => {
+                if (this.$refs.commentForm) {
+                  this.$refs.commentForm.clearValidate()
+                }
+              })
               this.$emit('finishComment')
             })
           }

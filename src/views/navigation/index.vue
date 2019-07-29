@@ -1,8 +1,8 @@
 <template>
   <div class='nav' :class="{'nav-fix': fixed}">
     <ul class="nav-panel w1200">
-      <li class="nav-panel__item" :class="{'active': item.show, 'nav-panel--noactive': !item.show}" v-for="item in navInfo" :key="item.name" @click="navClickHandler(item)" >
-        <router-link :to="{path: item.link, query: {name: item.index}}">{{item.name}}</router-link>
+      <li class="nav-panel__item" @click="goNav(item.link)" :class="{'active': item.show, 'nav-panel--noactive': !item.show}" v-for="item in navInfo" :key="item.name" >
+        {{item.name}}
       </li>
     </ul>
   </div>
@@ -16,57 +16,36 @@
         fixed: false,
         navInfo: [
           {
-            name: '站点首页',
+            name: '首页',
             link: '/index',
-            show: true
+            show: false
           },
           {
             name: '知识库',
             link: '/knowledge',
             index: '常规基酒',
             show: false
-          },
-          {
-            name: '文章',
-            link: '/brand',
-            index: '贴牌政策',
-            show: false
-          },
-          {
-            name: '书籍',
-            link: '/custom',
-            index: '企业定制',
-            show: false
-          },
-          {
-            name: '音乐',
-            link: '/news',
-            index: '公司新闻',
-            show: false
-          },
-          {
-            name: '计划',
-            link: '/relative',
-            index: '首酒简介',
-            show: false
-          },
-          {
-            name: '视频',
-            link: '/contact',
-            show: false
-          },
-          {
-            name: '关于我',
-            link: '/contact',
-            show: false
           }
         ]
       }
     },
+    watch: {
+      $route(to) {
+        this.showNav(to.path)
+      }
+    },
     mounted() {
+      this.showNav(this.$route.path)
       window.addEventListener('scroll', this.navHandler)
     },
     methods: {
+      showNav(path) {
+        let item = this.navInfo.filter(item => item.link === path)
+        for (let nav of this.navInfo) {
+          nav.show = false
+        }
+        item[0].show = true
+      },
       navHandler() {
         let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
         if (scrollTop > 150) {
@@ -75,11 +54,8 @@
           this.fixed = false
         }
       },
-      navClickHandler(item) {
-        for (let nav of this.navInfo) {
-          nav.show = false
-        }
-        item.show = true
+      goNav(link) {
+        this.$router.push({ path: link })
       }
     }
   }
