@@ -1,5 +1,5 @@
 <template>
-  <div class="tinymce-editor">
+  <div class="tinymce-editor" :class="{'fixed': fixed}">
     <editor v-model="myValue"
             :init="init"
             :disabled="disabled"
@@ -16,8 +16,10 @@
   import 'tinymce/plugins/media'// 插入视频插件
   import 'tinymce/plugins/table'// 插入表格插件
   import 'tinymce/plugins/lists'// 列表插件
+  import 'tinymce/plugins/autoresize'// 插件高度自适应
   import 'tinymce/plugins/wordcount'// 字数统计插件
   import 'tinymce/plugins/textcolor'// 文本颜色
+  import 'tinymce/plugins/codesample'// 文本颜色
   export default {
     name: 'myTinymce',
     props: {
@@ -32,23 +34,25 @@
       },
       plugins: {
         type: [String, Array],
-        default: 'lists image media table textcolor wordcount'
+        default: 'lists image media table textcolor wordcount autoresize codesample'
       },
       toolbar: {
         type: [String, Array],
-        default: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat'
+        default: 'formatselect bold italic forecolor backcolor fontselect fontsizeselect codesample blockquote alignleft aligncenter alignright alignjustify bullist numlist lists table removeformat'
       }
     },
     data() {
       return {
+        fixed: false,
         // 初始化配置
         init: {
           language_url: '/static/tinymce/zh_CN.js',
-          height: '100%',
+          height: 300,
           language: 'zh_CN',
           skin_url: '/static/tinymce/skins/ui/oxide',
           plugins: this.plugins,
           toolbar: this.toolbar,
+          font_formats: '宋体; 仿宋',
           branding: false,
           menubar: false,
           // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
@@ -65,6 +69,7 @@
       Editor
     },
     mounted() {
+      window.addEventListener('scroll', this.navHandler)
       tinymce.init({})
     },
     methods: {
@@ -82,6 +87,15 @@
       },
       setContent(content) {
         this.myValue = content
+      },
+      navHandler() {
+        let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        console.error(scrollTop)
+        if (scrollTop >= 280) {
+          this.fixed = true
+        } else {
+          this.fixed = false
+        }
       }
     },
     watch: {
@@ -97,6 +111,21 @@
 
 <style lang="scss" scoped>
   .tinymce-editor {
-    height: 100%
+    height: 100%;
+    position: relative;
+  }
+  .fixed {
+    /deep/ .tox-toolbar {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 80px;
+      margin-left: -120px;
+      z-index: 100;
+      width: 95px;
+      .tox-tbtn__select-label {
+        width: 60px;
+      }
+    }
   }
 </style>

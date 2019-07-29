@@ -34,9 +34,8 @@
               <a v-for="(item, index) in article.participantList" :key="index">{{item.userName}}</a>
             </li>
           </ul>
-        </el-card>
-        <el-card>
-          <div :style="{ 'min-height': visiableHeight + 'px' }" v-html="article.content">
+          <el-divider></el-divider>
+          <div class="article-content" :style="{ 'min-height': visiableHeight + 'px' }" v-html="article.content">
           </div>
         </el-card>
       </div>
@@ -49,6 +48,7 @@
   import { knowledgeItem } from '@/api/knowledge'
   import { clientVisiable } from '@/utils/compatibility'
   import { mapGetters } from 'vuex'
+  import Prism from 'prismjs'
   export default {
     name: 'articleShow',
     data() {
@@ -162,6 +162,10 @@
         getArticle({ articleId: articleId }).then(res => {
           if (res.flag) {
             this.article = res.data
+            // 异步获取导致代码高亮不显示，这里在获取代码内容以后在执行Prism.highlightAll
+            this.$nextTick(() => {
+              Prism.highlightAll()
+            })
           }
         })
       },
@@ -232,6 +236,12 @@
           li {
             margin-right: 15px;
             font-size: 12px;
+          }
+        }
+        .article-content {
+          /deep/ pre[class*="language-"] {
+            width: 950px;
+            padding: 0px;
           }
         }
       }

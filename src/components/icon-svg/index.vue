@@ -1,5 +1,5 @@
 <template>
-  <svg class="svg-icon" aria-hidden="true">
+  <svg class="svg-icon" aria-hidden="true" :style="vStyle">
     <use :xlink:href="iconName"></use>
   </svg>
 </template>
@@ -11,6 +11,15 @@
       iconClass: {
         type: String,
         required: true
+      },
+      vStyle: {
+        type: Object,
+        default: () => ({
+          width: '1.25em',
+          height: '1.25em',
+          fill: 'currentColor',
+          overflow: 'hidden'
+        })
       }
     },
     computed: {

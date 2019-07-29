@@ -13,6 +13,7 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^2.0.0",
     "axios": "^0.17.1",
+    "babel-plugin-prismjs": "^1.1.1",
     "better-scroll": "^1.10.0",
     "clipboard": "^2.0.1",
     "countup.js": "^1.9.3",
@@ -25,6 +26,7 @@
     "normalize.css": "^7.0.0",
     "nprogress": "^0.2.0",
     "particles.js": "^2.0.0",
+    "prismjs": "^1.17.1",
     "screenfull": "^3.3.2",
     "script-load": "^0.1.0",
     "script-loader": "^0.7.2",

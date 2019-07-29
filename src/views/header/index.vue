@@ -27,7 +27,8 @@
             <router-link :to="{ path: '/platform/blog/message' }" v-else><i class="el-icon-message"></i></router-link>
           </li>
           <li class="author">
-            <img :src="require('./assets/author01.jpg')"/>
+            <img v-if="currentUser.userAvatar" :src="currentUser.userAvatar"/>
+            <img v-else :src="require('./assets/user.png')">
           </li>
         </ul>
       </div>
@@ -53,7 +54,8 @@
       ...mapGetters([
         'permissions',
         'curNav',
-        'messageNum'
+        'messageNum',
+        'currentUser'
       ]),
       navResource() {
         let navResource
@@ -163,7 +165,6 @@
           img {
             width: 25px;
             height: 25px;
-            border: 2px solid darkorange;
             border-radius: 50%;
           }
         }
