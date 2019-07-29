@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import MainNav from '@/views/main'
 import Login from '@/views/login'
+import beAuthor from '@/views/be-author'
 import Index from '@/views/index'
 import Knowledge from '@/views/knowledge'
 import KnowledgeMain from '@/views/knowledge/components/main'
@@ -36,6 +37,11 @@ export const constantRouterMap = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/author/:userId',
+    name: 'beAuthor',
+    component: beAuthor
   },
   {
     path: '/index',

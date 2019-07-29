@@ -25,7 +25,6 @@ router.beforeEach((to, from, next) => {
         }, reason => {
           Vue.prototype.$message.error(reason)
         }).catch(reason => {
-          debugger
           Vue.prototype.$message.error(reason)
         })
       } else {

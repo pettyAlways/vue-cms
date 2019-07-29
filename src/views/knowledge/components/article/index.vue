@@ -79,33 +79,23 @@
                 <a>时间排序</a>
               </template>
               <template slot="body">
-                <div class="container">
-                  <div class="article__container__comment__item" v-for="index in 6" :key="index">
-                    <div class="article__container__comment--left">
-                      <img :src="require('./assets/author01.jpg')">
-                    </div>
-                    <div class="article__container__comment--right">
-                      <div class="top">
-                        <a>Billgo</a>
-                        <span>2019-05-14</span>
-                      </div>
-                      <div class="center">
-                        <span>Flutter 就是一个高不成低不就的解决方案。如果都下定决心去学一门编程语言来开发了，干嘛不直接学原生。RN最主要的好处是可以用JS来写，我既然都选择了JS来快速开发了，性能只要过得去就好啦。</span>
-                      </div>
-                      <div class="btn">
-                        <ul>
-                          <li>
-                            <i class="el-icon-thumb"></i>
-                            <a>赞</a>
-                          </li>
-                          <li>
-                            <i class="el-icon-s-comment"></i>
-                            <a>回复</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                <div class="comment-box-container">
+                  <comment-box :articleId="article.articleId" @finishComment="finishComment"></comment-box>
+                </div>
+                <div class="comment-list">
+                  <comment-item
+                    v-for="(item, index) in commentList"
+                    :key="index"
+                    :commentId = item.commentId
+                    :commentUserId="item.commentUserId"
+                    :avatar="item.commentUserAvatar"
+                    :author="item.commentUserName"
+                    :content="item.commentContent"
+                    :time="item.commentTime"
+                    :replyList="item.replyList"
+                    @finishReply="finishReply"
+                    @finishDeleteReply="finishDeleteReply">
+                  </comment-item>
                 </div>
               </template>
             </common-panel-one>
@@ -155,6 +145,8 @@
 <script>
   import { retrieveArticle, retrieveRecentArticleInKnowledge, retrieveArticleConcise } from '@/api/article'
   import { retrieveKnowledgeList } from '@/api/knowledge'
+  import { listComment } from '../../../../api/comment'
+
   export default {
     name: 'article',
     data() {
@@ -170,13 +162,17 @@
         recentArticleList: '',
         relateKnowledgeList: '',
         rows: '',
-        relateArticleList: []
+        relateArticleList: [],
+        commentList: [],
       }
     },
     components: {
       siteNav: () => import('@/components/site-nav'),
       commonPanelOne: () => import('@/components/common-panel-one'),
-      customCard01: () => import('@/components/custom-card-01')
+      customCard01: () => import('@/components/custom-card-01'),
+      commentBox: () => import('@/components/comment-box'),
+      commentItem: () => import('@/components/comment-item'),
+      commentReply: () => import('@/components/comment-reply')
     },
     mounted() {
       this.articleId = this.$route.params.articleId
@@ -191,6 +187,7 @@
         this.recentPost(this.article.knowledgeId)
         this.relateKnowledge(this.article.categoryId)
         this.articleConcise(this.article.knowledgeId)
+        this.getComment(this.article.articleId)
       },
       goKnowledgeDetail(knowledgeId) {
         this.$router.push({ name: 'knowledgeDetail', params: { knowledgeId: knowledgeId } })
@@ -217,6 +214,22 @@
               this.rows = Math.ceil(this.relateArticleList.length / 3)
             }
           })
+      },
+      getComment(articleId) {
+        listComment({ articleId: articleId }).then(res => {
+          if (res.flag) {
+            this.commentList = res.data
+          }
+        })
+      },
+      finishReply() {
+        this.getComment(this.article.articleId)
+      },
+      finishComment() {
+        this.getComment(this.article.articleId)
+      },
+      finishDeleteReply() {
+        this.getComment(this.article.articleId)
       }
     }
   }
@@ -306,7 +319,7 @@
                 text-overflow: ellipsis;
               }
               &:hover {
-                color: #409EFF;
+                color:  #409EFF;
               }
             }
           }
@@ -314,61 +327,11 @@
       }
       &__comment {
         margin-top: 15px;
-        .container {
-          display: flex;
-          flex-direction: column;
+        .comment-box-container {
+          height: 180px;
         }
-        &__item {
-          display: flex;
-          margin-top: 15px;
-          padding-bottom: 15px;
-          border-bottom: 1px dotted #e6e6e6;
-        }
-        &--left {
-          margin-right: 15px;
-          img {
-            width: 40px;
-            height: 40px;
-            border: 2px solid goldenrod;
-            border-radius: 50%;
-          }
-        }
-        &--right {
-          .top {
-            display: flex;
-            a {
-              color: #4c84be;
-            }
-            span {
-              color: #999
-            }
-          }
-          .center {
-            margin-top: 10px;
-            font-size: 14px;
-            line-height: 22.4px;
-            color: #333;
-          }
-          .btn {
-            display: flex;
-            margin-top: 10px;
-            ul {
-              display: flex;
-              list-style: none;
-              padding: 0px;
-              li {
-                display: flex;
-                align-items: center;
-                margin-right: 15px;
-                font-size: 12px;
-                a {
-                  display: block;
-                  margin-left: 10px;
-                  color: #666;
-                }
-              }
-            }
-          }
+        .comment-list {
+          margin-top: 10px;
         }
       }
       &__info {

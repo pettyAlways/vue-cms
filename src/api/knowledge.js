@@ -45,3 +45,19 @@ export function retrieveUserParticipant(params) {
     params
   })
 }
+
+export function retrieveKnowledgeCreator(params) {
+  return remote({
+    url: '/platform/frontend/knowledge/search/creator',
+    method: 'get',
+    params
+  })
+}
+
+export function retrieveKnowledgeParticipant(params) {
+  return remote({
+    url: '/platform/frontend/knowledge/search/participant',
+    method: 'get',
+    params
+  })
+}

@@ -30,7 +30,8 @@
               <div class="user-panel" @mouseenter="upShow=true" @mouseleave="upShow=false" v-if="upShow">
                 <ul>
                   <li><i class="el-icon-user"></i><a @click="goProfile(uInfo.userId)">我的主页</a></li>
-                  <li><i class="el-icon-edit"></i><a>工作台</a></li>
+                  <li v-if="uInfo.isAuthor"><i class="el-icon-edit"></i><a>工作台</a></li>
+                  <li v-else @click="beAuthor(uInfo.userId)"><i class="el-icon-edit"></i><a>成为作者</a></li>
                   <li><i class="el-icon-switch-button"></i><a @click="signOut">退出</a></li>
                 </ul>
               </div>
@@ -81,6 +82,9 @@
       },
       goProfile(userId) {
         this.$router.push({ name: 'profile', params: { userId: userId } })
+      },
+      beAuthor(userId) {
+        this.$router.push({ name: 'beAuthor', params: { userId: userId } })
       },
       signOut() {
         this.loginOut().then(() => {

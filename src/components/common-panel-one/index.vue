@@ -1,6 +1,6 @@
 <template>
   <div class="custom-panel">
-    <div class="custom-panel__header">
+    <div class="custom-panel__header" :style="hStyle">
       <div class="custom-panel__header--left">
         <div class="custom-panel__header__title">
           {{title}}
@@ -20,6 +20,7 @@
   export default {
     name: 'commonPanelOne',
     props: {
+      hStyle: Object,
       title: String,
       bStyle: {
         type: Object,

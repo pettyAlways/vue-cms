@@ -13,8 +13,8 @@
           <konwledge-content></konwledge-content>
         </div>
         <div class="knowledge-detail__content--right">
-          <author-list></author-list>
-          <knowledge-news></knowledge-news>
+          <author-list :knowledgeId="knowledge.knowledgeId"></author-list>
+          <knowledge-participant :knowledgeId="knowledge.knowledgeId"></knowledge-participant>
         </div>
       </div>
     </el-card>
@@ -28,7 +28,7 @@
       return {
         knowledgeName: '',
         knowledge: {
-          knowledgeId: ''
+          knowledgeId: Number
         }
       }
     },
@@ -37,7 +37,7 @@
       konwledgeCover: () => import('./components/knowledge-cover'),
       konwledgeContent: () => import('./components/knowledge-content'),
       authorList: () => import('./components/author-list'),
-      knowledgeNews: () => import('./components/knowledge-news')
+      knowledgeParticipant: () => import('./components/knowledge-participant')
     },
     provide() {
       return {
@@ -45,7 +45,7 @@
       }
     },
     created() {
-      this.knowledge.knowledgeId = this.$route.params.knowledgeId
+      this.knowledge.knowledgeId = parseInt(this.$route.params.knowledgeId)
     },
     methods: {
       getKnowledgeName(knowledgeName) {

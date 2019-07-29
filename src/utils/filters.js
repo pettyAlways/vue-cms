@@ -58,3 +58,8 @@ export function addMonth(addMonth) {
   }
   return new Date(nextY, nextM, day)
 }
+
+export function autoTransform(content) {
+  return content || 'Ta很懒'
+}
+

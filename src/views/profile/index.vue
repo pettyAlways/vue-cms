@@ -1,23 +1,58 @@
 <template>
   <div class="profile-panel w1200">
     <div class="profile-panel__header">
-      <el-image :src="require('./assets/profile.jpg')" class="profile-bg"></el-image>
+      <div class="profile-cover">
+        <el-image v-if="profileInfo.coverUrl" :src="profileInfo.coverUrl" class="profile-bg"></el-image>
+        <el-image v-else :src="require('./assets/person-cover.jpg')" fit="cover" class="profile-bg"></el-image>
+        <el-dialog
+          title="用户资料封面"
+          :visible.sync="cDialog.visible"
+          :modal="false"
+          top="28vh"
+          width="1200px">
+          <image-cut-upload ref="imageCutUpload" type="user_profile_cover"
+                            :imageUrl="cDialog.imageUrl"
+                            :fileName="cDialog.fileName"
+                            :cropperOption="{fixedNumber: [4, 1], autoCropWidth: 200, autoCropHeight: 50}"
+                            @getRemoteUrl="cRemoteUrl"></image-cut-upload>
+        </el-dialog>
+      </div>
       <div class="profile-panel__header__space">
-        <div class="nickname">{{ profileInfo.userName }}</div>
-        <div class="edit-btn" @click="editUserProfile" v-if="!editProfile">编辑个人资料</div>
-        <div class="edit-btn" @click="backProfile" v-else>返回个人主页</div>
+        <div class="nickname">{{ profileInfo.userName }}<span class="signature">{{ profileInfo.signature }}</span></div>
+        <div class="edit-btn" @click="editUserProfile" v-if="!editProfile && isCurLogin">编辑个人资料</div>
+        <div class="edit-btn" @click="backProfile" v-else-if="editProfile && isCurLogin">返回个人主页</div>
       </div>
       <div class="user-img" @mouseenter="mask = true" @mouseleave="mask = false">
-        <el-image :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')"></el-image>
-        <div class="camera" v-if="mask">
-          <i class="el-icon-camera"></i>
-          <span>修改我的头像</span>
+        <el-upload
+          v-if="isCurLogin"
+          action=""
+          ref="upload"
+          :show-file-list="false"
+          :auto-upload="false"
+          :on-change="getFile">
+          <div class="internal">
+            <el-image :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')"></el-image>
+            <div v-if="mask" class="camera">
+              <i class="el-icon-camera"></i>
+              <span>修改我的头像</span>
+            </div>
+          </div>
+        </el-upload>
+        <el-image v-else :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')" style="cursor: default;"></el-image>
+      </div>
+      <div v-if="isCurLogin" class="cover-img">
+        <el-upload
+          action=""
+          ref="upload"
+          :show-file-list="false"
+          :auto-upload="false"
+          :on-change="getCoverFile">
+          <div class="internal">
+            <i class="el-icon-camera"></i>
+            <span>修改封面图片</span>
+          </div>
+        </el-upload>
         </div>
-      </div>
-      <div class="cover-img">
-        <i class="el-icon-camera"></i>
-        <span>修改封面图片</span>
-      </div>
       <router-view class="profile--extra" v-if="editProfile" />
     </div>
     <div class="profile-panel__body" v-if="!editProfile">
@@ -102,16 +137,40 @@
         </div>
       </div>
       <div class="other-panel">
+        <common-panel-one title="用户信息" :hStyle="{ height: '60px' }">
+          <template slot="more">
+            <span class="header-tip">AUTHOR-INFO</span>
+          </template>
+          <template slot="body">
+            <user-card :skill="profileInfo.skillList" :userImg="profileInfo.avatarUrl"
+                       :introduce="profileInfo.introduce"
+                       :signature="profileInfo.signature"
+                       :userName="profileInfo.userName">
 
+            </user-card>
+          </template>
+        </common-panel-one>
       </div>
     </div>
+    <el-dialog
+      title="编辑头像"
+      :visible.sync="uDialog.visible"
+      width="30%">
+      <image-cut-upload ref="imageCutUpload" type="user_portrait"
+                        :cropperOption="{fixedNumber: [1, 1], autoCropWidth: 100, autoCropHeight: 100, img: uDialog.imageUrl}"
+                        :imageUrl="uDialog.imageUrl"
+                        :fileName="uDialog.fileName"
+                        @getRemoteUrl="remoteUrl"></image-cut-upload>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import { retrieveUserRecentPost } from '../../api/article'
   import { retrieveUserKnowledge, retrieveUserParticipant } from '../../api/knowledge'
-  import { retrieveUserProfile } from '../../api/user'
+  import { retrieveUserProfile, saveUserInfo } from '../../api/user'
+  import { getImageUrl } from '../../utils/images'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'profile',
@@ -122,6 +181,16 @@
           total: 0,
           size: 10
         },
+        uDialog: {
+          visible: false,
+          imageUrl: '',
+          fileName: ''
+        },
+        cDialog: {
+          visible: false,
+          imageUrl: '',
+          fileName: ''
+        },
         editProfile: false,
         mask: false,
         userId: '',
@@ -130,17 +199,28 @@
         userKnowledgeList: [],
         userParticipantKnowledgeList: [],
         profileInfo: '',
-        showxx: '123'
+        skillList: []
       }
     },
     computed: {
+      ...mapGetters([
+        'userShow'
+      ]),
+      isCurLogin() {
+        return this.userShow.userId === this.userId
+      },
       hasList() {
-        return this.recentArticleList.length || this.userKnowledgeList.length || this.userParticipantKnowledgeList.length
+        return (this.type === 'newPost' && this.recentArticleList.length) ||
+          (this.type === 'hisKnowledge' && this.userKnowledgeList.length) ||
+          (this.type === 'participantKnowledge' && this.userParticipantKnowledgeList.length)
       }
     },
     components: {
       articlePanel01: () => import('@/components/article-panel-01'),
-      knowledgeCard: () => import('@/components/knowledge-card')
+      knowledgeCard: () => import('@/components/knowledge-card'),
+      imageCutUpload: () => import('@/components/image-cut-upload'),
+      commonPanelOne: () => import('@/components/common-panel-one'),
+      userCard: () => import('@/components/user-card')
     },
     mounted() {
       this.userId = this.$route.params.userId
@@ -151,6 +231,36 @@
       init() {
         this.userProfile()
         this.userRecentPost()
+      },
+      remoteUrl(url) {
+        saveUserInfo({ id: this.userId, userAvatar: url }).then(res => {
+          if (res.flag) {
+            this.profileInfo.avatarUrl = url
+            this.uDialog.visible = false
+          }
+        })
+      },
+      cRemoteUrl(url) {
+        saveUserInfo({ id: this.userId, coverUrl: url }).then(res => {
+          if (res.flag) {
+            this.profileInfo.coverUrl = url
+            this.cDialog.visible = false
+          }
+        })
+      },
+      getFile(file) {
+        getImageUrl(file, (fileName, imageUrl) => {
+          this.uDialog.visible = true
+          this.uDialog.imageUrl = imageUrl
+          this.uDialog.fileName = fileName
+        })
+      },
+      getCoverFile(file) {
+        getImageUrl(file, (fileName, imageUrl) => {
+          this.cDialog.visible = true
+          this.cDialog.imageUrl = imageUrl
+          this.cDialog.fileName = fileName
+        })
       },
       refreshEditProfile(path) {
         if (/^\/profile-edit\/\w*$/.test(path)) {
@@ -223,6 +333,11 @@
   &__header {
     position: relative;
     background-color: #ffffff;
+    .profile-cover {
+      /deep/ .el-dialog__body {
+        padding: 0px;
+      }
+    }
     .profile-bg {
       width: 1200px;
       height: 250px;
@@ -233,11 +348,18 @@
       align-items: start;
       height: 80px;
       .nickname {
+        flex-grow: 1;
         margin-left: 220px;
         width: 200px;
         height: 40px;
         font-size: 30px;
         font-weight: 700;
+        .signature {
+          margin-left: 20px;
+          font-family: 仿宋;
+          font-size: 13px;
+          color: #ccc;
+        }
       }
       .edit-btn {
         width: 100px;
@@ -248,6 +370,7 @@
         border: 1px solid #0084ff;
         font-size: 14px;
         margin-right: 15px;
+        cursor: pointer;
       }
     }
     .user-img {
@@ -265,30 +388,35 @@
       border: 4px solid #fff;
       border-radius: 8px;
       cursor: pointer;
-      .camera {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        background: rgba(#1a1a1a, 0.6);
-        color: #fff;
-        i {
-          text-align: center;
-          font-size: 36px;
-        }
-        span {
-          text-align: center;
-          font-size: 16px;
+      .internal {
+        position: relative;
+        .camera {
+          position: absolute;
+          left: 0;
+          top: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          background: rgba(#1a1a1a, 0.6);
+          color: #fff;
+          i {
+            text-align: center;
+            font-size: 36px;
+          }
+          span {
+            text-align: center;
+            font-size: 16px;
+          }
         }
       }
+
     }
     .cover-img {
       position: absolute;
       top: 15px;
       right: 50px;
-      padding: 0 16px;
       font-size: 14px;
       line-height: 32px;
       color: #8590a6;
@@ -300,6 +428,9 @@
       color: hsla(0, 0%, 100%, .6);
       -webkit-transition: color, border-color .3s;
       transition: color, border-color .3s;
+      .internal {
+        padding: 0 16px;
+      }
       &:hover {
         border-color: hsla(0, 0%, 100%, .6);
         color: hsla(0,0%,100%,.7);
@@ -402,7 +533,15 @@
       }
     }
     .other-panel {
+      background-color: #fff;
+      padding: 0px 5px 15px 0px;
       width: 300px;
+      .header-tip {
+        font-size: 12px;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: normal;
+      }
     }
   }
 }

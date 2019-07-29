@@ -10,7 +10,6 @@
         </div>
         <div class="knowledge-main__container__center--right">
           <author></author>
-          <knowledge-news></knowledge-news>
         </div>
       </div>
       <el-image :src="require('../../asserts/ad01.jpg')" style="height: 120px; margin-top: 15px;" fit="cover"></el-image>
@@ -30,8 +29,7 @@
       'konwledgeBanner': () => import('../banner'),
       'knowledgeRecommend': () => import('../recommend'),
       'knowledgeCategory': () => import('../category'),
-      'author': () => import('../author'),
-      'knowledgeNews': () => import('../news')
+      'author': () => import('../author')
     }
   }
 </script>

@@ -9,16 +9,17 @@
           <span>{{knowledgeItem.knowledgeName}}</span>
         </div>
         <div class="author">
-          <span>作者：</span>
+          <span>创建者：</span>
           <span>{{ knowledgeItem.creatorName }}</span>
         </div>
         <div class="author">
           <span>参与者：</span>
-          <ul>
+          <ul v-if="knowledgeItem.participantList && knowledgeItem.participantList.length ">
             <li v-for="(item, index) in knowledgeItem.participantList" :key="index">
               <a>{{ item.userName }}</a>
             </li>
           </ul>
+          <span v-else>暂无</span>
         </div>
         <div class="introduce">
           <span>简介：</span>
