@@ -1,4 +1,5 @@
 import axios from 'axios/index'
+import router from '../router'
 import { removeToken, getToken } from '@/utils/auth'
 import Vue from 'vue'
 function remote(params) {
@@ -35,6 +36,7 @@ axios.interceptors.response.use(function (response) {
   }
   return response.data
 }, function (error) {
+  debugger
   // 重定向登录页面
   if (error.response.status === 401) {
     goLogin(error.response.data.message)
@@ -47,10 +49,10 @@ axios.interceptors.response.use(function (response) {
 function goLogin(message) {
   removeToken()
   setTimeout(() => {
-    location.reload()
+    router.push({ path: '/login' })
   }, 3 * 1000 + 1)
   Vue.prototype.$message({
-    message: message,
+    message: '登录凭证失效请重新登录',
     type: 'error'
   })
 }
