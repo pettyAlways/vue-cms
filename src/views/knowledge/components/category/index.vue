@@ -1,32 +1,26 @@
 <template>
   <div class="category-panel">
     <div class="category-panel__body">
-      <custom-card01 title="知识库分类" note="CATEGORY">
-        <div class="category-panel__body__container">
-          <div class="category-panel__body__container__item" v-for="(item, index) in knowledgeList" :key="index">
-            <div class="category-panel__body__container__item--left">
-              <el-image :src="item.knowledgeCover" style="width: 60px; height: 60px;" fit="cover"></el-image>
-              <div class="center">
-                <span class="icon">+</span>
-                <a @click="joinKnowledge(item.knowledgeId)" class="join">加入</a>
-              </div>
+      <common-panel-one title="知识库分类" :hStyle="{ height: '45px' }">
+        <template slot="more">
+          <span class="header-tip">AUTHOR-INFO</span>
+        </template>
+        <template slot="body">
+          <div class="category-panel__body__container">
+            <div class="knowledge__content" v-if="knowledgeList.length">
+              <knowledge-panel :knowledge="item" v-for="(item, index) in knowledgeList" :key="index"></knowledge-panel>
             </div>
-            <div class="category-panel__body__container__item--right">
-              <div class="title">
-                <a>{{ item.knowledgeName }}</a>
-              </div>
-              <div class="content">
-                <span>{{ item.knowledgeDesc }}</span>
-                <a>[详情]</a>
-              </div>
+            <div class="no-data" v-if="!knowledgeList.length">
+              <icon-svg iconClass="empty" :vStyle="{ width: '60px', height: '60px' }"></icon-svg>
+              <p class="tip">暂无数据,赶紧加入完善吧</p>
             </div>
           </div>
-        </div>
-      </custom-card01>
+        </template>
+      </common-panel-one>
       <div class="category-panel__scroll-panel">
         <ul v-if="categoryList.length">
           <li v-for="(item, index) in categoryList" :key="index">
-            <a @click="searchKnowledge(item.categoryId)">{{ item.categoryName }}</a>
+            <a :class="{'active': (showCategory === item.categoryId) }" @click="searchKnowledge(item)">{{ item.categoryName }}</a>
           </li>
         </ul>
       </div>
@@ -36,7 +30,7 @@
 
 <script>
   import { retrieveAllCategory } from '@/api/category'
-  import { retrieveKnowledgeList, joinKnowledge } from '@/api/knowledge'
+  import { retrieveKnowledgeList } from '@/api/knowledge'
   import { mapGetters } from 'vuex'
   export default {
     name: 'knowledgeCategory',
@@ -58,7 +52,8 @@
       ])
     },
     components: {
-      'customCard01': () => import('@/components/custom-card-01')
+      commonPanelOne: () => import('@/components/common-panel-one'),
+      knowledgePanel: () => import('@/components/knowledge-panel')
     },
     mounted() {
       this.init()
@@ -70,46 +65,17 @@
         if (this.categoryList) {
           this.showCategory = this.categoryList[0].categoryId
           res = await retrieveKnowledgeList({ categoryId: this.showCategory, page: this.paging.page, size: this.paging.size })
-          this.knowledgeList = res.data
+          this.knowledgeList = res.data || []
         }
       },
-      searchKnowledge(categoryId) {
-        this.showCategory = categoryId
+      searchKnowledge(category) {
+        this.showCategory = category.categoryId
         retrieveKnowledgeList({ categoryId: this.showCategory, page: this.paging.page, size: this.paging.size })
           .then(res => {
             if (res.flag) {
               this.knowledgeList = res.data
             }
           })
-      },
-      checkReason(val) {
-        if (!val) {
-          return '内容不能为空'
-        }
-        if (val.length < 10 || val.length > 50) {
-          return '请输出 10 - 50 个字'
-        }
-      },
-      joinKnowledge(knowledgeId) {
-        if (!this.userShow.userId || !this.userShow.isAuthor) {
-          this.$alert('需要登录并申请成为作者才能加入知识库哦', '提示', {
-            confirmButtonText: '确定'
-          })
-        } else {
-          this.$prompt('您加入的理由', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputValidator: this.checkReason
-          }).then(({ value }) => {
-            joinKnowledge({ knowledgeId: knowledgeId, reason: value }).then(res => {
-              if (res.flag) {
-                this.$alert('已经提交审核请耐心等待', '提示', {
-                  confirmButtonText: '确定'
-                })
-              }
-            })
-          })
-        }
       }
     }
   }
@@ -121,68 +87,35 @@
     min-height: 300px;
     &__body {
       width: 900px;
+      .header-tip {
+        font-size: 12px;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: normal;
+      }
       /deep/ .custom-panel__body {
         padding: 15px 20px 15px 0px;
       }
       &__container {
         display: flex;
-        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
         min-height: 300px;
-        &__item {
+        .knowledge__content {
           display: flex;
-          width: 280px;
-          height: 100px;
-          border-bottom: 1px dotted #eee;
-          padding: 5px;
-          &--left {
-            display: flex;
-            flex-direction: column;
-            width: 60px;
-            flex-shrink: 0;
-            .center {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              .icon {
-                font-size: 16px;
-                font-weight: bold;
-              }
-              a.join {
-                margin-left: 5px;
-                font-size: 13px;
-                color:  #4c84be;
-                cursor: pointer;
-                &:hover {
-                  color:  #409EFF;
-                }
-              }
-            }
-          }
-          &--right {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            margin-left: 10px;
-            .title {
-              margin-bottom: 5px;
-              font-size: 14px;
-              font-weight: 400;
-              color: #333;
-            };
-            .content {
-              font-size: 12px;
-              color: #777;
-              a {
-                color:  #4c84be;
-                cursor: pointer;
-                &:hover {
-                  color:  #409EFF;
-                }
-              }
-            }
-          }
-          &:hover {
-            background-color: gainsboro;
+          flex-wrap: wrap;
+          width: 100%;
+          min-height: 300px;
+        }
+        .no-data {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 180px;
+          height: 180px;
+          .tip {
+            margin-top: 5px;
+            color: #777;
           }
         }
       }
@@ -191,7 +124,7 @@
     &__scroll-panel {
       position: absolute;
       top: 0px;
-      left: 180px;
+      left: 80px;
       width: 660px;
       height: 40px;
       margin-left: 15px;
@@ -209,15 +142,19 @@
           margin-right: 15px;
           a {
             display: block;
-            height: 40px;
-            line-height: 40px;
-            color: #4c84be;
+            height: 45px;
+            line-height: 45px;
+            font-weight: 400;
+            color: #333;
             &:hover {
               color: #409EFF;
             }
           }
         }
       }
+    }
+    .active {
+      color: #409EFF;
     }
   }
 </style>

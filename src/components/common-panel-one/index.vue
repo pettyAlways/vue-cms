@@ -59,7 +59,7 @@
     }
     &__body {
       padding: 0px 10px;
-      border: 1px solid #e6e6e6;
+      border: 1px solid #d1d1d1;
       overflow: hidden;
     }
 

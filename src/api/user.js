@@ -53,6 +53,7 @@ export function bindUserAccount(data) {
     data
   })
 }
+
 export function retrieveRecommendAuthor() {
   return remote({
     url: '/platform/frontend/user/search/recommend',

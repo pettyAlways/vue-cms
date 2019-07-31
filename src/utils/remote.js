@@ -36,10 +36,13 @@ axios.interceptors.response.use(function (response) {
   }
   return response.data
 }, function (error) {
-  debugger
   // 重定向登录页面
   if (error.response.status === 401) {
-    goLogin(error.response.data.message)
+    goLogin('登录凭证失效请重新登录')
+    return { flag: false }
+  }
+  if (error.response.status === 403) {
+    goLogin('访问被拒绝请重新登录')
     return { flag: false }
   }
   return Promise.reject(error)
@@ -52,7 +55,7 @@ function goLogin(message) {
     router.push({ path: '/login' })
   }, 3 * 1000 + 1)
   Vue.prototype.$message({
-    message: '登录凭证失效请重新登录',
+    message: message,
     type: 'error'
   })
 }

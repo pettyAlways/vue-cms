@@ -61,7 +61,8 @@
     data() {
       return {
         knowledgeId: '',
-        knowledgeItem: ''
+        knowledgeItem: '',
+        token: ''
       }
     },
     computed: {
@@ -70,6 +71,7 @@
       ])
     },
     mounted() {
+      this.token = this.$route.params.token
       this.knowledgeId = this.kData.knowledgeId
       this.init()
     },
@@ -78,7 +80,7 @@
         this.knowledgeDetail()
       },
       knowledgeDetail() {
-        retrieveKnowledgeDetail({ knowledgeId: this.knowledgeId }).then(res => {
+        retrieveKnowledgeDetail({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId }).then(res => {
           if (res.flag) {
             this.knowledgeItem = res.data
             this.$emit('getKnowledgeName', this.knowledgeItem.knowledgeName)

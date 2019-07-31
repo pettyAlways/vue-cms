@@ -61,6 +61,7 @@
 
 <script>
   import { retrieveKnowledgeCatalogue, retrieveRecentPost, retrieveRecentEdit, retrieveArticleConcise } from '@/api/article'
+  import { mapGetters } from 'vuex'
   export default {
     name: 'knowledgeContent',
     inject: ['kData'],
@@ -75,13 +76,20 @@
         rows: '',
         img: require('./assets/knowledge01.jpg'),
         knowledgeId: '',
-        articleList: []
+        articleList: [],
+        token: ''
       }
     },
     components: {
       articlePanel01: () => import('@/components/article-panel-01')
     },
+    computed: {
+      ...mapGetters([
+        'userShow'
+      ])
+    },
     mounted() {
+      this.token = this.$route.params.token
       this.knowledgeId = this.kData.knowledgeId
       this.init()
     },
@@ -90,11 +98,12 @@
         this.knowledgeCatalogue()
       },
       goArticle(articleId) {
-        this.$router.push({ name: 'articleShow', params: { articleId: articleId } })
+        this.$router.push({ name: 'articleShow', params: { articleId: articleId, token: this.token } })
       },
       knowledgeCatalogue() {
         this.type = 'catalogue'
-        retrieveKnowledgeCatalogue({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+        this.articleList = []
+        retrieveKnowledgeCatalogue({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId, page: this.paging.page, size: this.paging.size })
           .then(res => {
             if (res.flag) {
               this.articleList = res.data
@@ -103,7 +112,8 @@
       },
       recentPost() {
         this.type = 'recentPost'
-        retrieveRecentPost({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+        this.articleList = []
+        retrieveRecentPost({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId, page: this.paging.page, size: this.paging.size })
           .then(res => {
             if (res.flag) {
               this.articleList = res.data
@@ -112,7 +122,8 @@
       },
       recentEdit() {
         this.type = 'recentEdit'
-        retrieveRecentEdit({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+        this.articleList = []
+        retrieveRecentEdit({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId, page: this.paging.page, size: this.paging.size })
           .then(res => {
             if (res.flag) {
               this.articleList = res.data
@@ -121,7 +132,8 @@
       },
       articleConcise() {
         this.type = 'concise'
-        retrieveArticleConcise({ knowledgeId: this.knowledgeId, page: this.paging.page, size: this.paging.size })
+        this.articleList = []
+        retrieveArticleConcise({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId, page: this.paging.page, size: this.paging.size })
           .then(res => {
             if (res.flag) {
               this.articleList = res.data

@@ -22,6 +22,14 @@ export function retrieveKnowledgeList(params) {
   })
 }
 
+export function retrieveRelateKnowledgeList(params) {
+  return remote({
+    url: '/platform/frontend/knowledge/search/relate',
+    method: 'get',
+    params
+  })
+}
+
 export function retrieveKnowledgeDetail(params) {
   return remote({
     url: '/platform/frontend/knowledge/search/detail',
@@ -74,6 +82,14 @@ export function joinKnowledge(params) {
   return remoteWithToken({
     url: '/platform/frontend/knowledge/join',
     method: 'post',
+    params
+  })
+}
+
+export function passwordVerify(params) {
+  return remoteWithToken({
+    url: '/platform/frontend/knowledge/password/verify',
+    method: 'get',
     params
   })
 }

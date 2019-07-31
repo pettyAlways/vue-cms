@@ -20,6 +20,23 @@
           </li>
           <li v-else class="user_info">
             <span class="nickname">欢迎{{uInfo.userName}}大驾光临</span>
+            <div  @mouseenter="messageShow=true" @mouseleave="messageShow=false">
+              <el-badge is-dot class="message" v-if="messageList && messageList.length">
+                <i class="el-icon-message"></i>
+              </el-badge>
+              <i v-else class="el-icon-message message"></i>
+            </div>
+            <div class="message-panel" @mouseenter="messageShow=true" @mouseleave="messageShow=false" v-if="messageShow && (messageList || messageList.length)">
+              <ul>
+                <li @mouseenter="messageEnter(item)" @mouseleave="messageLeave(item)" v-for="(item, index) in messageList" :key="index">{{ item.message}}&nbsp;&nbsp;
+                  <span style="color: #bfbfbf;font-size: 12px;">{{item.createTime}}</span>
+                  <a  @click="readMessage(item)" style="color: dodgerblue" v-if="item.hover">设置已读</a>
+                </li>
+              </ul>
+              <div class="tool-btn">
+                <a @click="allMessageRead" style="color: dodgerblue">全部可读</a>
+              </div>
+            </div>
             <div class="user_image_panel">
               <el-image class="user_img" @mouseenter="upShow=true" @mouseleave="upShow=false"
                         :src="uInfo.avatarUrl ? uInfo.avatarUrl : require('./asserts/user.png')">
@@ -29,10 +46,10 @@
               </el-image>
               <div class="user-panel" @mouseenter="upShow=true" @mouseleave="upShow=false" v-if="upShow">
                 <ul>
-                  <li style="margin-top: 5px;"><i class="el-icon-user"></i><a @click="goProfile(uInfo.userId)">我的主页</a></li>
+                  <li @click="goProfile(uInfo.userId)" style="margin-top: 5px;"><i class="el-icon-user"></i><a >我的主页</a></li>
                   <li v-if="uInfo.isAuthor" @click="goWorkbentch"><i class="el-icon-edit"></i><a>工作台</a></li>
                   <li v-else @click="beAuthor(uInfo.userId)"><i class="el-icon-edit"></i><a>成为作者</a></li>
-                  <li><i class="el-icon-switch-button"></i><a @click="signOut">退出</a></li>
+                  <li @click="signOut"><i class="el-icon-switch-button"></i><a>退出</a></li>
                 </ul>
               </div>
             </div>
@@ -46,6 +63,7 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import { clientVisiable } from '../../utils/compatibility'
+  import { retrieveMessageList, messageRead, messageAllRead } from '../../api/message'
 
   export default {
     name: 'headerNav',
@@ -55,7 +73,9 @@
         gitHubUrl: 'https://github.com/login/oauth/authorize?client_id=47fca5d6cdbf13ae8984',
         width: '',
         height: '',
-        upShow: false
+        upShow: false,
+        messageShow: false,
+        messageList: []
       }
     },
     computed: {
@@ -70,6 +90,7 @@
       let data = clientVisiable()
       this.width = data.width
       this.height = data.height
+      this.init()
     },
     methods: {
       ...mapActions([
@@ -77,6 +98,36 @@
         'userLogin',
         'loginOut'
       ]),
+      init() {
+        this.getMessage()
+      },
+      getMessage() {
+        retrieveMessageList().then(res => {
+          if (res.flag) {
+            this.messageList = res.data
+          }
+        })
+      },
+      readMessage(item) {
+        messageRead({ messageId: item.messageId }).then(res => {
+          if (res.flag) {
+            this.init()
+          }
+        })
+      },
+      allMessageRead() {
+        messageAllRead().then(res => {
+          if (res.flag) {
+            this.init()
+          }
+        })
+      },
+      messageEnter(item) {
+        this.$set(item, 'hover', true)
+      },
+      messageLeave(item) {
+        item.hover = false
+      },
       login() {
         this.$router.push({ name: 'login' })
       },
@@ -182,7 +233,7 @@
       }
       &--right {
         flex-shrink: 0;
-        width: 280px;
+        width: 300px;
         ul {
           display: flex;
           flex-direction: row;
@@ -219,7 +270,7 @@
               }
               .user-panel {
                 position: absolute;
-                right: 120px;
+                right: 123px;
                 top: 98px;
                 z-index: 10;
                 width: 120px;
@@ -263,10 +314,85 @@
               text-overflow: ellipsis;
               white-space: nowrap;
             }
+            .message {
+              width: 25px;
+              height: 28px;
+              line-height: 28px;
+              font-size: 25px;
+              cursor: pointer;
+            }
+            .message-panel {
+              display: flex;
+              flex-direction: column;
+              position: absolute;
+              right: 205px;
+              top: 90px;
+              z-index: 10;
+              &:after {
+                position: absolute;
+                top: -15px;
+                left: 258px;
+                content: '';
+                width: 0;
+                height: 0;
+                border: 8px solid;
+                border-color: transparent transparent #ffffff transparent;
+              }
+              .tool-btn {
+                height: 40px;
+                background-color: gainsboro;
+                line-height: 40px;
+              }
+              ul {
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                list-style: none;
+                background-color: #ffffff;
+                width: 300px;
+                max-height: 280px;
+                overflow-y: scroll;
+                li {
+                  width: 100%;
+                  text-align: start;
+                  color: #666;
+                  font-size: 13px;
+                  padding: 8px 15px;
+                  border-bottom: 1px solid #F3F3F3;
+                  line-height: 1.5;
+                  i {
+                    margin-right: 5px;
+                  }
+                  &:hover {
+                    background-color: #fcf8e3;
+                }
+                }
+              }
+            }
           }
         }
       }
     }
+  }
+  ::-webkit-scrollbar {
+    width: 5px;//y轴上的滚动条宽度
+    height: 5px;//x轴上滚动条高度
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 3px; /*滚动条的背景区域的圆角*/
+    background-color: #fdf8f5; /*滚动条的背景颜色*/
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 3px; /*滚动条的圆角*/
+    background-color: #ccc; /*滚动条的背景颜色*/
+  }
 
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(46, 86, 159);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background-color: rgb(46, 86, 159);
+    cursor: pointer;
   }
 </style>

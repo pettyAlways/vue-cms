@@ -100,34 +100,12 @@
           </div>
           <div v-if="type === 'hisKnowledge' && userKnowledgeList.length" class="his-knowledge">
             <div class="knowledge-item" v-for="(item, index) in userKnowledgeList" :key="index">
-              <knowledge-card
-                :knowledgeId="item.knowledgeId"
-                :title="item.knowledgeName"
-                :desc="item.knowledgeDesc"
-                :createTime="item.createTime"
-                :knowledgeCover="item.knowledgeCover"
-                :creator="item.creator"
-                :creatorName="item.creatorName"
-                :categoryName="item.categoryName"
-                :articleNum="item.articleCounts"
-                :participantNum="item.participantCounts"
-              ></knowledge-card>
+              <knowledge-card :knowledge="item"></knowledge-card>
             </div>
           </div>
           <div v-if="type === 'participantKnowledge' && userParticipantKnowledgeList.length" class="his-knowledge">
             <div class="knowledge-item" v-for="(item, index) in userParticipantKnowledgeList" :key="index">
-              <knowledge-card
-                :knowledgeId="item.knowledgeId"
-                :title="item.knowledgeName"
-                :desc="item.knowledgeDesc"
-                :createTime="item.createTime"
-                :knowledgeCover="item.knowledgeCover"
-                :creator="item.creator"
-                :creatorName="item.creatorName"
-                :categoryName="item.categoryName"
-                :articleNum="item.articleCounts"
-                :participantNum="item.participantCounts"
-              ></knowledge-card>
+              <knowledge-card :knowledge="item"></knowledge-card>
             </div>
           </div>
           <div v-if="!hasList" class="no-content">
@@ -521,8 +499,10 @@
           width: 100%;
           .knowledge-item {
             width: 280px;
-            height: 300px;
+            height: 273px;
             margin-right: 10px;
+            margin-bottom: 15px;
+            background-color: white;
           }
         }
         .no-content {

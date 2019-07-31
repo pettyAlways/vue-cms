@@ -44,7 +44,9 @@
         for (let nav of this.navInfo) {
           nav.show = false
         }
-        item[0].show = true
+        if (item && item.length) {
+          item[0].show = true
+        }
       },
       navHandler() {
         let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop

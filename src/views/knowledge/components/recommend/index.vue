@@ -1,9 +1,12 @@
 <template>
   <div class="knowledge">
     <div class="knowledge__recommend">
-      <custom-card01 title="推荐知识库" note="RECOMMEND">
-        <template>
-          <el-carousel indicator-position="none" arrow="never">
+      <common-panel-one title="推荐知识库" :bStyle="{ 'padding': '0px' }">
+        <template slot="more">
+          <span class="header-tip">AUTHOR-INFO</span>
+        </template>
+        <template slot="body">
+          <el-carousel indicator-position="none" arrow="never" interval="6000">
             <el-carousel-item v-for="(item, index) in recommendKnowledge" :key="index" indicator-position="none" arrow="never">
               <div class="knowledge__recommend__item">
                 <div class="knowledge__recommend__item__header">
@@ -28,28 +31,37 @@
             </el-carousel-item>
           </el-carousel>
         </template>
-      </custom-card01>
+      </common-panel-one>
     </div>
     <div class="article__recent">
-      <custom-card01 title="最新文章" note="ARTICLE" :bStyle="{ padding: '5px 5px' }">
-        <ul>
-          <li v-for="(item, index) in recentArticleList" :key="index" >
-            <router-link :to="{ path: '/article' }"><i class="el-icon-tickets icons"></i>{{ item.articleTitle }}</router-link>
-            <span>{{ item.postTime | toDate }}</span>
-          </li>
-        </ul>
-      </custom-card01>
+      <common-panel-one title="最新文章" :bStyle="{ padding: '0px' }">
+        <template slot="more">
+          <span class="header-tip">AUTHOR-INFO</span>
+        </template>
+        <template slot="body">
+          <ul>
+            <li v-for="(item, index) in recentArticleList" :key="index" >
+              <a @click="goArticle(item.articleId)"><i class="el-icon-tickets icons"></i>{{ item.articleTitle }}</a>
+              <span>{{ item.postTime | toDate }}</span>
+            </li>
+          </ul>
+        </template>
+      </common-panel-one>
     </div>
     <div class="knowledge__recent">
-      <custom-card01 title="最新知识库" note="KNOWLEDGE" :bStyle="{ padding: '5px 5px' }">
-        <ul class="knowledge__recent__list">
-          <li v-for="(item, index) in recentKnowledgeList" :key="index">
-            <a><i class="el-icon-document-copy icons"></i>{{item.knowledgeName}}</a>
-            <span>{{item.editTime | toDate}}</span>
-          </li>
-        </ul>
-
-      </custom-card01>
+      <common-panel-one title="最新知识库" :bStyle="{ padding: '0px' }">
+        <template slot="more">
+          <span class="header-tip">NEW-KNOWLEDGE</span>
+        </template>
+        <template slot="body">
+          <ul class="knowledge__recent__list">
+            <li v-for="(item, index) in recentKnowledgeList" :key="index">
+              <a @click.stop="goKnowledge(item.knowledgeId)"><i class="el-icon-document-copy icons"></i>{{item.knowledgeName}}</a>
+              <span>{{item.editTime | toDate}}</span>
+            </li>
+          </ul>
+        </template>
+      </common-panel-one>
     </div>
   </div>
 </template>
@@ -75,9 +87,6 @@
         this.recentArticle()
         this.recentKnowledge()
       },
-      goKnowledge(knowledgeId) {
-        this.$router.push({ name: 'knowledgeDetail', params: { knowledgeId: knowledgeId } })
-      },
       recommendKnowledgeList() {
         retrieveRecommend().then(res => {
           if (res.flag) {
@@ -98,10 +107,16 @@
             this.recentKnowledgeList = res.data
           }
         })
+      },
+      goArticle(articleId) {
+        this.$router.push({ name: 'articleShow', params: { articleId: articleId } })
+      },
+      goKnowledge(knowledgeId) {
+        this.$router.push({ name: 'knowledgeDetail', params: { knowledgeId: knowledgeId } })
       }
     },
     components: {
-      'customCard01': () => import('@/components/custom-card-01')
+      commonPanelOne: () => import('@/components/common-panel-one')
     }
   }
 </script>
@@ -114,6 +129,7 @@
       flex-shrink: 0;
       width: 430px;
       &__item {
+        padding: 5px;
         &__header {
           display: flex;
           &--left {
@@ -164,12 +180,12 @@
               flex-direction: row;
               justify-content: space-between;
               align-items: center;
-              height: 30px;
-              line-height: 30px;
+              height: 33px;
+              line-height: 33px;
               border-bottom: 1px dashed #e6e6e6;
               a {
                 display: block;
-                color: #4c84be;
+                color: #262626;
                 max-width: 270px;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -193,7 +209,7 @@
       ul {
         height: 300px;
         list-style: none;
-        padding: 0px;
+        padding: 0px 10px;
         li {
           display: flex;
           flex-direction: row;
@@ -207,7 +223,7 @@
           a {
             display: block;
             font-size: 13px;
-            color: #4c84be;
+            color: #262626;
             max-width: 250px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -232,7 +248,7 @@
       margin-left: 15px;
       &__list {
         list-style: none;
-        padding: 0px;
+        padding: 0px 10px;
         height: 300px;
         li {
           display: flex;
@@ -245,7 +261,7 @@
           a {
             display: block;
             font-size: 13px;
-            color: #4c84be;
+            color: #262626;
             max-width: 250px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -255,7 +271,7 @@
             color: #409EFF;
           }
           span {
-            font-size: 11px;
+            font-size: 12px;
             color: #999999;
           }
           .icons {
@@ -264,6 +280,11 @@
         }
       }
     }
-
+    .header-tip {
+      font-size: 12px;
+      color: #cccccc;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: normal;
+    }
   }
 </style>

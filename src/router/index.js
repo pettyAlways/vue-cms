@@ -67,7 +67,7 @@ export const constantRouterMap = [
             component: KnowledgeDetail
           },
           {
-            path: '/article/:articleId',
+            path: '/article-show/:articleId',
             name: 'articleShow',
             component: KnowledgeArticle
           }
@@ -111,5 +111,19 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  routes: constantRouterMap
+  routes: constantRouterMap,
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      const position = { x: 0, y: 0 }
+      if (to.hash) {
+        let anchor = document.querySelector(to.hash)
+        let scrollTop = anchor.scrollTop
+        console.error('跳转位置')
+        position.y = scrollTop
+      }
+      return position
+    }
+  }
 })
