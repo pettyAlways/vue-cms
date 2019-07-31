@@ -33,7 +33,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="可见范围" style="margin-left: 10px;" prop="kaccess">
-                  <el-select v-model="formData.kaccess" placeholder="请选择">
+                  <el-select v-model="formData.kaccess" placeholder="请选择" @change="accessChange">
                     <el-option label="私有" value="1"></el-option>
                     <el-option label="公开" value="2"></el-option>
                     <el-option label="加密" value="3"></el-option>
@@ -124,6 +124,9 @@
       this.searchCategory()
     },
     methods: {
+      accessChange() {
+        this.formData.kreserveO = '';
+      },
       searchKnowledge(knowledgeId) {
         knowledgeItem({ knowledgeId: knowledgeId }).then(res => {
           if (res.flag) {

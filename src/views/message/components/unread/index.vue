@@ -31,13 +31,13 @@
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '7'">
-          <p><a @click="confirmRead(item.id, { path: '' })">
+          <p><a @click="confirmRead(item.id, { name: 'audit', params: { activeName: 'joinKnowledge' } })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
         <div v-if="item.mtype === '8'">
-          <p><a @click="confirmRead(item.id, { path: '' })">
+          <p><a @click="confirmRead(item.id, { name: 'audit', params: { activeName: 'beAuthor' } })">
             {{item.message}}
           </a></p>
           <span>{{item.createTime}}</span>
@@ -48,7 +48,10 @@
           </a></p>
           <span>{{item.createTime}}</span>
         </div>
-
+        <div v-if="['10', '11'].includes(item.mtype)">
+          <p>{{item.message}}</p>
+          <span>{{item.createTime}}</span>
+        </div>
     </div>
   </el-card>
 </template>

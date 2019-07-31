@@ -11,15 +11,9 @@
       <el-form :rules="rules" :model="loginForm" ref="loginForm" label-width="60px">
         <el-form-item label="账号" prop="username" style="position:relative">
           <el-input type="text" v-model="loginForm.username" @keyup.enter.native="goToPwdInput"></el-input>
-          <span class="svg-container svg-container_user">
-
-          </span>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="loginForm.password" @keyup.enter.native="onLogin" ref="pwd"></el-input>
-          <span class="svg-container svg-container_password">
-            <icon-svg icon-class="password" />
-          </span>
         </el-form-item>
         <el-form-item label="记住密码" label-width="80px">
           <el-switch v-model="remember" @change="rememberMe"></el-switch>
@@ -154,6 +148,7 @@
       }
       .el-input /deep/ .el-input__inner {
         text-indent: 12px;
+        padding: 0px;
       }
       .svg-container {
         position: absolute;
