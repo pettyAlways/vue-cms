@@ -29,10 +29,10 @@
     <div class="article-editor__header">
       <el-input v-model="title" placeholder="请输入标题"></el-input>
     </div>
-    <div class="article-editor__body">
-      <my-tinymce ref="myTinymce" style="height: 100%"></my-tinymce>
+    <div class="article-editor__body" v-if="article.coverUrl">
+      <my-tinymce ref="myTinymce" style="height: 100%" :value="article.content"></my-tinymce>
     </div>
-    <el-button type="primary" style="width: 100%" @click="postArticle" :disabled="disable">发布</el-button>
+    <el-button v-if="article.coverUrl" type="primary" style="width: 100%" @click="postArticle" :disabled="disable">发布</el-button>
   </div>
 
 </template>
@@ -94,7 +94,6 @@
           if (res.flag) {
             this.article = res.data
             this.title = this.article.articleTitle
-            this.$refs.myTinymce.setContent(this.article.content)
           }
         })
       },
