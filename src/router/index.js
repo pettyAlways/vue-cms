@@ -117,11 +117,8 @@ export default new Router({
       return savedPosition
     } else {
       const position = { x: 0, y: 0 }
-      if (to.hash) {
-        let anchor = document.querySelector(to.hash)
-        let scrollTop = anchor.scrollTop
-        console.error('跳转位置')
-        position.y = scrollTop
+      if (to.hash && to.hash === '#category') {
+        position.y = 840
       }
       return position
     }

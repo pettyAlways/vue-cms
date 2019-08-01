@@ -5,14 +5,7 @@
         <span class="header-tip">AUTHOR-INFO</span>
       </template>
       <template slot="body">
-        <user-card
-          :userId="userProfile.userId"
-          :skill="userProfile.skillList"
-          :userImg="userProfile.avatarUrl"
-          :introduce="userProfile.introduce"
-          :signature="userProfile.signature"
-          :userName="userProfile.userName">
-        </user-card>
+        <user-card :userInfo="userProfile"></user-card>
       </template>
     </common-panel-two>
   </div>
@@ -28,7 +21,7 @@
     },
     data() {
       return {
-        userProfile: ''
+        userProfile: {}
       }
     },
     components: {

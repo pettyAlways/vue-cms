@@ -6,7 +6,7 @@
           <span class="header-tip">AUTHOR-INFO</span>
         </template>
         <template slot="body">
-          <el-carousel indicator-position="none" arrow="never" interval="6000">
+          <el-carousel indicator-position="none" arrow="never" :interval="6000">
             <el-carousel-item v-for="(item, index) in recommendKnowledge" :key="index" indicator-position="none" arrow="never">
               <div class="knowledge__recommend__item">
                 <div class="knowledge__recommend__item__header">
@@ -16,13 +16,13 @@
                   <div class="knowledge__recommend__item__header--right">
                     <div class="title"><a @click="goKnowledge(item.knowledgeId)">{{item.knowledgeName}}</a></div>
                     <span class="content">{{item.knowledgeDesc}}</span>
-                    <a>[详情]</a>
+                    <a @click="goKnowledge(item.knowledgeId)">[详情]</a>
                   </div>
                 </div>
                 <div class="knowledge__recommend__item__body">
                   <ul>
                     <li v-for="(tItem, index) in item.articleList" :key="'.'+ index">
-                      <a class="title">{{tItem.articleTitle}}</a>
+                      <a class="title" @click="goArticle(tItem.articleId)">{{tItem.articleTitle}}</a>
                       <span>{{tItem.postTime}}</span>
                     </li>
                   </ul>

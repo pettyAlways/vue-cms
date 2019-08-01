@@ -21,20 +21,19 @@
                     <img :src="require('./assets/author01.jpg')" />
                   </li>
                   <li class="author-info">
-                    <a>{{ article.authorName }}</a>
-                    <span>发布于</span>
+                    <a @click="goProfile(article.authorId)">{{ article.authorName }}</a>
+                    <span class="m-l-5 m-r-5">发布于</span>
                     <a @click="goKnowledgeDetail(article.knowledgeId)">{{ article.knowledgeName }}</a>
-                    <span>所属分类</span>
-                    <span>{{ article.categoryName }}</span>
+                    <span class="m-r-5">所属分类</span>
+                    <a @click="goCategory(article.categoryId)">{{ article.categoryName }}</a>
                     <span>发布时间</span>
                     <span>{{ article.postTime }}</span>
-                  </li>
-                  <li class="participant">
-                    <ul>
-                      <li v-for="(tItem, index) in article.participantList" :key="index+'.'">
-                        {{ tItem.userName }}
-                      </li>
-                    </ul>
+                    <div v-if="article.participantList && article.participantList.length">
+                      <span class="m-l-5">协作人</span>
+                      <a @click="goProfile(item.userId)" :key="index" v-for="(item, index) in article.participantList">
+                        {{item.userName}}
+                      </a>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -128,7 +127,7 @@
               </template>
               <template slot="body">
                 <div class="article__container__archive__item">
-                  <el-carousel indicator-position="none" arrow="never" interval="10000">
+                  <el-carousel indicator-position="none" arrow="never" :interval="10000">
                     <el-carousel-item v-for="(item, index) in relateKnowledgeList" :key="index" indicator-position="none" arrow="never">
                       <knowledge-card :knowledge="item"></knowledge-card>
                     </el-carousel-item>
@@ -204,6 +203,12 @@
       },
       goArticle(articleId) {
         this.$router.push({ name: 'articleShow', params: { articleId: articleId, token: this.token } })
+      },
+      goCategory(categoryId) {
+        this.$router.push({ path: '/knowledge#category', query: { categoryId: categoryId } })
+      },
+      goProfile(userId) {
+        this.$router.push({ name: 'profile', params: { userId: userId } })
       },
       goKnowledgeDetail(knowledgeId) {
         this.$router.push({ name: 'knowledgeDetail', params: { knowledgeId: knowledgeId } })
@@ -379,6 +384,7 @@
             }
           }
           .author-info {
+            display: flex;
             margin-left: 10px;
             font-size: 12px;
             a {
@@ -435,8 +441,10 @@
       }
       &__archive {
         margin-top: 15px;
+        /deep/ .custom-panel__body {
+          border: none;
+        }
         &__item {
-          margin-right: -1px;
           /deep/ .el-carousel {
             .el-carousel__container {
               height: 0px;

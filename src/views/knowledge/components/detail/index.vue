@@ -14,7 +14,6 @@
         </div>
         <div class="knowledge-detail__content--right">
           <author-list :knowledgeId="knowledge.knowledgeId"></author-list>
-          <knowledge-participant :knowledgeId="knowledge.knowledgeId"></knowledge-participant>
         </div>
       </div>
     </el-card>
@@ -36,8 +35,7 @@
       siteNav: () => import('@/components/site-nav'),
       konwledgeCover: () => import('./components/knowledge-cover'),
       konwledgeContent: () => import('./components/knowledge-content'),
-      authorList: () => import('./components/author-list'),
-      knowledgeParticipant: () => import('./components/knowledge-participant')
+      authorList: () => import('./components/author-list')
     },
     provide() {
       return {

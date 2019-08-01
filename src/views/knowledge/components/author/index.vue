@@ -5,16 +5,7 @@
         <span class="header-tip">AUTHOR-INFO</span>
       </template>
       <template slot="body">
-        <user-card
-          v-for="(item, index) in authorList"
-          :key = index
-          :userId="item.userId"
-          :skill="item.skillList"
-          :userImg="item.avatarUrl"
-          :introduce="item.introduce"
-          :signature="item.signature"
-          :userName="item.userName">
-        </user-card>
+        <user-card v-for="(item, index) in authorList" :key="index" :userInfo="item"></user-card>
       </template>
     </common-panel-two>
   </div>

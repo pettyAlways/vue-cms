@@ -25,20 +25,24 @@
       <div class="user-img" @mouseenter="mask = true" @mouseleave="mask = false">
         <el-upload
           v-if="isCurLogin"
+          class="user-upload"
           action=""
           ref="upload"
           :show-file-list="false"
           :auto-upload="false"
           :on-change="getFile">
           <div class="internal">
-            <el-image :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')"></el-image>
+            <el-image :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')" fit="cover">
+            </el-image>
             <div v-if="mask" class="camera">
               <i class="el-icon-camera"></i>
               <span>修改我的头像</span>
             </div>
           </div>
         </el-upload>
-        <el-image v-else :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')" style="cursor: default;"></el-image>
+        <el-image v-else :src="profileInfo.avatarUrl ? profileInfo.avatarUrl : require('./assets/person.png')"
+                  fit="cover" style="cursor: default;">
+        </el-image>
       </div>
       <div v-if="isCurLogin" class="cover-img">
         <el-upload
@@ -77,24 +81,8 @@
           <div class="recent-post" v-if="type === 'newPost' && recentArticleList.length">
             <ul>
               <li v-for="(item, index) in recentArticleList" :key="index">
-                <article-panel01 :content="item.content" :img="item.coverUrl">
-                  <template slot="title">
-                    <a @click="goArticle(item.articleId)">{{ item.articleTitle }}</a>
-                  </template>
-                  <template slot="tipPanel">
-                    <ul class="tipPanel">
-                      <li class="author-info">
-                        <span>{{ item.authorName }}</span>
-                        <span>发布于</span>
-                        <a>{{ item.knowledgeName }}</a>
-                        <span>分类</span>
-                        <span>{{ item.categoryName}}</span>
-                        <span>发布时间</span>
-                        <span>{{ item.postTime }}</span>
-                      </li>
-                    </ul>
-                  </template>
-                </article-panel01>
+                <article-panel :article="item" :bStyle="{ padding: '0px' }">
+                </article-panel>
               </li>
             </ul>
           </div>
@@ -120,12 +108,7 @@
             <span class="header-tip">AUTHOR-INFO</span>
           </template>
           <template slot="body">
-            <user-card :skill="profileInfo.skillList" :userImg="profileInfo.avatarUrl"
-                       :introduce="profileInfo.introduce"
-                       :signature="profileInfo.signature"
-                       :userName="profileInfo.userName">
-
-            </user-card>
+            <user-card :userInfo="profileInfo"></user-card>
           </template>
         </common-panel-one>
       </div>
@@ -185,7 +168,7 @@
         'userShow'
       ]),
       isCurLogin() {
-        return this.userShow.userId === this.userId
+        return parseInt(this.userShow.userId) === parseInt(this.userId)
       },
       hasList() {
         return (this.type === 'newPost' && this.recentArticleList.length) ||
@@ -194,19 +177,19 @@
       }
     },
     components: {
-      articlePanel01: () => import('@/components/article-panel-01'),
+      articlePanel: () => import('@/components/article-panel'),
       knowledgeCard: () => import('@/components/knowledge-card'),
       imageCutUpload: () => import('@/components/image-cut-upload'),
       commonPanelOne: () => import('@/components/common-panel-one'),
       userCard: () => import('@/components/user-card')
     },
     mounted() {
-      this.userId = this.$route.params.userId
-      this.refreshEditProfile(this.$route.path)
       this.init()
     },
     methods: {
       init() {
+        this.userId = this.$route.params.userId
+        this.refreshEditProfile(this.$route.path)
         this.userProfile()
         this.userRecentPost()
       },
@@ -294,6 +277,7 @@
     },
     watch: {
       $route(to) {
+        this.init()
         if (/^\/profile-edit\/\w*$/.test(to.path)) {
           this.editProfile = true
         }
@@ -360,13 +344,27 @@
       top: 180px;
       left: 50px;
       width: 140px;
-      height: 140px;
+      height:140px;
       overflow: hidden;
       background-color: gainsboro;
-      border: 4px solid #fff;
+      border: 2px solid #fff;
       border-radius: 8px;
       cursor: pointer;
+      .user-upload {
+        width: 100%;
+        height: 100%;
+      }
+      /deep/ .el-upload {
+        width: 100%;
+        height: 100%;
+      }
+      /deep/ .el-image {
+        width: 100%;
+        height: 100%;
+      }
       .internal {
+        width: 100%;
+        height: 100%;
         position: relative;
         .camera {
           position: absolute;
@@ -458,10 +456,9 @@
       &__body {
         display: flex;
         justify-content: center;
-        align-items: center;
         min-height: 250px;
         background-color: #ffffff;
-        padding: 15px;
+        padding: 0px 15px;
         .recent-post {
           width: 100%;
           ul {
@@ -497,7 +494,9 @@
           display: flex;
           flex-wrap: wrap;
           width: 100%;
+          margin-top: 15px;
           .knowledge-item {
+            background-color: white;
             width: 280px;
             height: 273px;
             margin-right: 10px;
@@ -506,6 +505,7 @@
           }
         }
         .no-content {
+          margin-top: 50px;
           width: 80px;
           height: 80px;
         }

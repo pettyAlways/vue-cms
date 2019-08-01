@@ -22,7 +22,7 @@
             <a class="creator" @click="goProfile">{{knowledge.creatorName}}</a>
           </li>
           <li><icon-svg iconClass="category" :vStyle="{ width: '12px', height: '12px' }"></icon-svg>
-            <a @click="goCategory" class="category">{{knowledge.categoryName}}</a>
+            <a @click="goCategory(knowledge.categoryId)" class="category">{{knowledge.categoryName}}</a>
           </li>
           <li><icon-svg iconClass="article" :vStyle="{ width: '12px', height: '12px' }"></icon-svg>
             <span class="article-num">{{knowledge.articleNum ? knowledge.articleNum : 0}}<span class="small">篇</span></span>
@@ -122,8 +122,8 @@
           })
         })
       },
-      goCategory() {
-
+      goCategory(categoryId) {
+        this.$router.push({ path: `/knowledge/#category`, query: { categoryId: categoryId } })
       }
     }
   }
@@ -131,12 +131,14 @@
 
 <style lang="scss" scoped>
   .knowledge-card {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     overflow: hidden;
     /deep/ .el-card {
       background-color: transparent;
-      border: none;
+      border: 1px solid #d1d1d1;
       .el-card__body {
         padding: 0px;
       }
@@ -232,6 +234,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: #3f87ae;
           }
           .article-num {
             margin-left: 5px;

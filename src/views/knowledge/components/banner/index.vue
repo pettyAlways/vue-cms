@@ -5,7 +5,7 @@
         知识库所属指定分类，包含一类的文章，可由多个作者协作编辑，对感兴趣的知识库可申请加入哟
       </div>
       <div class="banner__extra__join">
-        <a>JOIN NOW</a>
+        <a @click="goCategory">JOIN NOW</a>
       </div>
     </div>
   </div>
@@ -13,7 +13,13 @@
 
 <script>
   export default {
-    name: 'konwledgeBanner'
+    name: 'knowledgeBanner',
+    methods: {
+      goCategory() {
+        this.$router.push({ path: '/knowledge#category' })
+      }
+    }
+
   }
 </script>
 

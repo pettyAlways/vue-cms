@@ -10,24 +10,24 @@
         </div>
         <div class="author">
           <span>创建者：</span>
-          <span>{{ knowledgeItem.creatorName }}</span>
+          <a @click="goProfile(knowledgeItem.creator)" class="author-name">{{ knowledgeItem.creatorName }}</a>
         </div>
         <div class="author">
           <span>参与者：</span>
           <ul v-if="knowledgeItem.participantList && knowledgeItem.participantList.length ">
             <li v-for="(item, index) in knowledgeItem.participantList" :key="index">
-              <a>{{ item.userName }}</a>
+              <a @click="goProfile(item.userId)" class="author-name">{{ item.userName }}</a>
             </li>
           </ul>
-          <span v-else>暂无</span>
+          <span v-else class="author-name">暂无</span>
         </div>
         <div class="introduce">
           <span>简介：</span>
           <div class="content"><a>{{ knowledgeItem.knowledgeDesc }}</a></div>
         </div>
         <div class="category">
-          <span>所属分类：</span>
-          <div class="content"><a>{{ knowledgeItem.categoryName}}</a></div>
+          <span>分类：</span>
+          <div class="content"><a @click="goCategory(knowledgeItem.categoryId)">{{ knowledgeItem.categoryName}}</a></div>
         </div>
       </div>
     </div>
@@ -78,6 +78,12 @@
     methods: {
       init() {
         this.knowledgeDetail()
+      },
+      goProfile(userId) {
+        this.$router.push({ name: 'profile', params: { userId: userId } })
+      },
+      goCategory(categoryId) {
+        this.$router.push({ path: '/knowledge#category', query: { categoryId: categoryId } })
       },
       knowledgeDetail() {
         retrieveKnowledgeDetail({ knowledgeId: this.knowledgeId, token: this.token, userId: this.userShow.userId }).then(res => {
@@ -158,12 +164,22 @@
             line-height: 25px;
             flex-shrink: 0;
           }
+          a {
+            color: #4c84be;
+            &:hover {
+              color:  #409EFF;
+            }
+          }
+          &-name {
+            color: #6b747d;
+            font-size: 13px;
+          }
           ul {
             display: flex;
             list-style: none;
             padding: 0px;
             li {
-              margin-left: 10px;
+              margin-right: 10px;
               img {
                 width: 25px;
                 height: 25px;
@@ -182,9 +198,10 @@
             flex-shrink: 0;
           }
           .content {
+            color: #6b747d;
+            font-size: 13px;
             margin-left: 10px;
             flex-wrap: wrap;
-            color:  #737373;
           }
         }
         .category {
@@ -195,6 +212,7 @@
           .content {
             margin-left: 10px;
             a {
+              font-size: 13px;
               color: #4c84be;
               cursor: pointer;
               &:hover {

@@ -2,27 +2,27 @@
   <div class="author-panel">
     <ul>
       <li class="author">
-        <img v-if="userImg" :src="userImg" />
+        <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" />
         <img v-else src="./assets/user.png" />
-        <div class="nick"><a @click="goUser">{{userName}}</a></div>
+        <div class="nick"><a @click="goUser">{{userInfo.userName}}</a></div>
       </li>
       <li>
         <div class="key">简介:</div>
         <div class="value">
-          <span>{{introduce | autoTransform}}</span>
+          <span>{{userInfo.introduce | autoTransform}}</span>
         </div>
       </li>
       <li>
         <div class="key">擅长:</div>
-        <div class="tag" v-if="skill && skill.length">
-          <el-tag size="mini" v-for="(item, index) in skill" :key="index">{{item.skillName}}</el-tag>
+        <div class="tag" v-if="userInfo.skillList && userInfo.skillList.length">
+          <el-tag size="mini" v-for="(item, index) in userInfo.skillList" :key="index">{{item.skillName}}</el-tag>
         </div>
         <div v-else>暂无</div>
       </li>
       <li>
         <div class="key">个性签名:</div>
         <div class="value">
-          <span>{{signature | autoTransform}}</span>
+          <span>{{userInfo.signature | autoTransform}}</span>
         </div>
       </li>
     </ul>
@@ -33,15 +33,7 @@
   export default {
     name: 'userCard',
     props: {
-      userId: Number,
-      userImg: {
-        type: String,
-        default: require('./assets/user.png')
-      },
-      userName: String,
-      introduce: String,
-      signature: String,
-      skill: Array
+      userInfo: Object
     },
     methods: {
       goUser() {

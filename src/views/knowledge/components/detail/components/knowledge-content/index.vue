@@ -23,28 +23,7 @@
     <div v-if="type !== 'concise'" class="knowledge-content__body">
       <ul>
         <li v-for="(item, index) in articleList" :key="index">
-          <article-panel01 :content="item.content" :img="img">
-            <template slot="title">
-              <a @click="goArticle(item.articleId)">{{ item.articleTitle }}</a>
-            </template>
-            <template slot="tipPanel">
-              <ul class="tipPanel">
-                <li class="author-img">
-                  <img :src="require('./assets/author01.jpg')" />
-                </li>
-                <li class="author-info">
-                  <a>{{ item.authorName }}</a>
-                  <span>发布于</span>
-                  <span>{{ item.postTime }}</span>
-                </li>
-                <li class="love">
-                  <a><i class="el-icon-star-off"></i></a>
-                  <span>2</span>
-                  <span>点赞</span>
-                </li>
-              </ul>
-            </template>
-          </article-panel01>
+          <article-panel :article="item"></article-panel>
         </li>
       </ul>
     </div>
@@ -81,7 +60,7 @@
       }
     },
     components: {
-      articlePanel01: () => import('@/components/article-panel-01')
+      articlePanel: () => import('@/components/article-panel')
     },
     computed: {
       ...mapGetters([
@@ -170,6 +149,8 @@
       }
     }
     &__body {
+      min-height: 180px;
+      padding: 0px 15px;
       ul {
         list-style: none;
         padding: 0px;
@@ -212,6 +193,7 @@
       color: #3f87ae;
     }
     &__concise {
+      min-height: 180px;
       ul {
         display: flex;
         flex-wrap: wrap;

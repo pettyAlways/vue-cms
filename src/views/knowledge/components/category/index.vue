@@ -1,5 +1,5 @@
 <template>
-  <div class="category-panel">
+  <div class="category-panel" id="category">
     <div class="category-panel__body">
       <common-panel-one title="知识库分类" :hStyle="{ height: '45px' }">
         <template slot="more">
@@ -63,7 +63,7 @@
         let res = await retrieveAllCategory()
         this.categoryList = res.data
         if (this.categoryList) {
-          this.showCategory = this.categoryList[0].categoryId
+          this.showCategory = this.$route.query.categoryId || this.categoryList[0].categoryId
           res = await retrieveKnowledgeList({ categoryId: this.showCategory, page: this.paging.page, size: this.paging.size })
           this.knowledgeList = res.data || []
         }

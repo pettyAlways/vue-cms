@@ -87,9 +87,6 @@
       }
     },
     mounted() {
-      let data = clientVisiable()
-      this.width = data.width
-      this.height = data.height
       this.init()
     },
     methods: {
@@ -99,6 +96,10 @@
         'loginOut'
       ]),
       init() {
+        let data = clientVisiable()
+        this.width = data.width
+        this.height = data.height
+        this.upShow = false
         this.getMessage()
       },
       getMessage() {
@@ -154,7 +155,7 @@
             let password = RegExp.$2
             this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
               this.retrieveUserInfo()
-              this.upShow = false
+              this.init()
             })
           }
         }, false)
