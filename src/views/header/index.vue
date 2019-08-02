@@ -276,7 +276,7 @@
                 &:after {
                   position: absolute;
                   top: -15px;
-                  left: 58px;
+                  left: 48px;
                   content: '';
                   width: 0;
                   height: 0;
@@ -329,7 +329,7 @@
               &:after {
                 position: absolute;
                 top: -15px;
-                left: 270px;
+                left: 259px;
                 content: '';
                 width: 0;
                 height: 0;
