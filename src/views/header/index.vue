@@ -2,7 +2,7 @@
   <el-card class="header-container" :class="{'fixed': fixed}" body-style="padding: 0px">
     <div class="header-panel w1200">
       <div class="header-panel__logo">
-        <icon-svg iconClass="laoying"></icon-svg>
+        <icon-svg iconClass="laoying" :vStyle="{width: '50px', height: '50px'}"></icon-svg>
         <span>鹰嘴豆</span>
       </div>
       <div class="header-panel__search">
