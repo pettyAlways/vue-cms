@@ -3,9 +3,6 @@
     <div class="header-logo__main w1200">
       <div class="header-logo__main--left">
         <div class="header-logo__main--left__logo"></div>
-        <div class="header-logo__main--left__text">
-          记录走过的点点滴滴
-        </div>
         <div class="header-logo__main--left__search">
           <input type="search" id="text-input" placeholder="全文搜索"/>
           <input type="submit" id="search" value="搜索"/>
@@ -279,7 +276,7 @@
                 &:after {
                   position: absolute;
                   top: -15px;
-                  left: 48px;
+                  left: 58px;
                   content: '';
                   width: 0;
                   height: 0;
@@ -332,7 +329,7 @@
               &:after {
                 position: absolute;
                 top: -15px;
-                left: 258px;
+                left: 270px;
                 content: '';
                 width: 0;
                 height: 0;

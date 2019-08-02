@@ -1,7 +1,7 @@
 <template>
   <div class="category-panel" id="category">
     <div class="category-panel__body">
-      <common-panel-one title="知识库分类" :hStyle="{ height: '45px' }">
+      <common-panel-one title="知识库分类" :hStyle="{ height: '45px' }" :bStyle="{ padding: '10px;'}">
         <template slot="more">
           <span class="header-tip">AUTHOR-INFO</span>
         </template>
@@ -92,9 +92,6 @@
         color: #cccccc;
         font-family: Arial, Helvetica, sans-serif;
         font-weight: normal;
-      }
-      /deep/ .custom-panel__body {
-        padding: 15px 20px 15px 0px;
       }
       &__container {
         display: flex;

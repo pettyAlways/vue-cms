@@ -1,5 +1,5 @@
 <template>
-  <div class="author-panel">
+  <el-card class="author-panel">
     <ul>
       <li class="author">
         <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" />
@@ -26,7 +26,7 @@
         </div>
       </li>
     </ul>
-  </div>
+  </el-card>
 </template>
 
 <script>
@@ -51,7 +51,6 @@
       list-style: none;
       padding: 0px;
       margin-bottom: 10px;
-      border-bottom: 1px dotted #e6e6e6;
       li {
         display: flex;
         flex-direction: row;

@@ -8,10 +8,10 @@
           </a>
           <div class="carousel-panel__item__text">
             <div class="carousel-panel__item__text__title">
-              知识库 —— 整合零碎的知识
+              {{item.title}}
             </div>
             <div class="carousel-panel__item__text__content">
-              提供了大量前端后台的知识库
+              {{item.content}}
             </div>
           </div>
         </div>
@@ -28,19 +28,27 @@
         carouselPic: [
           {
             link: '',
-            pic: require('./asserts/banner01.jpg')
+            pic: require('./asserts/banner01.jpg'),
+            title: '知识库 —— 整合零碎的知识',
+            content: '知识库所属某一分类，其下包含一系列文章'
           },
           {
             link: '',
-            pic: require('./asserts/banner02.jpg')
+            pic: require('./asserts/banner02.jpg'),
+            title: '作者角色 —— 申请拥有更多权限',
+            content: '拥有加入知识库、创建知识库等权限'
           },
           {
             link: '',
-            pic: require('./asserts/banner03.jpg')
+            pic: require('./asserts/banner03.jpg'),
+            title: '共享角色 —— 拥有共享权限',
+            content: '享有操作他人的知识库文章'
           },
           {
             link: '',
-            pic: require('./asserts/banner04.jpg')
+            pic: require('./asserts/banner04.jpg'),
+            title: '鹰嘴豆 —— 一个知识库协同网站',
+            content: '想构建完整知识库那就加入吧'
           }
         ]
       }

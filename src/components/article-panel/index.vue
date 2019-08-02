@@ -65,7 +65,7 @@
     display: flex;
     justify-content: space-between;
     height: 130px;
-    border-bottom: 1px dotted #e6e6e6;
+    border-bottom: 1px solid #dcdfe6;
     margin-top: 10px;
     &--left {
       flex-grow: 1;

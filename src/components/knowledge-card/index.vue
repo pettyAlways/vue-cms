@@ -1,6 +1,6 @@
 <template>
   <div class="knowledge-card">
-    <el-card>
+    <el-card :shadow="shadow" :body-style="bStyle">
       <el-image :src="knowledge.knowledgeCover ? knowledge.knowledgeCover : require('./assets/placeholder.png')" class="cover" fit="cover"></el-image>
       <div class="title-panel">
         <p class="title"><a @click="goKnowledge">{{knowledge.knowledgeName}}</a></p>
@@ -25,10 +25,10 @@
             <a @click="goCategory(knowledge.categoryId)" class="category">{{knowledge.categoryName}}</a>
           </li>
           <li><icon-svg iconClass="article" :vStyle="{ width: '12px', height: '12px' }"></icon-svg>
-            <span class="article-num">{{knowledge.articleNum ? knowledge.articleNum : 0}}<span class="small">篇</span></span>
+            <span class="article-num">{{knowledge.articleCounts ? knowledge.articleCounts : 0}}<span class="small">篇</span></span>
           </li>
           <li><icon-svg iconClass="participant" :vStyle="{ width: '14px', height: '14px' }"></icon-svg>
-            <span class="participant">{{knowledge.participantNum ? knowledge.participantNum : 0}}<span class="small">人</span></span>
+            <span class="participant">{{knowledge.participantCounts ? knowledge.participantCounts : 0}}<span class="small">人</span></span>
           </li>
         </ul>
       </div>
@@ -42,6 +42,14 @@
   export default {
     name: 'knowledgeCard',
     props: {
+      shadow: {
+        type: String,
+        default: 'never'
+      },
+      bStyle: {
+        type: Object,
+        default: () => ({padding: '0px'})
+      },
       knowledge: Object
     },
     computed: {
@@ -135,14 +143,6 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    /deep/ .el-card {
-      background-color: transparent;
-      border: 1px solid #d1d1d1;
-      .el-card__body {
-        padding: 0px;
-      }
-    }
     .cover {
       width: 100%;
       height: 150px;
@@ -202,7 +202,6 @@
     .toolbar {
       ul {
         display: flex;
-        align-items: center;
         list-style: none;
         padding: 0px 3px;
         li {

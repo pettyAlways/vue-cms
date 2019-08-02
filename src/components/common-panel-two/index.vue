@@ -1,12 +1,16 @@
 <template>
-  <div class="news-panel">
-    <div class="news-panel__header" :style="hStyle">
-      <div class="title">{{title}}</div>
-      <slot name="more"><div class="btn"><a>更多</a></div></slot>
+  <div class="custom-panel">
+    <div class="custom-panel__header" :style="hStyle">
+      <div class="custom-panel__header--left">
+        <div class="custom-panel__header__title">
+          {{title}}
+        </div>
+      </div>
+      <div class="custom-panel__header--right">
+        <slot name="more"><el-image :src="require('../../assets/more2.jpg')"></el-image></slot>
+      </div>
     </div>
-    <div class="news-panel__body" :style="bStyle">
-      <slot name="body"></slot>
-    </div>
+    <slot name="body"></slot>
   </div>
 </template>
 
@@ -14,43 +18,48 @@
   export default {
     name: 'commonPanelTwo',
     props: {
+      shadow: {
+        type: String,
+        default: 'never'
+      },
       hStyle: Object,
       title: String,
       bStyle: {
         type: Object,
-        default: () => ({padding: '10px 15px'})
+        default: () => ({padding: '0px'})
+      }
+    },
+    data() {
+      return {
+        bodyStyle: this.bStyle
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .news-panel {
+  .custom-panel {
+    display: flex;
+    flex-direction: column;
     &__header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 40px;
-      border-bottom: 1px solid #e6e6e6;
-      .title {
-        font-size: 18px;
+      line-height: 40px;
+      &__title {
+        margin-right: 15px;
+        font-size: 16px;
         font-weight: 700;
         color: #323232;
       }
-      .btn {
-        color: #999;
-        font-weight: 400;
-        a {
-          cursor: pointer;
-          &:hover {
-            color: #259;
-          }
-        }
+      &--left {
+        display: inline-flex;
+        align-items: center;
       }
-    }
-    &__body {
-      margin-top: 10px;
-      min-height: 180px;
+      &--right {
+        font-size: 14px;
+      }
     }
   }
 </style>

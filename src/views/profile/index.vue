@@ -88,12 +88,12 @@
           </div>
           <div v-if="type === 'hisKnowledge' && userKnowledgeList.length" class="his-knowledge">
             <div class="knowledge-item" v-for="(item, index) in userKnowledgeList" :key="index">
-              <knowledge-card :knowledge="item"></knowledge-card>
+              <knowledge-card :knowledge="item" shadow="always" :bStyle="{padding: '0px'}"></knowledge-card>
             </div>
           </div>
           <div v-if="type === 'participantKnowledge' && userParticipantKnowledgeList.length" class="his-knowledge">
             <div class="knowledge-item" v-for="(item, index) in userParticipantKnowledgeList" :key="index">
-              <knowledge-card :knowledge="item"></knowledge-card>
+              <knowledge-card :knowledge="item" shadow="always" :bStyle="{padding: '0px'}"></knowledge-card>
             </div>
           </div>
           <div v-if="!hasList" class="no-content">
@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="other-panel">
-        <common-panel-one title="用户信息" :hStyle="{ height: '60px' }">
+        <common-panel-one title="用户信息" :hStyle="{ height: '60px' }" :bStyle="{ padding: '10px'}">
           <template slot="more">
             <span class="header-tip">AUTHOR-INFO</span>
           </template>
@@ -140,7 +140,7 @@
         paging: {
           page: 1,
           total: 0,
-          size: 10
+          size: 100
         },
         uDialog: {
           visible: false,
@@ -421,10 +421,10 @@
     margin-top: 5px;
     .content-panel {
       width: 900px;
+      background-color: #ffffff;
       &__header {
         height: 60px;
-        border-bottom: 1px solid #ece6e6;
-        background-color: #ffffff;
+        border-bottom: 1px solid #dcdfe6;
         padding-left: 10px;
         ul {
           display: flex;

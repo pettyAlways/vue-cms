@@ -1,5 +1,5 @@
 <template>
-  <div class="knowledge-content">
+  <div class="knowledge-content" ref="demo">
     <div class="knowledge-content__header">
       <ul>
         <li :class="{ active: (type === 'catalogue') }">
@@ -50,13 +50,14 @@
         paging: {
           page: 1,
           total: 0,
-          size: 10
+          size: 100
         },
         rows: '',
         img: require('./assets/knowledge01.jpg'),
         knowledgeId: '',
         articleList: [],
-        token: ''
+        token: '',
+        loading: false
       }
     },
     components: {
@@ -65,7 +66,13 @@
     computed: {
       ...mapGetters([
         'userShow'
-      ])
+      ]),
+      noMore () {
+        return this.articleList.length >= 20
+      },
+      disabled () {
+        return this.loading || this.noMore
+      }
     },
     mounted() {
       this.token = this.$route.params.token

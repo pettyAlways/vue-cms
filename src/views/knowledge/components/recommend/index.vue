@@ -1,12 +1,12 @@
 <template>
   <div class="knowledge">
     <div class="knowledge__recommend">
-      <common-panel-one title="推荐知识库" :bStyle="{ 'padding': '0px' }">
+      <common-panel-one title="推荐知识库" shadow="always" :bStyle="{ 'padding': '0px' }">
         <template slot="more">
           <span class="header-tip">AUTHOR-INFO</span>
         </template>
         <template slot="body">
-          <el-carousel indicator-position="none" arrow="never" :interval="6000">
+          <el-carousel indicator-position="none" arrow="always" :interval="6000">
             <el-carousel-item v-for="(item, index) in recommendKnowledge" :key="index" indicator-position="none" arrow="never">
               <div class="knowledge__recommend__item">
                 <div class="knowledge__recommend__item__header">
@@ -34,7 +34,7 @@
       </common-panel-one>
     </div>
     <div class="article__recent">
-      <common-panel-one title="最新文章" :bStyle="{ padding: '0px' }">
+      <common-panel-one title="最新文章" shadow="always" :bStyle="{ padding: '0px' }">
         <template slot="more">
           <span class="header-tip">AUTHOR-INFO</span>
         </template>
@@ -49,7 +49,7 @@
       </common-panel-one>
     </div>
     <div class="knowledge__recent">
-      <common-panel-one title="最新知识库" :bStyle="{ padding: '0px' }">
+      <common-panel-one title="最新知识库" shadow="always" :bStyle="{ padding: '0px' }">
         <template slot="more">
           <span class="header-tip">NEW-KNOWLEDGE</span>
         </template>

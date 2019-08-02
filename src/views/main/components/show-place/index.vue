@@ -4,57 +4,41 @@
       <wine-panel-title width="160px" height="40px" title="最新文章" note="ARTICLES"></wine-panel-title>
     </div>
     <div class="produce-place__body">
-      <div class="produce-place__body--left">
-        <el-image :src="require('./asserts/left.jpg')" style="width: 405px;height:355px;"></el-image>
-      </div>
-      <div class="produce-place__body--right">
-        <div class="produce-place__body--right__list">
-          <div class="produce-place__body--right__list__item" v-for="(item, index) in placeInfo" :key="index">
-            <a :href="item.link">
-              <el-image :src="item.pic" style="width: 260px;height:175px"></el-image>
-            </a>
-          </div>
-        </div>
+      <div class="article-item" v-for="(item, index) in recentList" :key="index">
+        <article-panel :article="item"></article-panel>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { recentArticleListInfo } from '../../../../api/article'
+
   export default {
     name: 'showPlace',
     data() {
       return {
-        placeInfo: [
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          },
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          },
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          },
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          },
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          },
-          {
-            pic: require('./asserts/shop.jpg'),
-            link: ''
-          }
-        ]
+        recentList: []
       }
     },
     components: {
-      'winePanelTitle': () => import('@/components/wine-panel-title')
+      'winePanelTitle': () => import('@/components/wine-panel-title'),
+      articlePanel: () => import('@/components/article-panel')
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      init() {
+        this.recentArticleList()
+      },
+      recentArticleList() {
+        recentArticleListInfo().then(res => {
+          if (res.flag) {
+            this.recentList = res.data
+          }
+        })
+      }
     }
   }
 </script>
@@ -67,27 +51,9 @@
     }
     &__body {
       display: flex;
-      justify-content: space-between;
-      &--left {
-        flex-shrink: 0;
-        width: 405px;
-        height: 355px;
-      }
-      &--right {
-        flex-shrink: 0;
-        width: 795px;
-        height: 355px;
-        &__list {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-         &__item {
-           margin-left: 5px;
-           width: 260px;
-           height: 175px;
-           margin-bottom: 5px;
-         }
-        }
+      flex-wrap: wrap;
+      .article-item {
+        width: 100%;
       }
     }
 

@@ -10,9 +10,9 @@
         <slot name="more"><el-image :src="require('../../assets/more2.jpg')"></el-image></slot>
       </div>
     </div>
-    <div class="custom-panel__body" :style="bodyStyle">
+    <el-card :shadow="shadow" :body-style="bStyle">
       <slot name="body"></slot>
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -20,11 +20,15 @@
   export default {
     name: 'commonPanelOne',
     props: {
+      shadow: {
+        type: String,
+        default: 'never'
+      },
       hStyle: Object,
       title: String,
       bStyle: {
         type: Object,
-        default: () => ({padding: '10px 15px'})
+        default: () => ({padding: '0px'})
       }
     },
     data() {
@@ -37,6 +41,8 @@
 
 <style lang="scss" scoped>
   .custom-panel {
+    display: flex;
+    flex-direction: column;
     &__header {
       display: flex;
       justify-content: space-between;
@@ -57,11 +63,5 @@
         font-size: 14px;
       }
     }
-    &__body {
-      padding: 0px 10px;
-      border: 1px solid #d1d1d1;
-      overflow: hidden;
-    }
-
   }
 </style>

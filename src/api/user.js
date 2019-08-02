@@ -54,10 +54,19 @@ export function bindUserAccount(data) {
   })
 }
 
-export function retrieveRecommendAuthor() {
+export function retrieveRecommendAuthor(params) {
   return remote({
     url: '/platform/frontend/user/search/recommend',
-    method: 'get'
+    method: 'get',
+    params
+  })
+}
+
+export function retrieveRecommendAuthorList(params) {
+  return remote({
+    url: '/platform/frontend/user/search/recommend/list',
+    method: 'get',
+    params
   })
 }
 

@@ -31,6 +31,13 @@ export function retrieveKnowledgeCatalogue(params) {
   })
 }
 
+export function recentArticleListInfo() {
+  return remote({
+    url: '/platform/frontend/article/search/recent/info',
+    method: 'get'
+  })
+}
+
 export function retrieveRecentPost(params) {
   return remote({
     url: '/platform/frontend/article/search/recent/post',

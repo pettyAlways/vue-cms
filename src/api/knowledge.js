@@ -14,6 +14,13 @@ export function retrieveRecentKnowledge() {
   })
 }
 
+export function retrieveRecentKnowledgeInfo() {
+  return remote({
+    url: '/platform/frontend/knowledge/search/recent/info',
+    method: 'get'
+  })
+}
+
 export function retrieveKnowledgeList(params) {
   return remote({
     url: '/platform/frontend/knowledge/search/list',

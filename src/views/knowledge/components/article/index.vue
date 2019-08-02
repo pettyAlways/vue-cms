@@ -45,22 +45,18 @@
             </div>
             <div class="article__container__btn">
               <ul>
-                <li>
-                  <i class="el-icon-thumb"></i>
-                  <a>点赞</a>
+                <li v-if="Object.keys(preArticle).length">
+                  <span>上一篇</span>
+                  <a @click="goArticle(preArticle.articleId)" class="m-r-10 m-l-10">{{ preArticle.articleTitle }}</a>
                 </li>
-                <li>
-                  <i class="el-icon-folder-add"></i>
-                  <a>收藏</a>
-                </li>
-                <li>
-                  <i class="el-icon-coffee-cup"></i>
-                  <a>打赏</a>
+                <li v-if="Object.keys(nextArticle).length">
+                  <span>下一篇</span>
+                  <a @click="goArticle(nextArticle.articleId)" class="m-l-10">{{ nextArticle.articleTitle }}</a>
                 </li>
               </ul>
             </div>
             <div class="article__container__others">
-              <common-panel-one title="相关文章">
+              <common-panel-one title="相关文章" :bStyle="{ padding: '15px' }">
                 <template slot="more">
                   <span class="header-tip">RELATE ARTICLE</span>
                 </template>
@@ -68,9 +64,10 @@
                   <ul>
                     <li v-for="(item, index) in relateArticleList" :key="index" :class ="{ 'no-bottom': (index >= (rows-1)*3) }">
                       <a @click="goArticle(item.articleId)">
-                        <i class="el-icon-tickets icons"></i>
-                        <span class="article_title">{{ item.articleTitle }}</span>
+                        <i class="el-icon-tickets icons"></i><span class="article_title">{{ item.articleTitle }}</span>
                       </a>
+                      <a>{{ item.authorName}}</a>
+                      <span class="post-time">{{ item.postTime | toDate }}</span>
                     </li>
                   </ul>
                 </template>
@@ -121,7 +118,7 @@
             </common-panel-one>
           </div>
           <div class="article__container__archive" v-if="relateKnowledgeList && relateKnowledgeList.length">
-            <common-panel-one title="相关知识库" :bStyle="{padding: '0px'}">
+            <common-panel-one title="相关知识库" shadow="always" :bStyle="{padding: '0px'}">
               <template slot="more">
                 <span class="header-tip">KNOWLEDGE</span>
               </template>
@@ -148,6 +145,7 @@
   import { retrieveRelateKnowledgeList } from '@/api/knowledge'
   import { listComment } from '../../../../api/comment'
   import { mapGetters } from 'vuex'
+  import Prism from 'prismjs'
   export default {
     name: 'article',
     data() {
@@ -157,7 +155,7 @@
           total: 0,
           size: 6
         },
-        articleId: '',
+        articleId: Number,
         knowledgeId: '',
         article: {},
         recentArticleList: '',
@@ -165,7 +163,9 @@
         rows: '',
         relateArticleList: [],
         commentList: [],
-        token: ''
+        token: '',
+        preArticle: {},
+        nextArticle: {}
       }
     },
     components: {
@@ -192,6 +192,12 @@
         let res = await retrieveArticle({ articleId: this.articleId, token: this.token, userId: this.userShow.userId })
         if (res.flag) {
           this.article = res.data || {}
+          this.preArticle = res.preAndNext ? res.preAndNext.pre || {} : {}
+          this.nextArticle = res.preAndNext ? res.preAndNext.next || {} : {}
+          // 异步获取导致代码高亮不显示，这里在获取代码内容以后在执行Prism.highlightAll
+          this.$nextTick(() => {
+            Prism.highlightAll()
+          })
         }
         if (Object.keys(this.article).length) {
           this.knowledgeId = this.article.knowledgeId
@@ -202,6 +208,9 @@
         }
       },
       goArticle(articleId) {
+        this.article = {}
+        this.preArticle = {}
+        this.nextArticle = {}
         this.$router.push({ name: 'articleShow', params: { articleId: articleId, token: this.token } })
       },
       goCategory(categoryId) {
@@ -232,6 +241,7 @@
           .then(res => {
             if (res.flag) {
               this.relateArticleList = res.data
+              this.relateArticleList = this.relateArticleList.filter(item => item.articleId !== parseInt(this.articleId))
               this.rows = Math.ceil(this.relateArticleList.length / 3)
             }
           })
@@ -301,16 +311,18 @@
           li {
             display: flex;
             align-items: center;
-            i {
-              margin-right: 5px;
-              font-size: 20px;
-            }
             a {
               display: block;
-              width: 60px;
               height: 60px;
               line-height: 60px;
-              font-size: 20px;
+              font-size: 13px;
+              max-width: 200px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              &:hover {
+                color:  #409EFF;
+              }
             }
           }
         }
@@ -329,10 +341,10 @@
           li {
             display: flex;
             justify-content: space-between;
-            width: 250px;
-            height: 80px;
-            line-height: 80px;
-            padding-right: 30px;
+            width: 320px;
+            height: 50px;
+            line-height: 50px;
+            margin-right: 50px;
             border-bottom: 1px solid #ebebeb;
             a {
               display: flex;
@@ -354,6 +366,10 @@
               &:hover {
                 color:  #409EFF;
               }
+            }
+            .post-time {
+              font-size: 11px;
+              color: #a9a9a9;
             }
           }
         }
@@ -414,6 +430,9 @@
         }
       }
       &__news {
+        /deep/ .el-card {
+          background-color: transparent;
+        }
         &__item {
           list-style: none;
           padding: 0px;
@@ -441,8 +460,8 @@
       }
       &__archive {
         margin-top: 15px;
-        /deep/ .custom-panel__body {
-          border: none;
+        /deep/ .el-card {
+          background-color: transparent;
         }
         &__item {
           /deep/ .el-carousel {

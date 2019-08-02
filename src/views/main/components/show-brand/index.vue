@@ -1,40 +1,50 @@
 <template>
   <div class="brand-panel">
     <div class="brand-panel__header">
-      <wine-panel-title width="130px" height="40px" title="推荐音乐" note="MUSIC"></wine-panel-title>
+      <wine-panel-title width="130px" height="40px" title="推荐作者" note="AUTHOR"></wine-panel-title>
     </div>
     <div class="brand-panel__body">
-      <div class="brand-panel__body__item" v-for="(item, index) in brandInfo" :key="index">
-        <a><el-image :src="item.pic" style="width: 230px;height:320px;"></el-image></a>
+      <div class="brand-panel__body__item" v-for="(item, index) in authorList" :key="index">
+        <user-card-item :userInfo="item"></user-card-item>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { retrieveRecommendAuthorList } from '../../../../api/user'
+
   export default {
     name: 'brand',
     data() {
       return {
-        brandInfo: [
-          {
-            pic: require('./asserts/brand01.jpg')
-          },
-          {
-            pic: require('./asserts/brand02.jpg')
-          },
-          {
-            pic: require('./asserts/brand03.jpg')
-          },
-          {
-            pic: require('./asserts/brand04.jpg')
-          }
-        ]
+        paging: {
+          page: 1,
+          total: 0,
+          size: 10
+        },
+        authorList: []
       }
     },
     components: {
-      'winePanelTitle': () => import('@/components/wine-panel-title'),
-      'autoScroll': () => import('@/components/auto-scroll')
+      winePanelTitle: () => import('@/components/wine-panel-title'),
+      autoScroll: () => import('@/components/auto-scroll'),
+      userCardItem: () => import('@/components/user-card-item')
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      init() {
+        this.recommendAuthor()
+      },
+      recommendAuthor() {
+        retrieveRecommendAuthorList().then(res => {
+          if (res.flag) {
+            this.authorList = res.data
+          }
+        })
+      }
     }
   }
 </script>
@@ -50,13 +60,13 @@
     &__body {
       display: flex;
       flex-direction: row;
-      background: url("./asserts/brand-bg.png") repeat;
       &__item {
         display: flex;
+        width: 350px;
+        height: 200px;
+        margin-right: 20px;
         justify-content: center;
         align-items: center;
-        width: 290px;
-        height: 410px;
         margin-left: 10px;
       }
     }

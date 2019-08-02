@@ -1,7 +1,7 @@
 <template>
   <div class="knowledge-main">
     <konwledge-banner/>
-    <el-card class="knowledge-main__container w1200">
+    <el-card class="knowledge-main__container w1200" shadow="never">
       <knowledge-recommend></knowledge-recommend>
       <el-image :src="require('../../asserts/ad01.jpg')" style="height: 120px; margin-top: 15px;" fit="cover"></el-image>
       <div class="knowledge-main__container__center">

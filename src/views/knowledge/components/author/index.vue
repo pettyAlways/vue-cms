@@ -22,6 +22,11 @@
     },
     data() {
       return {
+        paging: {
+          page: 1,
+          total: 0,
+          size: 2
+        },
         authorList: ''
       }
     },
@@ -33,7 +38,7 @@
         this.recommendAuthor()
       },
       recommendAuthor() {
-        retrieveRecommendAuthor().then(res => {
+        retrieveRecommendAuthor({ page: this.paging.page, size: this.paging.size }).then(res => {
           if (res.flag) {
             this.authorList = res.data
           }
