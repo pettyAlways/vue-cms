@@ -12,7 +12,7 @@
     "transform-vue-jsx",
     "transform-runtime",
     ["prismjs", {
-      "languages": ["javascript", "css", "markup", "java"],
+      "languages": ["javascript", "css", "markup", "java", "csharp"],
       "plugins": ["line-numbers"],
       "css": true
     }]

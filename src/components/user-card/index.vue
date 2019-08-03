@@ -8,20 +8,20 @@
       </li>
       <li>
         <div class="key">简介:</div>
-        <div class="value">
-          <span>{{userInfo.introduce | autoTransform}}</span>
+        <div class="value height-limit">
+          <div>{{userInfo.introduce | autoTransform}}</div>
         </div>
       </li>
       <li>
         <div class="key">擅长:</div>
-        <div class="tag" v-if="userInfo.skillList && userInfo.skillList.length">
+        <div class="tag height-limit" v-if="userInfo.skillList && userInfo.skillList.length">
           <el-tag size="mini" v-for="(item, index) in userInfo.skillList" :key="index">{{item.skillName}}</el-tag>
         </div>
         <div v-else>暂无</div>
       </li>
       <li>
         <div class="key">个性签名:</div>
-        <div class="value">
+        <div class="value height-limit">
           <span>{{userInfo.signature | autoTransform}}</span>
         </div>
       </li>
@@ -72,6 +72,12 @@
           line-height: 22px;
           margin-left: 5px;
           font-size: 13px;
+          word-break: break-all;
+          word-wrap : break-word
+        }
+        .height-limit {
+          max-height: 100px;
+          overflow: hidden;
         }
       }
       li.author {

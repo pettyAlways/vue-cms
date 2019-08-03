@@ -64,7 +64,8 @@
   .article-panel {
     display: flex;
     justify-content: space-between;
-    height: 130px;
+    width: 100%;
+    height: 100%;
     border-bottom: 1px solid #dcdfe6;
     margin-top: 10px;
     &--left {

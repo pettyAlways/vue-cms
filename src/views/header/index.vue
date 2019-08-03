@@ -97,7 +97,9 @@
         this.width = data.width
         this.height = data.height
         this.upShow = false
-        this.getMessage()
+        if (this.userShow.userId) {
+          this.getMessage()
+        }
       },
       getMessage() {
         retrieveMessageList().then(res => {
@@ -136,7 +138,7 @@
         this.$router.push({ name: 'beAuthor', params: { userId: userId } })
       },
       goWorkbentch() {
-        window.open('http://localhost:8082/#/platform/blog')
+        window.open('http://192.168.0.100:8082/#/platform/blog')
       },
       signOut() {
         this.loginOut().then(() => {

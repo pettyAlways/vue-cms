@@ -74,7 +74,7 @@
               </common-panel-one>
             </div>
             <div class="article__container__comment" v-if="Object.keys(article).length">
-              <common-panel-one :title="(commentList && commentList.length) ? commentList.length +'条评论' : '评论'">
+              <common-panel-one :bStyle="{padding: '15px'}" :title="(commentList && commentList.length) ? commentList.length +'条评论' : '评论'">
                 <template slot="more">
                   <a>时间排序</a>
                 </template>

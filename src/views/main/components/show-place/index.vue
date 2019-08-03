@@ -54,6 +54,8 @@
       flex-wrap: wrap;
       .article-item {
         width: 100%;
+        height: 110px;
+        margin-bottom: 10px;
       }
     }
 
