@@ -90,7 +90,6 @@
       },
       navHandler() {
         let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-        console.error(scrollTop)
         if (scrollTop >= 280) {
           this.fixed = true
         } else {
@@ -115,11 +114,12 @@
     position: relative;
   }
   .fixed {
+    margin-top: 100px;
     /deep/ .tox-toolbar {
       display: flex;
       flex-direction: column;
       position: fixed;
-      top: 80px;
+      top: 180px;
       margin-left: -120px;
       z-index: 100;
       width: 95px;

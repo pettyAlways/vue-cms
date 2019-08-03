@@ -125,7 +125,7 @@
     },
     methods: {
       accessChange() {
-        this.formData.kreserveO = '';
+        this.formData.kreserveO = ''
       },
       searchKnowledge(knowledgeId) {
         knowledgeItem({ knowledgeId: knowledgeId }).then(res => {

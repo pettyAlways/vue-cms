@@ -47,7 +47,7 @@
       <div class="manager-header">
         <div class="info">
           <h2><span>管理</span></h2>
-          <span class="extra">共{{tableData.length}}个文档</span>
+          <span v-if="!_.isEmpty(tableData)" class="extra">共{{tableData.length}}个文档</span>
         </div>
         <div class="search">
           <el-input
@@ -63,8 +63,7 @@
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange">
+          style="width: 100%">
           <el-table-column
             type="selection"
             width="55">
@@ -208,7 +207,7 @@
         this.copyVisible = true
       },
       editArticle(article) {
-        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: article.id, knowledgeId: this.knowledgeId } })
+        this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: article.articleId, knowledgeId: this.knowledgeId } })
       },
       delArticle(article) {
         let _this = this
@@ -217,7 +216,7 @@
             if (action === 'confirm') {
               // 判断是否有共享删除权限，有就执行共享删除请求
               let del = _this.otherPower['文章共享删除'] ? deleteShareArticle : deleteArticle
-              del({ articleId: article.id }).then(res => {
+              del({ articleId: article.articleId }).then(res => {
                 if (res.flag) {
                   _this.$message({
                     type: 'success',

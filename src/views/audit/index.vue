@@ -40,7 +40,8 @@
         deep: true
       }
     },
-    mounted() {
+    // mounted 是在dom元素渲染期间执行，这样可能导致activeName赋值以后不去执行activeName下组件的mounted数据初始化
+    created() {
       let active = this.$route.params.activeName
       if (active) {
         this.activeName = active

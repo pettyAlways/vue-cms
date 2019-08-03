@@ -147,6 +147,7 @@
         this.$router.push({ path: '/platform/blog/knowledge/article/editor', query: { articleId: this.articleId, knowledgeId: this.knowledgeId } })
       },
       goArticle(articleId) {
+        this.article = {}
         this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: this.knowledgeId } })
       },
       listArticle(knowledgeId) {

@@ -26,11 +26,17 @@
                           @getRemoteUrl="cRemoteUrl"></image-cut-upload>
       </el-dialog>
     </div>
-    <div class="article-editor__header">
-      <el-input v-model="title" placeholder="请输入标题"></el-input>
-    </div>
-    <div class="article-editor__body" v-if="article.coverUrl">
-      <my-tinymce ref="myTinymce" style="height: 100%" :value="article.content"></my-tinymce>
+    <div class="article-editor__form">
+      <el-form ref="articleForm" :model="article" :rules="rules">
+        <el-form-item  prop="articleTitle">
+          <div class="article-editor__form__header">
+            <el-input v-model="article.articleTitle" placeholder="请输入不大于30字的标题"></el-input>
+          </div>
+        </el-form-item>
+        <div class="article-editor__form__body" v-if="article.coverUrl">
+          <my-tinymce ref="myTinymce" style="height: 100%" :value="article.content"></my-tinymce>
+        </div>
+      </el-form>
     </div>
     <el-button v-if="article.coverUrl" type="primary" style="width: 100%" @click="postArticle" :disabled="disable">发布</el-button>
   </div>
@@ -48,16 +54,23 @@
         disable: false,
         knowledgeId: '',
         articleId: '',
-        title: '',
+        article: {
+          articleTitle: '',
+          content: ''
+        },
         coverUrl: '',
         showEdit: '',
-        article: {},
         cDialog: {
           visible: false,
           imageUrl: '',
           fileName: ''
         },
-        power: []
+        power: [],
+        rules: {
+          articleTitle: [
+            { max: 30, message: '长度不超过30 个字符', trigger: ['blur', 'change'] }
+          ]
+        }
       }
     },
     components: {
@@ -93,7 +106,6 @@
         getArticle({ articleId: articleId }).then(res => {
           if (res.flag) {
             this.article = res.data
-            this.title = this.article.articleTitle
           }
         })
       },
@@ -109,36 +121,40 @@
         })
       },
       postArticle() {
-        let params = {}
-        params.content = this.$refs.myTinymce.getContent()
-        params.id = this.articleId || ''
-        params.knowledgeId = this.knowledgeId
-        params.articleTitle = this.title
-        if (this.article.coverUrl) {
-          params.coverUrl = this.article.coverUrl
-        }
-        let edit = this.power['文章共享修改'] ? editShareArticle : editArticle
-        let method = this.articleId ? edit : addArticle
-        if (this.$loadingHelper.startLoading('.article-editor', '正在发布中，请稍后')) {
-          this.disable = true
-          method(params).then(res => {
-            this.$loadingHelper.stopLoading()
-            if (res.flag) {
-              let articleId = res.articleId
-              let knowledgeId = res.knowledgeId
-              this.$message({
-                message: '文章发布成功',
-                type: 'success'
-              })
-              setTimeout(() => {
-                this.disable = true
-                this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
-              }, 3 * 1000)
+        this.$refs['articleForm'].validate((valid) => {
+          if (valid) {
+            let params = {}
+            params.content = this.$refs.myTinymce.getContent()
+            params.id = this.articleId || ''
+            params.knowledgeId = this.knowledgeId
+            params.articleTitle = this.article.articleTitle
+            if (this.article.coverUrl) {
+              params.coverUrl = this.article.coverUrl
             }
-          }).catch(() => {
-            this.disable = false
-          })
-        }
+            let edit = this.power['文章共享修改'] ? editShareArticle : editArticle
+            let method = this.articleId ? edit : addArticle
+            if (this.$loadingHelper.startLoading('.article-editor', '正在发布中，请稍后')) {
+              this.disable = true
+              method(params).then(res => {
+                this.$loadingHelper.stopLoading()
+                if (res.flag) {
+                  let articleId = res.articleId
+                  let knowledgeId = res.knowledgeId
+                  this.$message({
+                    message: '文章发布成功',
+                    type: 'success'
+                  })
+                  setTimeout(() => {
+                    this.disable = true
+                    this.$router.push({ path: '/platform/blog/knowledge/article/show', query: { articleId: articleId, knowledgeId: knowledgeId } })
+                  }, 3 * 1000)
+                }
+              }).catch(() => {
+                this.disable = false
+              })
+            }
+          }
+        })
       }
     }
   }
@@ -161,6 +177,7 @@
       justify-content: center;
       height: 200px;
       background-color: #f6f6f6;
+      margin-bottom: 22px;
       .article-cover {
         width: 100%;
         height: 100%;
@@ -181,28 +198,29 @@
         }
       }
     }
-    &__header {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      /deep/ .el-input__inner {
-        height: 44px;
-        min-height: 44px;
-        display: block;
-        width: 100%;
-        border: 0;
-        padding: 0px;
-        font-size: 32px;
-        line-height: 1.4;
-        font-weight: 600;
-        font-synthesis: style;
-        outline: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
+    &__form {
+      &__header {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        /deep/ .el-input__inner {
+          height: 44px;
+          min-height: 44px;
+          display: block;
+          width: 100%;
+          border: 0;
+          padding: 0px;
+          font-size: 32px;
+          line-height: 1.4;
+          font-weight: 600;
+          font-synthesis: style;
+          outline: none;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+        }
       }
-    }
-    &__body {
+      &__body {
+      }
     }
   }
 </style>
