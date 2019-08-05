@@ -34,7 +34,7 @@
         // const hostname = location.hostname
         // const port = location.port
         // this.websock = new WebSocket('ws://' + hostname + ':' + port + '/cms_web/websocket.ws?username=123')
-        this.websock = new WebSocket(`ws://localhost:9092/blog/websocket.ws/${this.currentUser.id}`)
+        this.websock = new WebSocket(`ws://47.98.215.5:9092/blog/websocket.ws/${this.currentUser.id}`)
         this.websock.onmessage = this.onMessage
         this.websock.onopen = this.onOpen
         this.websock.onclose = this.onClose
