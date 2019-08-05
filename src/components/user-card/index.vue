@@ -4,7 +4,7 @@
       <li class="author">
         <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" />
         <img v-else src="./assets/user.png" />
-        <div class="nick"><a @click="goUser">{{userInfo.userName}}</a></div>
+        <div class="nick"><a @click="goUser(userInfo.userId)">{{userInfo.userName}}</a></div>
       </li>
       <li>
         <div class="key">简介:</div>
@@ -36,8 +36,8 @@
       userInfo: Object
     },
     methods: {
-      goUser() {
-        this.$router.push({ name: 'profile', params: { userId: this.userId } })
+      goUser(userId) {
+        this.$router.push({ name: 'profile', params: { userId: userId } })
       }
     }
   }

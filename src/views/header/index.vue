@@ -138,7 +138,7 @@
         this.$router.push({ name: 'beAuthor', params: { userId: userId } })
       },
       goWorkbentch() {
-        window.open('http://192.168.0.100:8082/#/platform/blog')
+        window.open('http://www.thinkover.fun:6666/#/platform/blog')
       },
       signOut() {
         this.loginOut().then(() => {
