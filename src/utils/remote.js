@@ -38,7 +38,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // 重定向登录页面
   if (error.response.status === 401) {
-    goLogin('登录凭证失效请重新登录')
+    goLogin(error.response.data.message)
     return { flag: false }
   }
   if (error.response.status === 403) {
