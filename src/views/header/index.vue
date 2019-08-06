@@ -44,7 +44,7 @@
               <div class="user-panel" @mouseenter="upShow=true" @mouseleave="upShow=false" v-if="upShow">
                 <ul>
                   <li @click="goProfile(uInfo.userId)" style="margin-top: 5px;"><i class="el-icon-user"></i><a >我的主页</a></li>
-                  <li v-if="uInfo.isAuthor" @click="goWorkbentch"><i class="el-icon-edit"></i><a>工作台</a></li>
+                  <li v-if="uInfo.isAuthor" @click="goWorkbench"><i class="el-icon-edit"></i><a>工作台</a></li>
                   <li v-else @click="beAuthor(uInfo.userId)"><i class="el-icon-edit"></i><a>成为作者</a></li>
                   <li @click="signOut"><i class="el-icon-switch-button"></i><a>退出</a></li>
                 </ul>
@@ -137,8 +137,8 @@
       beAuthor(userId) {
         this.$router.push({ name: 'beAuthor', params: { userId: userId } })
       },
-      goWorkbentch() {
-        window.open('http://www.thinkover.fun:6666/#/platform/blog')
+      goWorkbench() {
+        window.open('http://workbench.thinkover.fun')
       },
       signOut() {
         this.loginOut().then(() => {
