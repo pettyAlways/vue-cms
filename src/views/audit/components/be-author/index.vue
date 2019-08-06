@@ -160,18 +160,16 @@
         })
       },
       getAuthorAuditList(params) {
-        if (this.$loadingHelper.startLoading('.table-represent', '努力加载中，请稍后')) {
-          authorAuditList(params).then(res => {
-            this.$loadingHelper.stopLoading()
-            if (res.flag) {
-              this.auditList = res.data
-              this.auditList = this.auditList.map(item => {
-                this.$set(item, 'handleResultName', ['申请中', '申请通过', '申请不通过'][parseInt(item.handleResult)])
-                return item
-              })
-            }
-          })
-        }
+        authorAuditList(params).then(res => {
+          this.$loadingHelper.stopLoading()
+          if (res.flag) {
+            this.auditList = res.data
+            this.auditList = this.auditList.map(item => {
+              this.$set(item, 'handleResultName', ['申请中', '申请通过', '申请不通过'][parseInt(item.handleResult)])
+              return item
+            })
+          }
+        })
       },
       searchForm() {
         let params = { ...{ page: 1, size: this.paging.size }, ...this.authorSearchForm }

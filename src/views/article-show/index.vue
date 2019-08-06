@@ -207,9 +207,13 @@
             a {
               display: block;
               height: 37px;
+              width: 199px;
               line-height: 37px;
               font-size: 13px;
               cursor: pointer;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
               &hover {
                 color: #8c8c8c;
               }

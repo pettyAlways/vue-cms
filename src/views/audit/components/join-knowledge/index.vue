@@ -131,18 +131,16 @@
         this.getAuthorAuditList(params)
       },
       getAuthorAuditList(params) {
-        if (this.$loadingHelper.startLoading('.table-represent', '努力加载中，请稍后')) {
-          joinKnowledgeList(params).then(res => {
-            this.$loadingHelper.stopLoading()
-            if (res.flag) {
-              this.auditList = res.data
-              this.auditList = this.auditList.map(item => {
-                this.$set(item, 'handleResultName', ['申请中', '申请通过', '申请不通过'][item.handleResult])
-                return item
-              })
-            }
-          })
-        }
+        joinKnowledgeList(params).then(res => {
+          this.$loadingHelper.stopLoading()
+          if (res.flag) {
+            this.auditList = res.data
+            this.auditList = this.auditList.map(item => {
+              this.$set(item, 'handleResultName', ['申请中', '申请通过', '申请不通过'][item.handleResult])
+              return item
+            })
+          }
+        })
       },
       pass(item) {
         joinKnowledgePass({ auditId: item.auditId }).then(res => {

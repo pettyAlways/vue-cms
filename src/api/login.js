@@ -29,14 +29,6 @@ export function messageCount() {
   })
 }
 
-export function retrieveMessages(params) {
-  return remote({
-    url: '/platform/blog/user/messages',
-    method: 'get',
-    params
-  })
-}
-
 export function comfirmRead(params) {
   return remote({
     url: '/platform/blog/user/confirm/read',
