@@ -11,7 +11,6 @@
 </template>
 
 <script>
-  import { retrieveMessages } from '@/api/login'
   export default {
     name: 'message',
     components: {
@@ -25,20 +24,6 @@
         unReadMessages: [],
         readMessages: [],
         auditMessages: []
-      }
-    },
-    mounted () {
-      this.retrieveMessages()
-    },
-    methods: {
-      retrieveMessages() {
-        retrieveMessages().then(res => {
-          if (res.flag) {
-            this.unReadMessages = res.unReadMessages
-            this.readMessages = res.readMessages
-            this.auditMessages = res.auditMessages
-          }
-        })
       }
     }
   }
