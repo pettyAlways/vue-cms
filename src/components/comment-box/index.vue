@@ -14,14 +14,17 @@
     </div>
     <div class="tool-btn">
       <el-button v-if="userShow.userId" type="primary" @click="postHandler" size="small">提交</el-button>
-      <a v-else><icon-svg iconClass="gitHub" :vStyle="{width: '1.2em', height: '1.2em'}"></icon-svg>&nbsp;使用GitHub登录</a>
+      <a v-else @click="thirdParty">
+        <icon-svg iconClass="gitHub" :vStyle="{width: '1.2em', height: '1.2em'}"></icon-svg>&nbsp;使用GitHub登录
+      </a>
     </div>
   </div>
 </template>
 
 <script>
   import { postReply, postComment } from '../../api/comment'
-  import { mapGetters } from 'vuex'
+  import { thirdPartyLogin } from '../../utils/third-party-login'
+  import { mapGetters, mapActions } from 'vuex'
   export default {
     name: 'commentBox',
     props: {
@@ -53,6 +56,18 @@
       }
     },
     methods: {
+      ...mapActions([
+        'retrieveUserInfo',
+        'userLogin'
+      ]),
+      thirdParty() {
+        thirdPartyLogin().then((username, password) => {
+          this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
+            this.retrieveUserInfo()
+            this.init()
+          })
+        })
+      },
       postHandler() {
         this.$refs['commentForm'].validate((valid) => {
           if (valid) {

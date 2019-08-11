@@ -1,4 +1,4 @@
-import { retrieveUserInfo, login } from '../../api/user'
+import { retrieveUserInfo, login, logout } from '../../api/user'
 import {removeToken, setToken} from '../../utils/auth'
 
 const SET_USERINFO = 'SET_USERINFO'
@@ -38,10 +38,16 @@ const user = {
       })
     },
     loginOut({commit}) {
-      return new Promise((resolve) => {
-        removeToken()
-        commit(SET_USERINFO, {})
-        resolve()
+      return new Promise((resolve, reject) => {
+        logout().then(res => {
+          if (res.flag) {
+            removeToken()
+            commit(SET_USERINFO, {})
+            resolve()
+          }
+        }).catch(reason => {
+          reject(reason)
+        })
       })
     }
   },

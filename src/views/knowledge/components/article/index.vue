@@ -147,7 +147,7 @@
   import { mapGetters } from 'vuex'
   import Prism from 'prismjs'
   export default {
-    name: 'article',
+    name: 'articleShow',
     data() {
       return {
         paging: {
@@ -297,6 +297,7 @@
       &__body {
         margin-top: 15px;
         min-height: 150px;
+        font-size: 16px;
       }
       &__btn {
         margin-top: 15px;

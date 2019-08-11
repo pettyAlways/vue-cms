@@ -59,17 +59,13 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import { clientVisiable } from '../../utils/compatibility'
   import { retrieveMessageList, messageRead, messageAllRead } from '../../api/message'
+  import { thirdPartyLogin } from '../../utils/third-party-login'
 
   export default {
     name: 'headerNav',
     data() {
       return {
-        thirdPartyHtml: '',
-        gitHubUrl: 'https://github.com/login/oauth/authorize?client_id=47fca5d6cdbf13ae8984',
-        width: '',
-        height: '',
         upShow: false,
         messageShow: false,
         messageList: []
@@ -93,9 +89,6 @@
         'loginOut'
       ]),
       init() {
-        let data = clientVisiable()
-        this.width = data.width
-        this.height = data.height
         this.upShow = false
         if (this.userShow.userId) {
           this.getMessage()
@@ -146,18 +139,12 @@
         })
       },
       thirdParty() {
-        window.open(this.gitHubUrl, 'newwindow', `height=300, width=300, top=${this.height / 2 - 150}, left=${this.width / 2 - 150}, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no`)
-        window.addEventListener('message', e => {
-          console.error('接收到的第三方登录token:' + e.data)
-          if (/^ThirdPartyLogin-(\w*)-(\w*)/.test(e.data)) {
-            let username = RegExp.$1
-            let password = RegExp.$2
-            this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
-              this.retrieveUserInfo()
-              this.init()
-            })
-          }
-        }, false)
+        thirdPartyLogin().then((username, password) => {
+          this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
+            this.retrieveUserInfo()
+            this.init()
+          })
+        })
       }
     }
   }

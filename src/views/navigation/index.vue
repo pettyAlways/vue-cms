@@ -40,6 +40,10 @@
     },
     methods: {
       showNav(path) {
+        // 刷新页面时会在末尾增加一个/
+        if (/\/$/.test(path)) {
+          path = path.substring(0, path.length - 1)
+        }
         let item = this.navInfo.filter(item => item.link === path)
         for (let nav of this.navInfo) {
           nav.show = false

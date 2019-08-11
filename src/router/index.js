@@ -45,20 +45,20 @@ export const constantRouterMap = [
   },
   {
     path: '/index',
-    name: '首页',
     component: Index,
     children: [
       {
         path: '',
+        name: '首页',
         component: MainNav
       },
       {
         path: '/knowledge',
-        name: 'categoryPage',
         component: Knowledge,
         children: [
           {
             path: '',
+            name: 'knowledgePage',
             component: KnowledgeMain
           },
           {

@@ -77,3 +77,10 @@ export function login(data) {
     data
   })
 }
+
+export function logout() {
+  return remoteWithToken({
+    url: '/platform/logout',
+    method: 'get'
+  })
+}

@@ -10,7 +10,7 @@
             <a @click="goProfile(article.authorId)">{{ article.authorName }}</a>
             <span class="m-r-5 m-l-5">发布于</span>
             <a @click="goKnowledge(article.knowledgeId)">{{ article.knowledgeName }}</a>
-            <span class="m-r-5">分类</span>
+            <span class="m-r-5 m-l-5">分类</span>
             <a @click="goCategory(article.categoryId)">{{ article.categoryName}}</a>
             <span class="m-l-5 m-r-5">发布时间</span>
             <span>{{ article.postTime }}</span>
