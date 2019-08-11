@@ -8,11 +8,11 @@ function getToken() {
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  return Cookies.set(TokenKey, token, { domain: 'thinkover.fun' })
 }
 
 function removeToken() {
-  return Cookies.remove(TokenKey)
+  return Cookies.remove(TokenKey, { path: '/', domain: '.thinkover.fun' })
 }
 
 export { getToken, removeToken }

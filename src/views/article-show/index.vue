@@ -35,7 +35,7 @@
             </li>
           </ul>
           <el-divider></el-divider>
-          <div class="article-content" :style="{ 'min-height': visiableHeight + 'px' }" v-html="article.content">
+          <div class="article-content-info" :style="{ 'min-height': visiableHeight + 'px' }" v-html="article.content">
           </div>
         </el-card>
       </div>
@@ -243,10 +243,10 @@
             font-size: 12px;
           }
         }
-        .article-content {
+        .article-content-info {
+          font-size: 16px;
           /deep/ pre[class*="language-"] {
             width: 950px;
-            padding: 0px;
           }
         }
       }

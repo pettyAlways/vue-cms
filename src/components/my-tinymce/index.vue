@@ -52,7 +52,20 @@
           skin_url: '/static/tinymce/skins/ui/oxide',
           plugins: this.plugins,
           toolbar: this.toolbar,
-          font_formats: '宋体; 仿宋',
+          codesample_languages: [
+            {text: 'HTML/XML', value: 'markup'},
+            {text: 'JavaScript', value: 'javascript'},
+            {text: 'CSS', value: 'css'},
+            {text: 'PHP', value: 'php'},
+            {text: 'Ruby', value: 'ruby'},
+            {text: 'Python', value: 'python'},
+            {text: 'Java', value: 'java'},
+            {text: 'C', value: 'c'},
+            {text: 'C#', value: 'csharp'},
+            {text: 'C++', value: 'cpp'},
+            {text: 'SQL', value: 'sql'},
+            {text: 'YML', value: 'yml'}
+          ],
           branding: false,
           menubar: false,
           // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
