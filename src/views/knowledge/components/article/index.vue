@@ -17,9 +17,6 @@
               </div>
               <div class="article__container__info">
                 <ul class="tipPanel">
-                  <li class="author-img">
-                    <img :src="require('./assets/author01.jpg')" />
-                  </li>
                   <li class="author-info">
                     <a @click="goProfile(article.authorId)">{{ article.authorName }}</a>
                     <span class="m-l-5 m-r-5">发布于</span>
@@ -402,7 +399,6 @@
           }
           .author-info {
             display: flex;
-            margin-left: 10px;
             font-size: 12px;
             a {
               color: #4c84be;

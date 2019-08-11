@@ -9,7 +9,7 @@ export function thirdPartyLogin() {
       if (/^ThirdPartyLogin-(\w*)-(\w*)/.test(e.data)) {
         let username = RegExp.$1
         let password = RegExp.$2
-        resolve(username, password)
+        resolve({ username: username, password: password })
       }
     }, false)
   })

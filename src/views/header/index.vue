@@ -139,8 +139,8 @@
         })
       },
       thirdParty() {
-        thirdPartyLogin().then((username, password) => {
-          this.userLogin({ username: username, password: password, thirdparty: 'Y' }).then(() => {
+        thirdPartyLogin().then(res => {
+          this.userLogin({ username: res.username, password: res.password, thirdparty: 'Y' }).then(() => {
             this.retrieveUserInfo()
             this.init()
           })
