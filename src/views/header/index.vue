@@ -10,7 +10,7 @@
       </div>
       <div class="header-logo__main--right">
         <ul>
-          <li v-if="uInfo.userId" class="login-way" style="cursor: pointer">
+          <li v-if="!uInfo.userId" class="login-way" style="cursor: pointer">
             <span>登录方式</span>
             <a title="使用github登录" @click="thirdParty"><icon-svg iconClass="gitHub" :vStyle="{width: '2em', height: '2em'}"></icon-svg></a>
             <a title="本站登录" @click="login" style="margin-top: -5px;"><icon-svg iconClass="laoying" :vStyle="{width: '2.5em', height: '2.5em'}"></icon-svg></a>
