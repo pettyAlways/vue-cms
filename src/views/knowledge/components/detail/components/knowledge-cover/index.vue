@@ -9,7 +9,7 @@
           <span>{{knowledgeItem.knowledgeName}}</span>
         </div>
         <div class="author">
-          <span>创建者：</span>
+          <span >创建者：</span>
           <a @click="goProfile(knowledgeItem.creator)" class="author-name">{{ knowledgeItem.creatorName }}</a>
         </div>
         <div class="author">
@@ -160,6 +160,7 @@
         }
         .author {
           display: flex;
+          line-height: 25px;
           span {
             line-height: 25px;
             flex-shrink: 0;
@@ -173,6 +174,7 @@
           &-name {
             color: #6b747d;
             font-size: 13px;
+            line-height: 25px;
           }
           ul {
             display: flex;

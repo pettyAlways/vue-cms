@@ -4,7 +4,7 @@
       <icon-svg iconClass="laoying" :vStyle="{width: '5em', height: '5em'}"></icon-svg>
       <p class="title">欢迎来到知识库协作式网站</p>
     </div>
-    <el-card>
+    <el-card class="login-panel">
       <div slot="header">
         <h2 class="login-title">登录</h2>
       </div>
@@ -119,32 +119,28 @@
   $dark_gray:#889aa4;
   .login-container {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #f3f3f3;
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -200px;
+    width: 400px;
+    height: 350px;
     .site-title {
       position: absolute;
-      top: 50px;
-      left: calc(50% - 150px);
+      top: -90px;
+      left: 30px;
       display: flex;
       height: 60px;
       line-height: 80px;
+      z-index: 9999;
       .title {
         font-size: 18px;
         font-weight: 700;
       }
     }
-    .el-card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin: -220px 0 0 -200px;
-      width: 400px;
-      height: 350px;
+    .login-panel {
+      width: 100%;
+      height: 100%;
       background: #f9f9f9;
       .login-title {
         margin: 0;
@@ -170,5 +166,6 @@
         width: 100%;
       }
     }
+
   }
 </style>

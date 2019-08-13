@@ -12,7 +12,7 @@
     "transform-vue-jsx",
     "transform-runtime",
     ["prismjs", {
-      "languages": ["javascript", "css", "markup", "java", "csharp", "sql", "html", "c", "json", "yml", "python"],
+      "languages": ["javascript", "css", "markup", "java", "csharp", "sql", "html", "c", "json", "yml", "python", "shell"],
       "plugins": ["line-numbers"],
       "css": true
     }]

@@ -1,6 +1,6 @@
 <template>
   <div class="header-logo">
-    <div class="header-logo__main w1200">
+    <div class="header-logo__main">
       <div class="header-logo__main--left">
         <div class="header-logo__main--left__logo"></div>
         <div class="header-logo__main--left__search">
@@ -10,28 +10,28 @@
       </div>
       <div class="header-logo__main--right">
         <ul>
-          <li v-if="!uInfo.userId" class="login-way" style="cursor: pointer">
+          <li v-if="uInfo.userId" class="login-way" style="cursor: pointer">
             <span>登录方式</span>
             <a title="使用github登录" @click="thirdParty"><icon-svg iconClass="gitHub" :vStyle="{width: '2em', height: '2em'}"></icon-svg></a>
             <a title="本站登录" @click="login" style="margin-top: -5px;"><icon-svg iconClass="laoying" :vStyle="{width: '2.5em', height: '2.5em'}"></icon-svg></a>
           </li>
           <li v-else class="user_info">
             <span class="nickname">欢迎{{uInfo.userName}}大驾光临</span>
-            <div  @mouseenter="messageShow=true" @mouseleave="messageShow=false">
+            <div class="message-container"  @mouseenter="messageShow=true" @mouseleave="messageShow=false">
               <el-badge is-dot class="message" v-if="messageList && messageList.length">
                 <i class="el-icon-message"></i>
               </el-badge>
               <i v-else class="el-icon-message message"></i>
-            </div>
-            <div class="message-panel" @mouseenter="messageShow=true" @mouseleave="messageShow=false" v-if="messageShow && (messageList || messageList.length)">
-              <ul>
-                <li @mouseenter="messageEnter(item)" @mouseleave="messageLeave(item)" v-for="(item, index) in messageList" :key="index">{{ item.message}}&nbsp;&nbsp;
-                  <span style="color: #bfbfbf;font-size: 12px;">{{item.createTime}}</span>
-                  <a  @click="readMessage(item)" style="color: dodgerblue" v-if="item.hover">设置已读</a>
-                </li>
-              </ul>
-              <div class="tool-btn">
-                <a @click="allMessageRead" style="color: dodgerblue">全部可读</a>
+              <div class="message-panel" @mouseenter="messageShow=true" @mouseleave="messageShow=false" v-if="messageShow && (messageList || messageList.length)">
+                <ul>
+                  <li @mouseenter="messageEnter(item)" @mouseleave="messageLeave(item)" v-for="(item, index) in messageList" :key="index">{{ item.message}}&nbsp;&nbsp;
+                    <span style="color: #bfbfbf;font-size: 12px;">{{item.createTime}}</span>
+                    <a  @click="readMessage(item)" style="color: dodgerblue" v-if="item.hover">设置已读</a>
+                  </li>
+                </ul>
+                <div class="tool-btn">
+                  <a @click="allMessageRead" style="color: dodgerblue">全部可读</a>
+                </div>
               </div>
             </div>
             <div class="user_image_panel">
@@ -46,6 +46,7 @@
                   <li @click="goProfile(uInfo.userId)" style="margin-top: 5px;"><i class="el-icon-user"></i><a >我的主页</a></li>
                   <li v-if="uInfo.isAuthor" @click="goWorkbench"><i class="el-icon-edit"></i><a>工作台</a></li>
                   <li v-else @click="beAuthor(uInfo.userId)"><i class="el-icon-edit"></i><a>成为作者</a></li>
+                  <li v-if="uInfo.isAdmin" @click="goBackEnd"><i class="el-icon-edit"></i><a>管理后台</a></li>
                   <li @click="signOut"><i class="el-icon-switch-button"></i><a>退出</a></li>
                 </ul>
               </div>
@@ -133,6 +134,9 @@
       goWorkbench() {
         window.open('http://workbench.thinkover.fun')
       },
+      goBackEnd() {
+        window.open('http://developer.thinkover.fun')
+      },
       signOut() {
         this.loginOut().then(() => {
           this.$router.push({ path: '/index' })
@@ -159,11 +163,14 @@
     height: 150px;
     z-index: 4;
     &__main {
-      height: 100%;
+      position: relative;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      height: 100%;
+      width: 1200px;
+      margin: 0 auto;
       background: url("./asserts/header-bg.jpg");
       background-size: cover;
       &--left {
@@ -247,6 +254,7 @@
             align-items: center;
             width: 300px;
             .user_image_panel {
+              position: relative;
               width: 50px;
               flex-shrink: 0;
               .user_img {
@@ -257,8 +265,8 @@
               }
               .user-panel {
                 position: absolute;
-                right: 123px;
-                top: 98px;
+                top: 38px;
+                left: -30px;
                 z-index: 10;
                 width: 120px;
                 border-radius: 15px;
@@ -301,58 +309,61 @@
               text-overflow: ellipsis;
               white-space: nowrap;
             }
-            .message {
-              width: 25px;
-              height: 28px;
-              line-height: 28px;
-              font-size: 25px;
-              cursor: pointer;
-            }
-            .message-panel {
-              display: flex;
-              flex-direction: column;
-              position: absolute;
-              right: 205px;
-              top: 90px;
-              z-index: 10;
-              &:after {
-                position: absolute;
-                top: -15px;
-                left: 259px;
-                content: '';
-                width: 0;
-                height: 0;
-                border: 8px solid;
-                border-color: transparent transparent #ffffff transparent;
+            .message-container {
+              position: relative;
+              .message {
+                width: 25px;
+                height: 28px;
+                line-height: 28px;
+                font-size: 25px;
+                cursor: pointer;
               }
-              .tool-btn {
-                height: 40px;
-                background-color: gainsboro;
-                line-height: 40px;
-              }
-              ul {
+              .message-panel {
                 display: flex;
                 flex-direction: column;
-                align-items: start;
-                list-style: none;
-                background-color: #ffffff;
-                width: 300px;
-                max-height: 280px;
-                overflow-y: scroll;
-                li {
-                  width: 100%;
-                  text-align: start;
-                  color: #666;
-                  font-size: 13px;
-                  padding: 8px 15px;
-                  border-bottom: 1px solid #F3F3F3;
-                  line-height: 1.5;
-                  i {
-                    margin-right: 5px;
-                  }
-                  &:hover {
-                    background-color: #fcf8e3;
+                position: absolute;
+                top: 32px;
+                right: -20px;
+                z-index: 10;
+                &:after {
+                  position: absolute;
+                  top: -15px;
+                  left: 259px;
+                  content: '';
+                  width: 0;
+                  height: 0;
+                  border: 8px solid;
+                  border-color: transparent transparent #ffffff transparent;
                 }
+                .tool-btn {
+                  height: 40px;
+                  background-color: gainsboro;
+                  line-height: 40px;
+                }
+                ul {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: start;
+                  list-style: none;
+                  background-color: #ffffff;
+                  width: 300px;
+                  max-height: 280px;
+                  overflow-y: scroll;
+                  li {
+                    width: 100%;
+                    text-align: start;
+                    color: #666;
+                    font-size: 13px;
+                    padding: 8px 15px;
+                    border-bottom: 1px solid #F3F3F3;
+                    line-height: 1.5;
+                    i {
+                      margin-right: 5px;
+                    }
+                    &:hover {
+                      background-color: #fcf8e3;
+                    }
+                  }
                 }
               }
             }

@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '*': {
-            target: 'http://47.98.215.5:8086' // 'http://localhost:8086'//'http://47.98.215.5:8086',
+            target: 'http://106.13.167.135:8086' // 'http://localhost:8086'//'http://47.98.215.5:8086',
         }
     },
 
