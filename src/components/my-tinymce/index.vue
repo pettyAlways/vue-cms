@@ -64,7 +64,8 @@
             {text: 'C#', value: 'csharp'},
             {text: 'C++', value: 'cpp'},
             {text: 'SQL', value: 'sql'},
-            {text: 'YML', value: 'yml'}
+            {text: 'YML', value: 'yml'},
+            {text: 'Shell', value: 'shell'}
           ],
           branding: false,
           menubar: false,
