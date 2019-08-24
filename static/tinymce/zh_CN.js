@@ -247,7 +247,7 @@ tinymce.addI18n('zh_CN',{
 "Custom color": "\u81ea\u5b9a\u4e49\u989c\u8272",
 "No color": "\u65e0",
 "Remove color": "\u79fb\u9664\u989c\u8272",
-"Table of Contents": "\u5185\u5bb9\u5217\u8868",
+"Table of Contents": "\u76ee\u5f55",
 "Show blocks": "\u663e\u793a\u533a\u5757\u8fb9\u6846",
 "Show invisible characters": "\u663e\u793a\u4e0d\u53ef\u89c1\u5b57\u7b26",
 "Word count": "\u5b57\u6570",
