@@ -37,7 +37,7 @@
             </div>
             <el-divider></el-divider>
             <div class="article__container__body">
-              <div v-html="article.content">
+              <div class="article-content" v-html="article.content">
               </div>
             </div>
             <div class="article__container__btn">
@@ -130,10 +130,12 @@
               </template>
             </common-panel-one>
           </div>
+          <div class="catalog-panel" :class="{'catalog-panel--fixed': fixed}" v-html="catalogue" v-if="catalogue">
+          </div>
         </div>
-
       </div>
     </div>
+
   </div>
 </template>
 
@@ -152,6 +154,8 @@
           total: 0,
           size: 6
         },
+        fixed: false,
+        catalogue: '',
         articleId: Number,
         knowledgeId: '',
         article: {},
@@ -176,6 +180,7 @@
     },
     mounted() {
       this.init()
+      window.addEventListener('scroll', this.navHandler)
     },
     computed: {
       ...mapGetters([
@@ -194,6 +199,9 @@
           // 异步获取导致代码高亮不显示，这里在获取代码内容以后在执行Prism.highlightAll
           this.$nextTick(() => {
             Prism.highlightAll()
+            if (document.querySelector('.mce-toc')) {
+              this.catalogue = document.querySelector('.mce-toc').innerHTML
+            }
           })
         }
         if (Object.keys(this.article).length) {
@@ -258,6 +266,14 @@
       },
       finishDeleteReply() {
         this.getComment(this.article.articleId)
+      },
+      navHandler() {
+        let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+        if (scrollTop > 680) {
+          this.fixed = true
+        } else {
+          this.fixed = false
+        }
       }
     },
     watch: {
@@ -271,6 +287,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "../../../../style/article-style01";
   .article {
     &__container {
       display: flex;
@@ -285,6 +302,7 @@
         background-color: white;
       }
       &--right {
+        position: relative;
         width: 300px;
         flex-shrink: 0;
       }
@@ -376,7 +394,7 @@
         margin-top: 15px;
         .comment-box-container {
           height: 180px;
-          margin: -10px -15px;
+          margin: -15px -15px;
         }
         .comment-list {
           margin-top: 10px;
@@ -495,6 +513,33 @@
         color: #cccccc;
         font-family: Arial, Helvetica, sans-serif;
         font-weight: normal;
+      }
+      /deep/ .catalog-panel {
+        margin-top: 20px;
+        overflow: hidden;
+        color: #314659;
+        border: 1px solid #eef2f8;
+        min-width: 150px;
+        opacity: 1;
+        font-size: 14px;
+        font-family: Lato, "PingFang SC", "Microsoft YaHei", sans-serif !important;
+        line-height: 2.2;
+        font-weight: 300;
+        background-color: transparent;
+        h2 {
+          font-size: 16px;
+          font-weight: 700;
+          color: #323232;
+          margin-bottom: 10px;
+        }
+        ul {
+          list-style: none!important;
+          padding-left: 15px!important;
+        }
+        &--fixed {
+          position: fixed;
+          top: 150px;
+        }
       }
     }
 
