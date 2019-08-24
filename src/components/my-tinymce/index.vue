@@ -7,10 +7,10 @@
     </editor>
   </div>
 </template>
-
 <script>
   import tinymce from 'tinymce/tinymce'
   import Editor from '@tinymce/tinymce-vue'
+  import { fileUpload } from '@/api/upload'
   import 'tinymce/themes/silver'
   import 'tinymce/plugins/image'// 插入上传图片插件
   import 'tinymce/plugins/media'// 插入视频插件
@@ -19,7 +19,11 @@
   import 'tinymce/plugins/autoresize'// 插件高度自适应
   import 'tinymce/plugins/wordcount'// 字数统计插件
   import 'tinymce/plugins/textcolor'// 文本颜色
-  import 'tinymce/plugins/codesample'// 文本颜色
+  import 'tinymce/plugins/codesample'// 代码插入
+  import 'tinymce/plugins/hr'// 水平分割线
+  import 'tinymce/plugins/autolink'// 自动连接
+  import 'tinymce/plugins/link'// 自动连接
+  import 'tinymce/plugins/toc'// 自动连接
   export default {
     name: 'myTinymce',
     props: {
@@ -34,11 +38,11 @@
       },
       plugins: {
         type: [String, Array],
-        default: 'lists image media table textcolor wordcount autoresize codesample'
+        default: 'lists image media table textcolor wordcount autoresize codesample autolink hr link image toc'
       },
       toolbar: {
         type: [String, Array],
-        default: 'formatselect bold italic forecolor backcolor fontselect fontsizeselect codesample blockquote alignleft aligncenter alignright alignjustify bullist numlist lists table removeformat'
+        default: 'formatselect bold italic forecolor backcolor fontselect fontsizeselect codesample blockquote alignleft aligncenter alignright alignjustify bullist numlist lists table removeformat hr link image toc'
       }
     },
     data() {
@@ -67,13 +71,20 @@
             {text: 'YML', value: 'yml'},
             {text: 'Shell', value: 'shell'}
           ],
+          image_caption: true,
           branding: false,
           menubar: false,
           // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
           // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
           images_upload_handler: (blobInfo, success, failure) => {
-            const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-            success(img)
+            let formData = new FormData()
+            formData.append('file', blobInfo.blob())
+            formData.append('type', 'tinymce_pic')
+            formData.append('fileName', blobInfo.filename())
+            fileUpload(formData).then(res => {
+              success(res.data)
+              console.error(res.data)
+            })
           }
         },
         myValue: this.value
