@@ -36,7 +36,7 @@
     <div class="article__recent">
       <common-panel-one title="最新文章" shadow="always" :bStyle="{ padding: '0px' }">
         <template slot="more">
-          <span class="header-tip">AUTHOR-INFO</span>
+          <span class="header-tip">NEW-ARTICLE</span>
         </template>
         <template slot="body">
           <ul>

@@ -20,7 +20,7 @@
         <div v-else>暂无</div>
       </li>
       <li>
-        <div class="key">个性签名:</div>
+        <div class="key">签名:</div>
         <div class="value height-limit">
           <span>{{userInfo.signature | autoTransform}}</span>
         </div>

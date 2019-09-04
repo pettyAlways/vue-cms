@@ -5,13 +5,13 @@
   font-size: 15px;
   .mce-toc {
     margin-bottom: 15px;
-    h2 {
-      color: #3194d0!important;
-      font-size: 18px!important;
-      font-weight: 300!important;
-    }
-    ul {
-      list-style: none!important;
+      h2 {
+        color: #3194d0!important;
+        font-size: 18px!important;
+        font-weight: 300!important;
+      }
+      ul {
+        list-style: none!important;
       font-size: 14px!important;
     }
   }
@@ -41,12 +41,10 @@
   blockquote {
     display: block;
     background: #fff;
-    padding: 15px 20px 15px 45px;
-    margin: 0 0 20px;
+    padding: 15px 20px 15px 15px;
     position: relative;
     font-family: Georgia, serif;
     font-size: 16px;
-    line-height: 1.2;
     color: #666;
     text-align: justify;
     border-left: 5px solid #ccc;
@@ -56,21 +54,5 @@
     box-shadow: 2px 2px 15px #ccc;
   }
 
-  blockquote::before{
-    content: "\201C"; /*左双引号的Unicode编码*/
-    /*字体*/
-    font-family: Georgia, serif;
-    font-size: 60px;
-    font-weight: bold;
-    color: #999;
-
-    /*位置*/
-    position: absolute;
-    left: 10px;
-    top:5px;
-  }
-  blockquote::after{
-    content: ""; /*如果要显示右双引号，则写 content: "\201D"; */
-  }
 }
 
